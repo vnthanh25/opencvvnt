@@ -5,35 +5,19 @@
 #include <iostream>
 #include <stdio.h>
 
+using namespace std;
+using namespace cv;
+
+// Function Headers
+void detectAndDisplay(Mat frame);
+
 // Global variables
 // Copy this file from opencv/data/haarscascades to target folder
-std::string face_cascade_name = "cascades/haarcascade_frontalface_alt.xml";
-cv::CascadeClassifier face_cascade;
-
-// Detect face.
-std::vector<cv::Mat> detectAndDisplay(cv::Mat image)
-{
-	std::vector<cv::Mat> result;
-	std::vector<cv::Rect> faces;
-	cv::Mat face;
-
-	// Detect faces
-	face_cascade.detectMultiScale(image, faces, 1.1, 2, 0 | cv::CASCADE_SCALE_IMAGE, cv::Size(30, 30));
-
-	// Get Region of Interest
-	cv::Rect roi;
-	for (size_t i = 0; i < faces.size(); i++)
-	{
-		roi.x = faces[i].x;
-		roi.y = faces[i].y;
-		roi.width = faces[i].width;
-		roi.height = faces[i].height;
-
-		face = image(roi);
-		result.push_back(face);
-	}
-	return result;
-}
+string face_cascade_name = "cascades/haarcascade_frontalface_alt.xml";
+CascadeClassifier face_cascade;
+string window_name = "Capture - Face detection";
+int filenumber; // Number of file to be saved
+string filename;
 
 // Function main
 int main(void)
@@ -46,14 +30,115 @@ int main(void)
 	};
 
 	// Read the image file
-	cv::Mat image = cv::imread("images/lena.png", CV_8UC1);
-	std::vector<cv::Mat> faces = detectAndDisplay(image);
+	//Mat frame = imread("yourImageName.bmp");
+	Mat frame = imread("images/lena.png");
 
-	for (size_t i = 0; i < faces.size(); i++)
+	for (;;)
 	{
-		cv::imshow("image" + std::to_string(i), faces[i]);
+		// Apply the classifier to the frame
+		if (!frame.empty())
+		{
+			detectAndDisplay(frame);
+		}
+		else
+		{
+			printf(" --(!) No captured frame -- Break!");
+			break;
+		}
+
+		int c = waitKey(10);
+
+		if (27 == char(c))
+		{
+			break;
+		}
 	}
 
-	cv::waitKey();
 	return 0;
+}
+
+// Function detectAndDisplay
+void detectAndDisplay(Mat frame)
+{
+	std::vector<Rect> faces;
+	Mat frame_gray;
+	Mat crop;
+	Mat res;
+	Mat gray;
+	string text;
+	stringstream sstm;
+
+	cvtColor(frame, frame_gray, COLOR_BGR2GRAY);
+	equalizeHist(frame_gray, frame_gray);
+
+	// Detect faces
+	face_cascade.detectMultiScale(frame_gray, faces, 1.1, 2, 0 | CASCADE_SCALE_IMAGE, Size(30, 30));
+
+	// Set Region of Interest
+	cv::Rect roi_b;
+	cv::Rect roi_c;
+
+	size_t ic = 0; // ic is index of current element
+	int ac = 0; // ac is area of current element
+
+	size_t ib = 0; // ib is index of biggest element
+	int ab = 0; // ab is area of biggest element
+
+	for (ic = 0; ic < faces.size(); ic++) // Iterate through all current elements (detected faces)
+
+	{
+		roi_c.x = faces[ic].x;
+		roi_c.y = faces[ic].y;
+		roi_c.width = (faces[ic].width);
+		roi_c.height = (faces[ic].height);
+
+		ac = roi_c.width * roi_c.height; // Get the area of current element (detected face)
+
+		roi_b.x = faces[ib].x;
+		roi_b.y = faces[ib].y;
+		roi_b.width = (faces[ib].width);
+		roi_b.height = (faces[ib].height);
+
+		ab = roi_b.width * roi_b.height; // Get the area of biggest element, at beginning it is same as "current" element
+
+		if (ac > ab)
+		{
+			ib = ic;
+			roi_b.x = faces[ib].x;
+			roi_b.y = faces[ib].y;
+			roi_b.width = (faces[ib].width);
+			roi_b.height = (faces[ib].height);
+		}
+
+		crop = frame(roi_b);
+		resize(crop, res, Size(128, 128), 0, 0, INTER_LINEAR); // This will be needed later while saving images
+		cvtColor(crop, gray, CV_BGR2GRAY); // Convert cropped image to Grayscale
+
+		// Form a filename
+		filename = "";
+		stringstream ssfn;
+		ssfn << filenumber << ".png";
+		filename = ssfn.str();
+		filenumber++;
+
+		imwrite(filename, gray);
+
+		Point pt1(faces[ic].x, faces[ic].y); // Display detected faces on main window - live stream from camera
+		Point pt2((faces[ic].x + faces[ic].height), (faces[ic].y + faces[ic].width));
+		rectangle(frame, pt1, pt2, Scalar(0, 255, 0), 2, 8, 0);
+	}
+
+	// Show image
+	sstm << "Crop area size: " << roi_b.width << "x" << roi_b.height << " Filename: " << filename;
+	text = sstm.str();
+
+	putText(frame, text, cvPoint(30, 30), FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(0, 0, 255), 1, CV_AA);
+	imshow("original", frame);
+
+	if (!crop.empty())
+	{
+		imshow("detected", crop);
+	}
+	else
+		destroyWindow("detected");
 }
