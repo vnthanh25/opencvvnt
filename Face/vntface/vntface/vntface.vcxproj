@@ -12,6 +12,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Source\DetectFace.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Header\DetectFace.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A126096-05B0-412F-BD4C-477D262D69F4}</ProjectGuid>
