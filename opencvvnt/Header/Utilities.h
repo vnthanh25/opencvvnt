@@ -6,12 +6,6 @@ using namespace std;
 
 namespace vnt
 {
-	class DataMat
-	{
-	public:
-		static Mat src, gray, filter, edge, dst;
-	};
-
 	class Utilites
 	{
 	public:

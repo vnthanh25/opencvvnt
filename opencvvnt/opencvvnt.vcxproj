@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header\DataMat.h" />
     <ClInclude Include="Header\Rotation.h" />
     <ClInclude Include="Header\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\DataMat.cpp" />
     <ClCompile Include="Source\Rotation.cpp" />
     <ClCompile Include="Source\Utilities.cpp" />
   </ItemGroup>
