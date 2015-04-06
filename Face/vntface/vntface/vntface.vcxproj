@@ -12,12 +12,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Source\ColorFeret.cpp" />
     <ClCompile Include="Source\FaceDataSet.cpp" />
+    <ClCompile Include="Source\FaceDataSetBase.cpp" />
     <ClCompile Include="Source\FaceDetect.cpp" />
     <ClCompile Include="Source\FeatureLBP.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Header\ColorFeret.h" />
     <ClInclude Include="Header\FaceDataSet.h" />
+    <ClInclude Include="Header\FaceDataSetBase.h" />
     <ClInclude Include="Header\FaceDetect.h" />
     <ClInclude Include="Header\FeatureLBP.h" />
   </ItemGroup>
