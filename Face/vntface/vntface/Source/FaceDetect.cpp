@@ -1,31 +1,33 @@
-#include "..\Header\DetectFace.h"
+#include "..\Header\FaceDetect.h"
 
 using namespace vnt;
 /********** Constructor **********/
-DetectFace::DetectFace()
+FaceDetect::FaceDetect()
 {
 }
-DetectFace::~DetectFace()
+FaceDetect::~FaceDetect()
 {
 }
 
 /********** private Methods **********/
 //\\ Khoi tao bo phan lop.
-bool DetectFace::aLoadFaceCascade()
+bool FaceDetect::aLoadFaceCascade()
 {
 	if (mFaceCascade.load(mFaceCascadeName))
 		return true;
 	return false;
 }
-bool DetectFace::aLoadFaceCascade(const std::string pFaceCascadeName)
+bool FaceDetect::aLoadFaceCascade(const std::string pFaceCascadeName)
 {
 	mFaceCascadeName = pFaceCascadeName;
 	if (mFaceCascade.load(mFaceCascadeName))
 		return true;
 	return false;
 }
+
+/********** public Methods **********/
 //\\ Tim tat ca mat nguoi trong anh.
-std::vector<cv::Rect> DetectFace::aGetsRect(const cv::Mat pImage)
+std::vector<cv::Rect> FaceDetect::aGetsRect(const cv::Mat pImage)
 {
 	std::vector<cv::Rect> result;
 	//\\ Khoi tao bo phan lop.
@@ -36,7 +38,7 @@ std::vector<cv::Rect> DetectFace::aGetsRect(const cv::Mat pImage)
 	}
 	return result;
 }
-std::vector<cv::Mat> DetectFace::aGetsMat(const cv::Mat pImage)
+std::vector<cv::Mat> FaceDetect::aGetsMat(const cv::Mat pImage)
 {
 	std::vector<cv::Mat> result;
 	//\\ Tim bien chua mat nguoi.
@@ -48,8 +50,8 @@ std::vector<cv::Mat> DetectFace::aGetsMat(const cv::Mat pImage)
 	}
 	return result;
 }
-//\\ Tim tat ca mat nguoi trong anh co tham so.
-std::vector<cv::Rect> DetectFace::aGetsRect(const cv::Mat pImage, const std::string pFaceCascadeName)
+//\\ Tim tat ca mat nguoi trong anh. Co tham so.
+std::vector<cv::Rect> FaceDetect::aGetsRect(const cv::Mat pImage, const std::string pFaceCascadeName)
 {
 	std::vector<cv::Rect> result;
 	//\\ Khoi tao bo phan lop.
@@ -60,7 +62,7 @@ std::vector<cv::Rect> DetectFace::aGetsRect(const cv::Mat pImage, const std::str
 	}
 	return result;
 }
-std::vector<cv::Mat> DetectFace::aGetsMat(const cv::Mat pImage, const std::string pFaceCascadeName)
+std::vector<cv::Mat> FaceDetect::aGetsMat(const cv::Mat pImage, const std::string pFaceCascadeName)
 {
 	std::vector<cv::Mat> result;
 	//\\ Tim bien chua mat nguoi.

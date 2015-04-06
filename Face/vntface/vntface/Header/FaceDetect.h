@@ -11,13 +11,10 @@ VNThanh
 
 namespace vnt
 {
-	class DetectFace
+	class FaceDetect
 	{
-	public:
-		DetectFace();
-		~DetectFace();
-		/********** private Members **********/
 	private:
+		/********** private Members **********/
 		std::string mFaceCascadeName = "cascades/haarcascade_frontalface_alt.xml";
 		cv::CascadeClassifier mFaceCascade;
 
@@ -25,14 +22,17 @@ namespace vnt
 		bool aLoadFaceCascade();
 		bool aLoadFaceCascade(const std::string pFaceCascadeName);
 
-		/********** public Methods **********/
 	public:
+		/********** Constructor **********/
+		FaceDetect();
+		~FaceDetect();
+		/********** public Methods **********/
 		//\\ Tim tat ca mat nguoi trong anh.
 		std::vector<cv::Rect> aGetsRect(cv::Mat pImage);
 		std::vector<cv::Mat> aGetsMat(cv::Mat pImage);
-		//\\ Tim tat ca mat nguoi trong anh co tham so.
-		std::vector<cv::Rect> DetectFace::aGetsRect(const cv::Mat pImage, const std::string pFaceCascadeName);
-		std::vector<cv::Mat> DetectFace::aGetsMat(const cv::Mat pImage, const std::string pFaceCascadeName);
+		//\\ Tim tat ca mat nguoi trong anh. Co tham so.
+		std::vector<cv::Rect> aGetsRect(const cv::Mat pImage, const std::string pFaceCascadeName);
+		std::vector<cv::Mat> aGetsMat(const cv::Mat pImage, const std::string pFaceCascadeName);
 	};
 
 }

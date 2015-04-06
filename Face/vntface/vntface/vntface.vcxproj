@@ -12,10 +12,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Source\DetectFace.cpp" />
+    <ClCompile Include="Source\FaceDataSet.cpp" />
+    <ClCompile Include="Source\FaceDetect.cpp" />
+    <ClCompile Include="Source\FeatureLBP.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header\DetectFace.h" />
+    <ClInclude Include="Header\FaceDataSet.h" />
+    <ClInclude Include="Header\FaceDetect.h" />
+    <ClInclude Include="Header\FeatureLBP.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A126096-05B0-412F-BD4C-477D262D69F4}</ProjectGuid>
