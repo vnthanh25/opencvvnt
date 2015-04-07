@@ -5,7 +5,7 @@ void LBP()
 	vnt::FeatureLBP lbp;
 	vnt::Utilites util;
 	//\\ Doc anh.
-	cv::Mat image = util.createMatRandom(11, 11);
+	cv::Mat image = lbp.createMat(11, 11);
 	std::vector<std::vector<int>> lbpfeature = lbp.LBP(image, 3, 1);
 	//\\ Chuyen doi vector 2 chieu thanh Mat.
 	cv::Mat lbpFeatureMat = util.convertV2ToMat(lbpfeature, lbpfeature[0].size(), lbpfeature.size());

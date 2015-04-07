@@ -242,3 +242,20 @@ std::vector<std::vector<int>> FeatureLBP::LBP(const cv::Mat image, int n, int pa
 	}
 	return result;
 }
+
+
+//\\ Tao Mat voi gia tri.
+cv::Mat FeatureLBP::createMat(int width, int height)
+{
+	cv::Mat result;
+	result = cv::Mat(height, width, CV_8UC1, cv::Scalar(0));
+	for (size_t y = 0; y < height; y++)
+	{
+		for (size_t x = 0; x < width; x++)
+		{
+			if (y % 2 == 1 || x % 2 == 1)
+				result.at<uchar>(y, x) = 1;
+		}
+	}
+	return result;
+}

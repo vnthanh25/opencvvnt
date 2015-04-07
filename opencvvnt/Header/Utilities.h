@@ -31,8 +31,6 @@ namespace vnt
 
 		//\\ Chuyen doi so thanh chuoi nhi phan.
 		std::string convertUnsignedIntToBinary(int pValue);
-		//\\ Tao Mat voi gia tri radom.
-		cv::Mat createMatRandom(int width, int height);
 
 		//\\ Chuyen vector<vector<in>> thanh Mat.
 		cv::Mat convertV2ToMat(std::vector<std::vector<int>> lbpFeature, int width, int height);

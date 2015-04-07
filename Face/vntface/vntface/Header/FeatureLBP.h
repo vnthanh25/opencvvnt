@@ -48,5 +48,9 @@ namespace vnt
 		void showLBPUniValues();
 		//\\ Tinh dac trung LBP cho 1 anh xam, chia lam n x n vung va co ban kinh pad.
 		std::vector<std::vector<int>> LBP(const cv::Mat image, int n, int pad);
+
+		//\\ Tao Mat voi gia tri.
+		cv::Mat createMat(int width, int height);
+
 	};
 }
