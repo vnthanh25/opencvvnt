@@ -1,3 +1,7 @@
+/*
+VNThanh
+- Face Track.
+*/
 
 #include "../Header/FaceTrack.h"
 #include "../Header/FeatureLBP.h"
@@ -60,6 +64,18 @@ std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<cv::Ma
 	//\\ Tinh dac trung LBP cho tat ca face trong facetrack
 	std::vector<std::vector<std::vector<int>>> featureLBPs = aGetsFeature(pFaceTrack);
 	result = aAvgFeature(featureLBPs);
+	return result;
+}
+//\\ Tinh vector trung binh cho tung facetrack. Moi facetrack co danh sach vector dac trung.
+std::vector<std::vector<std::vector<double>>> FaceTrack::aAvgFeatures(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures)
+{
+	std::vector<std::vector<std::vector<double>>> result;
+	//\\ Tinh vector dac trung trung binh cho tung facetrack.
+	for (size_t i = 0; i < pFTFeatures.size(); i++)
+	{
+		std::vector<std::vector<double>> feature = aAvgFeature(pFTFeatures[i]);
+		result.push_back(feature);
+	}
 	return result;
 }
 //\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co danh sach vector dac trung.
@@ -184,7 +200,144 @@ double FaceTrack::aEuclid(std::vector<std::vector<double>> pVector1, std::vector
 	return result;
 }
 
+//\\ Tinh hieu cua 2 vector dac trung.
+std::vector<std::vector<double>> FaceTrack::aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
+{
+	std::vector<std::vector<double>> result;
+	//\\ Lap qua 9 vung. (truc y)
+	for (size_t i = 0; i < pVector1.size(); i++)
+	{
+		std::vector<double> lbp;
+		//\\ Lap qua 59 dac trung LBP. (truc x)
+		for (size_t j = 0; j < pVector1[0].size(); j++)
+		{
+			//\\ Hieu cua cac phan tu.
+			lbp.push_back(pVector1[i][j] - pVector2[i][j]);
+		}
+		result.push_back(lbp);
+	}
+	return result;
+}
 
+//\\ Khoi tao csdl mean-cos (danh sach vector dac trung trung binh cho cac facetrack).
+std::vector<std::vector<std::vector<double>>> FaceTrack::aMeanCosInit(std::vector<std::vector<cv::Mat>> pFaceTracks)
+{
+	std::vector<std::vector<std::vector<double>>> result;
+	//\\ Rut trich vector dac trung cho danh sach facetrack.
+	std::vector<std::vector<std::vector<std::vector<int>>>> facetrackfeatures;
+	for (size_t i = 0; i < pFaceTracks.size(); i++)
+	{
+		std::vector<std::vector<std::vector<int>>> features = aGetsFeature(pFaceTracks[i]);
+		facetrackfeatures.push_back(features);
+	}
+	//\\ B1: Tinh vector dac trung trung binh cho toan bo anh trong danh sach facetrack.
+	std::vector<std::vector<double>> avgFeature = aAvgFeature(facetrackfeatures);
+	//\\ B2: Tinh vector dac trung trung binh cho moi facetrack. (mean)
+	std::vector<std::vector<std::vector<double>>> facetrackfeature = aAvgFeatures(facetrackfeatures);
+	//\\ B3: Chuan hoa vector dac trung trung binh cua moi facetrack.
+	for (size_t i = 0; i < facetrackfeature.size(); i++)
+	{
+		std::vector<std::vector<double>> featureSub = aSub(facetrackfeature[i], avgFeature);
+		result.push_back(featureSub);
+	}
+	return result;
+}
+//\\ Sap xep danh sach facetrack theo facetrack yeu cau. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
+std::vector<std::vector<std::vector<double>>> FaceTrack::aMeanCosMatching(std::vector<std::vector<double>> pFaceTrack, std::vector<std::vector<std::vector<double>>> pFaceTracks)
+{
+	std::vector<std::vector<std::vector<double>>> result;
+	std::vector<double> resultmeancos;
+	//\\ Tinh khoang cach mean-cos giua 2 vector dac trung trung binh.
+	double meancos = 0;
+	//\\ Lap qua trung facetrack de tinh khoang cach.
+	for (size_t i = 0; i < pFaceTracks.size(); i++)
+	{
+		meancos = aCosine(pFaceTrack, pFaceTracks[i]);
+		std::vector<double> resultmeancostemp;
+		std::vector<std::vector<std::vector<double>>> resulttemp;
+		size_t j = 0;
+		//\\ Chen gia tri menacos vua tinh vao danh sach temp.
+		while (true)
+		{
+			if (meancos < resultmeancos[j])
+			{
+				resultmeancostemp.push_back(meancos);
+				resultmeancostemp.push_back(resultmeancos[j]);
+				resulttemp.push_back(pFaceTracks[i]);
+				resulttemp.push_back(result[j]);
+				break;
+			}
+			j++;
+		}
+		while (j < resultmeancos.size())
+		{
+			resultmeancostemp.push_back(resultmeancos[j]);
+			resulttemp.push_back(result[j]);
+			j++;
+		}
+		//\\ Gan danh sach temp cho danh sach ket qua.
+		resultmeancos = resultmeancostemp;
+		result = resulttemp;
+	}
+	return result;
+}
+std::vector<int> FaceTrack::aMeanCosMatchingIndex(std::vector<std::vector<double>> pFaceTrack, std::vector<std::vector<std::vector<double>>> pFaceTracks)
+{
+	std::vector<int> result;
+	std::vector<double> resultmeancos;
+	//\\ Tinh khoang cach mean-cos giua 2 vector dac trung trung binh.
+	double meancos = 0;
+	//\\ Lap qua trung facetrack de tinh khoang cach.
+	for (size_t i = 0; i < pFaceTracks.size(); i++)
+	{
+		meancos = aCosine(pFaceTrack, pFaceTracks[i]);
+		std::vector<double> resultmeancostemp;
+		std::vector<int> resulttemp;
+		size_t j = 0;
+		//\\ Chen gia tri menacos vua tinh vao danh sach temp.
+		while (true)
+		{
+			if (meancos < resultmeancos[j])
+			{
+				resultmeancostemp.push_back(meancos);
+				resultmeancostemp.push_back(resultmeancos[j]);
+				resulttemp.push_back(i);
+				resulttemp.push_back(result[j]);
+				break;
+			}
+			j++;
+		}
+		while (j < resultmeancos.size())
+		{
+			resultmeancostemp.push_back(resultmeancos[j]);
+			resulttemp.push_back(result[j]);
+			j++;
+		}
+		//\\ Gan danh sach temp cho danh sach ket qua.
+		resultmeancos = resultmeancostemp;
+		result = resulttemp;
+	}
+	return result;
+}
+//\\ Thuat toan mean-cos: input (facetrack yeu cau, DS facetrack); output (DS facetrack duoc sap xep theo facetrack yeu cau).
+std::vector<std::vector<cv::Mat>> FaceTrack::aMeanCos(std::vector<cv::Mat> pQueryFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks)
+{
+	std::vector<std::vector<cv::Mat>> result;
+	//\\ Rut trich vector dac trung cho facetrack truy van.
+	std::vector<std::vector<double>> queryfeature = aAvgFeature(pQueryFaceTrack);
+	//\\ Khoi tao csdl.
+	std::vector<std::vector<std::vector<double>>> csdl = aMeanCosInit(pFaceTracks);
+	//\\ Sap xep danh sach facetrack theo facetrack yeu cau. Tra ve danh sach index cua facetrack.
+	std::vector<int> resultIndex = aMeanCosMatchingIndex(queryfeature, csdl);
+	for (size_t i = 0; i < resultIndex.size(); i++)
+	{
+		result.push_back(pFaceTracks[i]);
+	}
+	return result;
+}
+
+
+/******************** Gia lap ********************/
 //\\ Gia lap danh sach vector dac trung cua facetrack. 1 facetrack co nhieu vector dac trung.
 std::vector<std::vector<std::vector<int>>> FaceTrack::aGetsFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue)
 {
@@ -246,6 +399,7 @@ std::vector<std::vector<std::vector<std::vector<int>>>> FaceTrack::aGetsFeatures
 	//size_t numLists = 3;
 	for (size_t i = 0; i < pNumLists; i++)
 	{
+		//\\ Gia lap danh sach vector dac trung cua facetrack. 1 facetrack co nhieu vector dac trung.
 		result.push_back(aGetsFeatureFake(pNumList, pNumRows, pNumCols, pValue));
 	}
 	return result;
