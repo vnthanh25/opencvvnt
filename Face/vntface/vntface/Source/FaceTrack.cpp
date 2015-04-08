@@ -17,6 +17,19 @@ FaceTrack::~FaceTrack()
 }
 
 /********** public Methods **********/
+//\\ Doc tat ca file anh vao trong facetrack.
+std::vector<cv::Mat> FaceTrack::aGestAllImage(std::string pFolderPath, std::vector<std::string> pAllFileName)
+{
+	std::vector<cv::Mat> result;
+	size_t size01 = pAllFileName.size();
+	for (size_t i = 0; i < size01; i++)
+	{
+		cv::Mat face = cv::imread(pFolderPath + pAllFileName[i], CV_8UC1);
+		result.push_back(face);
+	}
+	return result;
+}
+
 //\\ Lay dac trung cua tung face trong facetrack.
 std::vector<std::vector<std::vector<int>>> FaceTrack::aGetsFeature(const std::vector<cv::Mat> pFaceTrack)
 {

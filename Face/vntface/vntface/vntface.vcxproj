@@ -18,6 +18,7 @@
     <ClCompile Include="Source\FaceDetect.cpp" />
     <ClCompile Include="Source\FaceTrack.cpp" />
     <ClCompile Include="Source\FeatureLBP.cpp" />
+    <ClCompile Include="Source\HeadPose.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\ColorFeret.h" />
@@ -26,6 +27,7 @@
     <ClInclude Include="Header\FaceDetect.h" />
     <ClInclude Include="Header\FaceTrack.h" />
     <ClInclude Include="Header\FeatureLBP.h" />
+    <ClInclude Include="Header\HeadPose.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A126096-05B0-412F-BD4C-477D262D69F4}</ProjectGuid>

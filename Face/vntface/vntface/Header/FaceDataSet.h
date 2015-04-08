@@ -10,7 +10,10 @@ VNThanh
 #include <iostream>
 #include <stdio.h>
 
-#include "../Header/ColorFeret.h"
+#ifndef _FaceDataSetBase_
+#define _FaceDataSetBase_
+#include "FaceDataSetBase.h"
+#endif
 
 namespace vnt
 {
@@ -19,15 +22,19 @@ namespace vnt
 	{
 	private:
 		FaceDataSetBase* mDataSet;
+		//\\ Danh sach facetrack
+		std::vector<std::vector<cv::Mat>> mFaceTracks;
 	public:
 		/********** Constructor **********/
 		FaceDataSet();
 		~FaceDataSet();
 	
 		/********** public Methods **********/
-		//\\ Lay 1 anh cua 1 nguoi. Mac dinh la lay anh dau tien neu co nhieu anh.
-		cv::Mat aGetFace(const std::string pId, const std::string pPath = "");
-		//\\ Lay 1 facetrack cua 1 nguoi.
-		std::vector<cv::Mat> aGetsAllFace(const std::string pId, const std::string pPath = "");
+		//\\ Lay danh sach facetrack.
+		std::vector<std::vector<cv::Mat>> aGetFaceTraks();
+		//\\ Gan danh sach facetrack.
+		void aSetFaceTracks(std::vector<std::vector<cv::Mat>> pFaceTracks);
+		//\\ Doc tat ca cac anh.
+		std::vector<cv::Mat> aReadsImage(std::vector<std::string> pAllFileName, const std::string pPath = "");
 	};
 }

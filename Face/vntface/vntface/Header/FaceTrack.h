@@ -22,6 +22,9 @@ namespace vnt
 		~FaceTrack();
 
 		/********** public Methods **********/
+		//\\ Doc tat ca file anh vao trong facetrack.
+		std::vector<cv::Mat> aGestAllImage(std::string pFolderPath, std::vector<std::string> pAllFileName);
+
 		//\\ Lay dac trung cua tung face trong facetrack.
 		std::vector<std::vector<std::vector<int>>> aGetsFeature(const std::vector<cv::Mat> pFaceTrack);
 		//\\ Tinh vector trung binh cho facetrack.

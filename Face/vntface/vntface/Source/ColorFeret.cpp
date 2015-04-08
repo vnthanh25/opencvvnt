@@ -375,4 +375,21 @@ std::vector<std::string> ColorFeret::aGetsAllFileName(const std::string pId)
 	}
 	return result;
 }
+//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.
+std::vector<std::string> ColorFeret::aGetsAllFullFileName(const std::string pId, const std::string pPath)
+{
+	std::vector<std::string> result;
+	//\\ Lay duong dan thu muc.
+	std::string path = pPath + aGetPath(pId);
+	//\\ Lay tat ca ten file anh co the co.
+	std::vector<std::string> fileNames = aGetsAllFileName(pId);
+	//\\ Tra ve anh dau tien duoc tim thay trong thu muc.
+	cv::Mat face;
+	for (size_t i = 0; i < fileNames.size(); i++)
+	{
+		path += fileNames[i];
+		result.push_back(path);
+	}
+	return result;
+}
 
