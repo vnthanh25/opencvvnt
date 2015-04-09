@@ -1,5 +1,6 @@
 #include "..\Header\Utilities.h"
 #include "..\Header\DataMat.h"
+#include <ctime>
 
 using namespace vnt;
 
@@ -186,6 +187,19 @@ std::string Utilites::increaseNumber(const std::string pNumber, const int pIncre
 	result = leftPad(result, len, '0');
 	return result;
 }
+
+//\\ Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+std::string Utilites::currentDateTime()
+{
+	time_t     now = time(0);
+	struct tm  tstruct;
+	char       buf[80];
+	tstruct = *localtime(&now);
+	strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+	return buf;
+}
+
 
 
 Mat DataMat::src, DataMat::gray, DataMat::filter, DataMat::edge, DataMat::dst;

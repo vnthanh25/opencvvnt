@@ -37,6 +37,8 @@ namespace vnt
 
 		//\\ Lay so tiep theo tu chuoi so truyen vao.
 		std::string increaseNumber(const std::string pNumber, const int pIncrease);
+		//\\ Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+		std::string currentDateTime();
 
 		Mat detectsimpleshape(Mat src);
 

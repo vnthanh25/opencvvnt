@@ -4,8 +4,6 @@
 #include "Header\HeadPose.h"
 #include "Header\FaceTrack.h"
 
-#include <ctime>
-
 using namespace vnt;
 
 void aFaceDataSetBase()
@@ -123,24 +121,12 @@ void aMatchingFaceTrack()
 	std::vector<std::vector<std::vector<std::vector<int>>>> facetracks = faceTrack.aGetsFeaturesFake(numFaceTrack, numFeature, numRow, numCol);
 }
 
-//\\ Get current date/time, format is YYYY-MM-DD.HH:mm:ss
-std::string currentDateTime() {
-	time_t     now = time(0);
-	struct tm  tstruct;
-	char       buf[80];
-	tstruct = *localtime(&now);
-	// Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
-	// for more information about date/time format
-	strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
-
-	return buf;
-}
-
 //\\ Thuat toan sap xep theo mean-cos.
 void aMeanCos()
 {
+	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << currentDateTime() << std::endl;
+	cout << util.currentDateTime() << std::endl;
 	//\\ Facetrack yeu cau.
 	std::vector<cv::Mat> query;
 	//\\ Danh sach facetrack trong csdl.
@@ -171,7 +157,7 @@ void aMeanCos()
 	FaceTrack vFaceTrack;
 	std::vector<std::vector<cv::Mat>> vFaceTracksMatching = vFaceTrack.aMeanCos(vFaceTracks[1], vFaceTracks);
 	//\\ Hien thi thoi gian ket thuc.
-	cout << currentDateTime() << std::endl;
+	cout << util.currentDateTime() << std::endl;
 }
 
 // Function main
