@@ -69,7 +69,7 @@ std::vector<cv::Mat> FeatureLBP::divImageDilation(const cv::Mat image, int n, in
 	std::vector<cv::Mat> result;
 	int width = image.cols / n + pad * 2;
 	int height = image.rows / n + pad * 2;
-	cv::Mat imageDil(image.cols + pad * 2, image.rows + pad * 2, CV_8UC1, cv::Scalar(0));
+	cv::Mat imageDil(image.rows + pad * 2, image.cols + pad * 2, CV_8UC1, cv::Scalar(0));
 	image.copyTo(imageDil.colRange(pad, image.cols + pad).rowRange(pad, image.rows + pad));
 	cv::Mat region;
 	for (int y = 0; y < imageDil.rows - height + 1; y += height - pad * 2)

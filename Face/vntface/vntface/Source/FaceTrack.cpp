@@ -107,15 +107,15 @@ std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<std::v
 			{
 				double avg = 0;
 				//\\ Lap qua danh sach facetrack. (truc z).
-				for (size_t k = 0; k < pFTFeatures[0].size(); k++)
+				for (size_t k = 0; k < pFTFeatures.size(); k++)
 				{
 					//\\ Lap qua danh sach dac trung. (truc t)
-					for (size_t l = 0; l < pFTFeatures.size(); l++)
+					for (size_t l = 0; l < pFTFeatures[0].size(); l++)
 					{
 						avg += pFTFeatures[k][l][i][j];
 					}
 				}
-				avg = avg / (pFTFeatures[0].size() * pFTFeatures.size());
+				avg = avg / (pFTFeatures.size() * pFTFeatures[0].size());
 				lbp.push_back(avg);
 			}
 			result.push_back(lbp);
@@ -238,7 +238,8 @@ std::vector<std::vector<std::vector<double>>> FaceTrack::aMeanCosInit(std::vecto
 	std::vector<std::vector<std::vector<double>>> result;
 	//\\ Rut trich vector dac trung cho danh sach facetrack.
 	std::vector<std::vector<std::vector<std::vector<int>>>> facetrackfeatures;
-	for (size_t i = 0; i < pFaceTracks.size(); i++)
+	size_t vFaceTrackSize = pFaceTracks.size();
+	for (size_t i = 0; i < vFaceTrackSize; i++)
 	{
 		std::vector<std::vector<std::vector<int>>> features = aGetsFeature(pFaceTracks[i]);
 		facetrackfeatures.push_back(features);
@@ -248,7 +249,8 @@ std::vector<std::vector<std::vector<double>>> FaceTrack::aMeanCosInit(std::vecto
 	//\\ B2: Tinh vector dac trung trung binh cho moi facetrack. (mean)
 	std::vector<std::vector<std::vector<double>>> facetrackfeature = aAvgFeatures(facetrackfeatures);
 	//\\ B3: Chuan hoa vector dac trung trung binh cua moi facetrack.
-	for (size_t i = 0; i < facetrackfeature.size(); i++)
+	size_t facetrackfeaturesize = facetrackfeature.size();
+	for (size_t i = 0; i < facetrackfeaturesize; i++)
 	{
 		std::vector<std::vector<double>> featureSub = aSub(facetrackfeature[i], avgFeature);
 		result.push_back(featureSub);
@@ -297,38 +299,45 @@ std::vector<std::vector<std::vector<double>>> FaceTrack::aMeanCosMatching(std::v
 std::vector<int> FaceTrack::aMeanCosMatchingIndex(std::vector<std::vector<double>> pFaceTrack, std::vector<std::vector<std::vector<double>>> pFaceTracks)
 {
 	std::vector<int> result;
+	if (pFaceTracks.size() == 0)
+		return result;
 	std::vector<double> resultmeancos;
 	//\\ Tinh khoang cach mean-cos giua 2 vector dac trung trung binh.
-	double meancos = 0;
+	double meancos = aCosine(pFaceTrack, pFaceTracks[0]);
+	result.push_back(0);
+	resultmeancos.push_back(meancos);
 	//\\ Lap qua trung facetrack de tinh khoang cach.
-	for (size_t i = 0; i < pFaceTracks.size(); i++)
+	for (size_t i = 1; i < pFaceTracks.size(); i++)
 	{
 		meancos = aCosine(pFaceTrack, pFaceTracks[i]);
 		std::vector<double> resultmeancostemp;
 		std::vector<int> resulttemp;
 		size_t j = 0;
+		bool find = true;
 		//\\ Chen gia tri menacos vua tinh vao danh sach temp.
-		while (true)
-		{
-			if (meancos < resultmeancos[j])
-			{
-				resultmeancostemp.push_back(meancos);
-				resultmeancostemp.push_back(resultmeancos[j]);
-				resulttemp.push_back(i);
-				resulttemp.push_back(result[j]);
-				break;
-			}
-			j++;
-		}
 		while (j < resultmeancos.size())
 		{
+			if (find && meancos < resultmeancos[j])
+			{
+				resultmeancostemp.push_back(meancos);
+				resulttemp.push_back(i);
+				find = false;
+			}
 			resultmeancostemp.push_back(resultmeancos[j]);
 			resulttemp.push_back(result[j]);
 			j++;
 		}
+		//\\ Khong tim thay cai nao lon hon meancos.
+		if (find)
+		{
+			resultmeancostemp.push_back(meancos);
+			resulttemp.push_back(i);
+		}
 		//\\ Gan danh sach temp cho danh sach ket qua.
 		resultmeancos = resultmeancostemp;
+		resultmeancostemp.clear();
 		result = resulttemp;
+		resulttemp.clear();
 	}
 	return result;
 }
@@ -344,7 +353,8 @@ std::vector<std::vector<cv::Mat>> FaceTrack::aMeanCos(std::vector<cv::Mat> pQuer
 	std::vector<int> resultIndex = aMeanCosMatchingIndex(queryfeature, csdl);
 	for (size_t i = 0; i < resultIndex.size(); i++)
 	{
-		result.push_back(pFaceTracks[i]);
+		int index = resultIndex[i];
+		result.push_back(pFaceTracks[index]);
 	}
 	return result;
 }

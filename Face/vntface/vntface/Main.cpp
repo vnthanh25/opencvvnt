@@ -4,6 +4,8 @@
 #include "Header\HeadPose.h"
 #include "Header\FaceTrack.h"
 
+#include <ctime>
+
 using namespace vnt;
 
 void aFaceDataSetBase()
@@ -45,14 +47,15 @@ void aHeadPose()
 	FaceDataSet vFaceDataSet;
 	//\\ Duong dan den thu muc dataset.
 	//std::string vFolderPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPoseImageDatabase/";
-	std::string vFolderPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/";
+	std::string vFolderPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/";
 
 	HeadPose vHeadPose;
 	std::string vId = vHeadPose.aGetId(0);
 	vFolderPath += vHeadPose.aGetPath(vId);
 	//Utilites util;
 	//id = util.increaseNumber(vId, 1);
-	//\\ Lay tat ca ten file anh cua 1 nguoi.
+
+	//\\ Load facetrack. Lay tat ca ten file anh cua 1 nguoi.
 	std::vector<std::string> vAllFileName = vHeadPose.aGetsAllFileName(vId);
 
 	std::vector<cv::Mat> vFaceTrack = vFaceDataSet.aReadsImage(vAllFileName, vFolderPath);
@@ -120,21 +123,61 @@ void aMatchingFaceTrack()
 	std::vector<std::vector<std::vector<std::vector<int>>>> facetracks = faceTrack.aGetsFeaturesFake(numFaceTrack, numFeature, numRow, numCol);
 }
 
+//\\ Get current date/time, format is YYYY-MM-DD.HH:mm:ss
+std::string currentDateTime() {
+	time_t     now = time(0);
+	struct tm  tstruct;
+	char       buf[80];
+	tstruct = *localtime(&now);
+	// Visit http://en.cppreference.com/w/cpp/chrono/c/strftime
+	// for more information about date/time format
+	strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+
+	return buf;
+}
+
 //\\ Thuat toan sap xep theo mean-cos.
 void aMeanCos()
 {
+	//\\ Hien thi thoi gian bat dau.
+	cout << currentDateTime() << std::endl;
 	//\\ Facetrack yeu cau.
 	std::vector<cv::Mat> query;
 	//\\ Danh sach facetrack trong csdl.
 	std::vector<std::vector<cv::Mat>> csdl;
 	//\\ Ket qua so khop.
 	std::vector<std::vector<cv::Mat>> matching;
+
+	//\\ Load tat ca anh vao FaceDataSet.
+	FaceDataSet vFaceDataSet;
+	FaceDataSetBase* vFaceDataSetBase;
+	HeadPose vHeadPose;
+	std::string vFolderPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/Test/";
+	vFaceDataSetBase = &vHeadPose;
+	//\\ Lay tat ca Ids co trong nguon anh.
+	std::vector<std::string> vAllIds = vFaceDataSetBase->aGetsAllIds();
+	std::vector<std::vector<cv::Mat>> vFaceTracks;
+	size_t vAllIdsSize = vAllIds.size();
+	for (size_t i = 0; i < vAllIdsSize; i++)
+	{
+		std::string vId = vAllIds[i];
+		//\\ Load facetrack. Lay tat ca ten file anh cua 1 nguoi.
+		std::vector<std::string> vAllFileName = vHeadPose.aGetsAllFileName(vId);
+		std::vector<cv::Mat> vFaceTrack = vFaceDataSet.aReadsImage(vAllFileName, vFolderPath + vHeadPose.aGetPath(vId));
+		vFaceTracks.push_back(vFaceTrack);
+	}// for i.
+	vFaceDataSet.aSetFaceTracks(vFaceTracks);
+	//\\ Thuat toan mean-cos.
+	FaceTrack vFaceTrack;
+	std::vector<std::vector<cv::Mat>> vFaceTracksMatching = vFaceTrack.aMeanCos(vFaceTracks[1], vFaceTracks);
+	//\\ Hien thi thoi gian ket thuc.
+	cout << currentDateTime() << std::endl;
 }
 
 // Function main
 int main(void)
 {
-	aFaceDataSetBase();
+	//aFaceDataSetBase();
 	//aColorFeret();
 	//aHeadPose();
 	//aAvgFaceTrackOne();
@@ -142,7 +185,7 @@ int main(void)
 	//aCosineTwoVector();
 	//aEuclidTwoVector();
 
-	//aMeanCos();
+	aMeanCos();
 
 	cv::waitKey();
 	return 0;
