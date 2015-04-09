@@ -14,4 +14,3 @@ FaceDataSetBase::FaceDataSetBase()
 FaceDataSetBase::~FaceDataSetBase()
 {
 }
-

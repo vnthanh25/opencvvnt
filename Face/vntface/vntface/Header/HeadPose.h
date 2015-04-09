@@ -2,7 +2,6 @@
 VNThanh
 - Du lieu anh ve mat nguoi.
 */
-
 #include "opencv2/objdetect/objdetect.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
@@ -10,10 +9,11 @@ VNThanh
 #include <iostream>
 #include <stdio.h>
 
-#ifndef _FaceDataSetBase_
-#define _FaceDataSetBase_
+//#ifndef _FaceDataSetBase_
+//#define _FaceDataSetBase_
+//#include "FaceDataSetBase.h"
+//#endif
 #include "FaceDataSetBase.h"
-#endif
 
 namespace vnt
 {
@@ -74,9 +74,9 @@ namespace vnt
 
 		//\\ Lay duong dan thu muc.
 		std::string aGetPath(const std::string pId);
-		//\\ Lay tat ca cac ten anh mat nguoi co trong thu muc. Format: "person[Id][Serie][Number][Tilt][Pan].jpg".
+		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm"
 		std::vector<std::string> aGetsAllFileName(const std::string pId);
-		//\\ Lay tat ca cac ten anh mat nguoi co trong thu muc. Format: "person[Id][Serie][Number][Tilt][Pan].jpg". Co duong dan tuong doi.
+		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.
 		std::vector<std::string> aGetsAllFullFileName(const std::string pId, const std::string pPath);
 	};
 }

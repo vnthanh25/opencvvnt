@@ -6,7 +6,18 @@
 
 using namespace vnt;
 
-
+void aFaceDataSetBase()
+{
+	FaceDataSetBase* vFaceDataSetBase;
+	ColorFeret vColorFeret;
+	vFaceDataSetBase = &vColorFeret;
+	std::string s1 = vFaceDataSetBase->aGetPath("00001");
+	std::vector<std::string> vAllIds1 = vFaceDataSetBase->aGetsAllIds();
+	HeadPose vHeadPose;
+	vFaceDataSetBase = &vHeadPose;
+	std::string s2 = vFaceDataSetBase->aGetPath("01");
+	std::vector<std::string> vAllIds2 = vFaceDataSetBase->aGetsAllIds();
+}
 void aColorFeret()
 {
 	FaceDataSet vFaceDataSet;
@@ -29,7 +40,6 @@ void aColorFeret()
 		cv::imshow("face" + std::to_string(i), vFaceTrack[i]);
 	}
 }
-
 void aHeadPose()
 {
 	FaceDataSet vFaceDataSet;
@@ -52,7 +62,6 @@ void aHeadPose()
 		cv::imshow("face" + std::to_string(i), vFaceTrack[i]);
 	}
 }
-
 
 //\\ Tinh vector trung binh cho 1 facetrack.
 void aAvgFaceTrackOne()
@@ -125,13 +134,13 @@ void aMeanCos()
 // Function main
 int main(void)
 {
+	aFaceDataSetBase();
 	//aColorFeret();
-	aHeadPose();
+	//aHeadPose();
 	//aAvgFaceTrackOne();
 	//aAvgFaceTrackAll();
 	//aCosineTwoVector();
 	//aEuclidTwoVector();
-
 
 	//aMeanCos();
 

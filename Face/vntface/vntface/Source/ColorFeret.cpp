@@ -4,6 +4,7 @@ VNThanh
 */
 
 #include "../Header/ColorFeret.h"
+#include "Utilities.h"
 
 using namespace vnt;
 
@@ -312,6 +313,31 @@ std::vector<std::string> ColorFeret::aGetsAllMeta()
 	return result;
 }
 
+
+//\\ Lay tat ca Id theo thu tu tang dan.
+std::vector<std::string> ColorFeret::aGetsAllIds()
+{
+	std::vector<std::string> result;
+	Utilites util;
+	std::vector<std::string> index = aGetsAllId();
+	size_t index_size = index.size();
+	for (size_t i = 0; i < index_size; i += 2)
+	{
+		int start = std::atoi(index[i].c_str());
+		int end = std::atoi(index[i + 1].c_str());
+		//\\ Them phan tu dau tien.
+		std::string id = index[i];
+		result.push_back(id);
+		//\\ Them cac phan tu tiep theo cho den phan tu cuoi.
+		for (size_t j = start; j < end; j++)
+		{
+			id = util.increaseNumber(id, 1);
+			result.push_back(id);
+		}
+	}
+	return result;
+}
+
 //\\ Lay duong dan thu muc.
 std::string ColorFeret::aGetPath(const std::string pId)
 {
@@ -392,4 +418,3 @@ std::vector<std::string> ColorFeret::aGetsAllFullFileName(const std::string pId,
 	}
 	return result;
 }
-

@@ -390,4 +390,3 @@ std::vector<std::string> HeadPose::aGetsAllFullFileName(const std::string pId, c
 	return result;
 }
 
-

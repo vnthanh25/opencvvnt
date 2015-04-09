@@ -21,7 +21,7 @@ namespace vnt
 	class FaceDataSet
 	{
 	private:
-		FaceDataSetBase* mDataSet;
+		FaceDataSetBase* mDataSetBase;
 		//\\ Danh sach facetrack
 		std::vector<std::vector<cv::Mat>> mFaceTracks;
 	public:
@@ -30,11 +30,17 @@ namespace vnt
 		~FaceDataSet();
 	
 		/********** public Methods **********/
-		//\\ Lay danh sach facetrack.
-		std::vector<std::vector<cv::Mat>> aGetFaceTraks();
-		//\\ Gan danh sach facetrack.
-		void aSetFaceTracks(std::vector<std::vector<cv::Mat>> pFaceTracks);
-		//\\ Doc tat ca cac anh.
+		////\\ Lay nguon anh.
+		//FaceDataSetBase aGetDataSetBase();
+		////\\ Gan nguon anh.
+		//void aSetDataSetBase(FaceDataSetBase pDataSetBase);
+		////\\ Lay danh sach facetrack.
+		//std::vector<std::vector<cv::Mat>> aGetFaceTraks();
+		////\\ Gan danh sach facetrack.
+		//void aSetFaceTracks(std::vector<std::vector<cv::Mat>> pFaceTracks);
+	
+		//\\ Doc tat ca cac anh. Roi gan vao danh sach facetrack.
 		std::vector<cv::Mat> aReadsImage(std::vector<std::string> pAllFileName, const std::string pPath = "");
+
 	};
 }
