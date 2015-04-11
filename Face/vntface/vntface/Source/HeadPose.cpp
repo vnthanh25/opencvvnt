@@ -4,7 +4,7 @@ VNThanh
 */
 
 #include "../Header/HeadPose.h"
-#include "Utilities.h"
+#include "../Header/Utilities.h"
 
 using namespace vnt;
 
@@ -273,8 +273,8 @@ std::vector<std::string> HeadPose::aGetsAllIds()
 	size_t index_size = index.size();
 	for (size_t i = 0; i < index_size; i += 2)
 	{
-		int start = std::atoi(index[i].c_str());
-		int end = std::atoi(index[i + 1].c_str());
+		size_t start = std::atoi(index[i].c_str());
+		size_t end = std::atoi(index[i + 1].c_str());
 		//\\ Them phan tu dau tien.
 		std::string id = index[i];
 		result.push_back(id);
@@ -296,8 +296,8 @@ std::vector<std::string> HeadPose::aGetsAllNumbers()
 	size_t index_size = index.size();
 	for (size_t i = 0; i < index_size; i += 2)
 	{
-		int start = std::atoi(index[i].c_str());
-		int end = std::atoi(index[i + 1].c_str());
+		size_t start = std::atoi(index[i].c_str());
+		size_t end = std::atoi(index[i + 1].c_str());
 		//\\ Them phan tu dau tien.
 		std::string number = index[i];
 		result.push_back(number);

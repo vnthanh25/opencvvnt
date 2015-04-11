@@ -230,7 +230,7 @@ std::vector<std::vector<int>> FeatureLBP::LBP(const cv::Mat image, int n, int pa
 	//\\ Chia anh thanh n x n vung. Co mo rong bien voi do lon la pad.
 	std::vector<cv::Mat> regions = divImage(image, n, pad);
 	//\\ Tinh dac trung LBP voi n x n vung x 59 khoang.
-	for (int i = 0; i < regions.size(); i++)
+	for (size_t i = 0; i < regions.size(); i++)
 	{
 		//\\ Tinh LBP cho moi vung.
 		cv::Mat lbp = LBP(regions[i], pad);
@@ -249,9 +249,9 @@ cv::Mat FeatureLBP::createMat(int width, int height)
 {
 	cv::Mat result;
 	result = cv::Mat(height, width, CV_8UC1, cv::Scalar(0));
-	for (size_t y = 0; y < height; y++)
+	for (int y = 0; y < height; y++)
 	{
-		for (size_t x = 0; x < width; x++)
+		for (int x = 0; x < width; x++)
 		{
 			if (y % 2 == 1 || x % 2 == 1)
 				result.at<uchar>(y, x) = 1;

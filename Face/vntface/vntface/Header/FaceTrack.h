@@ -15,13 +15,27 @@ namespace vnt
 	class FaceTrack
 	{
 	private:
-
+		std::vector<std::vector<std::vector<std::vector<double>>>> mFaceTrackDatabase;
+		std::string mFolderPath = "";
+		std::string mFaceTrackName = "FaceTrack";//\\ Ex: "FaceTrack01", "FaceTrack02", ...
+		std::string mFaceTracksFolder = "FaceTracks";
+		std::string mFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
+		std::string mNormalizeFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
+		std::string mNormalizeFeatureFolder = "Normalize";//\\ Thu muc con cua mFaceTrackFolder. Chua vector dac trung trung binh.
+		std::string mFeatureType = ".txt";
+		std::string mDataSetFolder = "DataSet";//\\ Thu muc con cua mFaceTrackFolder. Chua gia tri Mat cua anh.
+		std::string mImageType = ".img";
 	public:
 		/********** Constructor **********/
 		FaceTrack();
 		~FaceTrack();
 
 		/********** public Methods **********/
+		//\\ Lay csdl.
+		std::vector<std::vector<std::vector<std::vector<double>>>> aGetFaceTrackDatabase();
+		//\\ Gan csdl.
+		void aSetFaceTrackDatabase(std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTrackDatabase);
+
 		//\\ Doc tat ca file anh vao trong facetrack.
 		std::vector<cv::Mat> aGestAllImage(std::string pFolderPath, std::vector<std::string> pAllFileName);
 
@@ -50,12 +64,17 @@ namespace vnt
 		//\\ Tinh hieu cua 2 vector dac trung.
 		std::vector<std::vector<double>> aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
 		
-		//\\ Khoi tao csdl mean-cos (danh sach vector dac trung trung binh cho cac facetrack).
-		std::vector<std::vector<std::vector<double>>> aMeanCosInit(std::vector<std::vector<cv::Mat>> pFaceTracks);
-		//\\ Sap xep danh sach facetrack theo facetrack yeu cau. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
-		std::vector<std::vector<std::vector<double>>> aMeanCosMatching(std::vector<std::vector<double>> pFaceTrack, std::vector<std::vector<std::vector<double>>> pFaceTracks);
-		std::vector<int> aMeanCosMatchingIndex(std::vector<std::vector<double>> pFaceTrack, std::vector<std::vector<std::vector<double>>> pFaceTracks);
-		//\\ Thuat toan mean-cos: input (facetrack yeu cau, DS facetrack); output (DS facetrack duoc sap xep theo facetrack yeu cau).
+		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
+		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks);
+		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
+		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath);
+		//\\ Doc cac vector dac trung tu file va dua vao csdl.
+		int aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
+
+		//\\ Sap xep danh sach facetrack theo facetrack truy van. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
+		std::vector<std::vector<std::vector<std::vector<double>>>> aMeanCosMatching(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks);
+		std::vector<int> aMeanCosMatchingIndex(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks);
+		//\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
 		std::vector<std::vector<cv::Mat>> aMeanCos(std::vector<cv::Mat> pFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks);
 
 
