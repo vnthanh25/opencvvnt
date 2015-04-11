@@ -48,5 +48,8 @@ namespace vnt
 		std::string replace(const std::string str, const std::string from, const std::string to);
 		//\\ Thay the tat ca trong chuoi.
 		std::string replaceAll(const std::string str, const std::string from, const std::string to);
+
+		std::string GetExeFileName();
+		std::string GetExePath();
 	};
 }

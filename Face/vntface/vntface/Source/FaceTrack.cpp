@@ -262,13 +262,13 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks)
 	//\\ B2: Tinh vector dac trung trung binh cho moi facetrack. (mean)
 	std::vector<std::vector<std::vector<double>>> facetrackfeature = aAvgFeatures(facetrackfeatures);
 	//\\ B3: Chuan hoa vector dac trung trung binh cua moi facetrack.
-	std::vector<std::vector<std::vector<double>>> normalizefeatures;
+	std::vector<std::vector<std::vector<double>>> dbfeatures;
 	//size_t facetrackfeaturesize = facetrackfeature.size();
 	for (size_t i = 0; i < vFaceTrackSize; i++)
 	{
 		std::vector<std::vector<double>> featureSub = aSub(facetrackfeature[i], avgFeature);
-		normalizefeatures.push_back(featureSub);
-		mFaceTrackDatabase.push_back(normalizefeatures);
+		dbfeatures.push_back(featureSub);
+		mFaceTrackDatabase.push_back(dbfeatures);
 	}
 	result = mFaceTrackDatabase.size();
 	return result;
@@ -279,12 +279,13 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std:
 	int result = -1;
 	mFaceTrackDatabase.clear();
 	Utilites util;
+	//\\ Tao thu muc.
 	mFolderPath = pFolderPath;
 	std::string vFolderPath = pFolderPath;
 	if (vFolderPath.length() > 0)
 		vFolderPath = util.replaceAll(pFolderPath, "/", "\\");
 	util.makeDir(vFolderPath + mFaceTracksFolder);
-	util.makeDir(vFolderPath + mFaceTracksFolder + "\\" + mDataSetFolder);
+	util.makeDir(vFolderPath + mDBFeatureFolder);
 	//\\ Rut trich vector dac trung cho danh sach facetrack.
 	std::vector<std::vector<std::vector<std::vector<int>>>> facetrackfeatures;
 	const size_t vFaceTrackSize = pFaceTracks.size();
@@ -296,7 +297,6 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std:
 		std::string faceTrackName = std::to_string(i);
 		faceTrackName = mFaceTrackName + util.leftPad(faceTrackName, numlengthFaceTrack, '0');
 		util.makeDir(vFolderPath + mFaceTracksFolder + "\\" + faceTrackName);
-		util.makeDir(vFolderPath + mFaceTracksFolder + "\\" + mDataSetFolder + "\\" + faceTrackName);
 		faceTrackNames.push_back(faceTrackName);
 
 		std::vector<std::vector<std::vector<int>>> features = aGetsFeature(pFaceTracks[i]);
@@ -313,8 +313,6 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std:
 			fName = mFeatureName + util.leftPad(fName, numlengthFeature, '0');
 			//\\ Ghi gia tri vector dac trung.
 			util.writeMatBasic(vFeatureFile, mFolderPath + mFaceTracksFolder + "/" + faceTrackName + "/" + fName + mFeatureType);
-			//\\ Ghi tri Mat cua anh.
-			util.writeMatBasic(vFeatureFile, mFolderPath + mFaceTracksFolder + "/" + mDataSetFolder + "/" + faceTrackName + "/" + fName + mImageType);
 		}
 	}
 	//\\ B1: Tinh vector dac trung trung binh cho toan bo anh trong danh sach facetrack.
@@ -322,34 +320,36 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std:
 	//\\ B2: Tinh vector dac trung trung binh cho moi facetrack. (mean)
 	std::vector<std::vector<std::vector<double>>> facetrackfeature = aAvgFeatures(facetrackfeatures);
 	//\\ B3: Chuan hoa vector dac trung trung binh cua moi facetrack.
-	std::vector<std::vector<std::vector<double>>> normalizefeatures;
-	//\\ Tao thu muc "Normalize".
-	util.makeDir(vFolderPath + mFaceTracksFolder + "\\" + mNormalizeFeatureFolder);
+	std::vector<std::vector<std::vector<double>>> dbfeatures;
 	//size_t facetrackfeaturesize = facetrackfeature.size();
 	for (size_t i = 0; i < vFaceTrackSize; i++)
 	{
 		//\\ Tao thu muc cho facetrack thu i.
-		util.makeDir(vFolderPath + mFaceTracksFolder + "\\" + mNormalizeFeatureFolder + "\\" + faceTrackNames[i]);
+		util.makeDir(vFolderPath + "\\" + mDBFeatureFolder + "\\" + faceTrackNames[i]);
 		//\\ Chuan hoa cac vector dac trung trung binh.
-		normalizefeatures.clear();
+		dbfeatures.clear();
 		std::vector<std::vector<double>> featureSub = aSub(facetrackfeature[i], avgFeature);
-		normalizefeatures.push_back(featureSub);
-		mFaceTrackDatabase.push_back(normalizefeatures);
+		
+		////\\ Test. Khong chuan hoa cho u (vector dac trung trung binh toan bo anh).
+		//featureSub = facetrackfeature[i];
+
+		dbfeatures.push_back(featureSub);
+		mFaceTrackDatabase.push_back(dbfeatures);
 		//\\ Ghi ra file: cac vector dac trung da duoc chuan hoa (dac trung trung binh) cua facetrack thu i.
-		size_t featuressize = normalizefeatures.size();
+		size_t featuressize = dbfeatures.size();
 		int numlengthFeature = std::to_string((int)featuressize).length();
 		for (size_t j = 0; j < featuressize; j++)
 		{
 			//\\ Chuyen doi vector 2 chieu thanh doi tuong Mat.
-			cv::Mat file = util.convertV2DToMat(normalizefeatures[j], (int)normalizefeatures[j][0].size(), (int)normalizefeatures[j].size());
+			cv::Mat file = util.convertV2DToMat(dbfeatures[j], (int)dbfeatures[j][0].size(), (int)dbfeatures[j].size());
 			//\\ Ten file co dang: "Feature01.txt", ...
 			std::string fName = std::to_string(j);
 			fName = mFeatureName + util.leftPad(fName, numlengthFeature, '0');
-			util.writeMatBasic(file, mFolderPath + mFaceTracksFolder + "/" + mNormalizeFeatureFolder + "/" + faceTrackNames[i] + "/" + fName + mFeatureType);
+			util.writeMatBasic(file, mFolderPath + mDBFeatureFolder + "/" + faceTrackNames[i] + "/" + fName + mDBFeatureType);
 			//
 			////\\ Ten file co dang: "Normalize/Feature01", ...
 			//std::string fName = std::to_string(j);
-			//fName = mNormalizeFeatureName + util.leftPad(fName, numlengthFeature, '0');
+			//fName = mDBFeatureName + util.leftPad(fName, numlengthFeature, '0');
 			//util.writeMatBasic(file, mFolderPath + fName);
 		}
 	}
@@ -371,16 +371,16 @@ int FaceTrack::aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFac
 	for (size_t i = vNumFaceTrackStart; i <= vNumFaceTrackEnd; i++)
 	{
 		//\\ Doc tung vector dac trung (trung binh) cua facetrack.
-		std::string vFaceTrackPath = mFolderPath + mFaceTracksFolder + "/";
+		//std::string vFaceTrackPath = mFolderPath + mFaceTracksFolder + "/";
 		std::string vFaceTrackName = mFaceTrackName + util.leftPad(std::to_string(i), facetrackLength, '0');
 		std::vector<std::vector<std::vector<double>>> facetrack;
 		size_t vNumFeatureStart = std::atoi(pNumFeatureStart.c_str());
 		size_t vNumFeatureEnd = std::atoi(pNumFeatureEnd.c_str());
 		for (size_t j = vNumFeatureStart; j <= vNumFeatureEnd; j++)
 		{
-			std::string vFeaturePath = vFaceTrackPath + mNormalizeFeatureFolder + "/" + vFaceTrackName + "/";
-			std::string featureName = mNormalizeFeatureName + util.leftPad(std::to_string(j), featueLength, '0');
-			cv::Mat featureMat = util.readMatBasic(vFeaturePath + featureName + mFeatureType);
+			//std::string vFeaturePath = vFaceTrackPath + mDBFeatureFolder + "/" + vFaceTrackName + "/";
+			std::string featureName = mDBFeatureName + util.leftPad(std::to_string(j), featueLength, '0');
+			cv::Mat featureMat = util.readMatBasic(mFolderPath + mDBFeatureFolder + "/" + vFaceTrackName + "/" + featureName + mDBFeatureType);
 			std::vector<std::vector<double>> feature = util.convertMatToV2D(featureMat);
 			facetrack.push_back(feature);
 		}

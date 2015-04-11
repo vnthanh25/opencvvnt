@@ -1,8 +1,9 @@
 #include "..\Header\Utilities.h"
 #include <ctime>
+#include <windows.h>
 
 using namespace vnt;
-
+using namespace std;
 /********** Constructor **********/
 Utilites::Utilites()
 {
@@ -256,5 +257,28 @@ std::string Utilites::replaceAll(const std::string str, const std::string from, 
 		result.replace(start_pos, from.length(), to);
 		start_pos += to.length();
 	}
+	return result;
+}
+
+std::string Utilites::GetExeFileName()
+{
+	TCHAR szEXEPath[_MAX_PATH];
+	GetModuleFileName(NULL, szEXEPath, _MAX_PATH);
+	wstring test(&szEXEPath[0]); //convert to wstring
+	std::string result(test.begin(), test.end()); //and convert to string.
+
+	///* Prints the full path */
+	//char actualpath[2048];
+	//for (int j = 0; szEXEPath[j] != 0; j++)
+	//{
+	//	actualpath[j] = szEXEPath[j];
+	//}
+	return result;
+}
+
+std::string Utilites::GetExePath()
+{
+	std::string result = GetExeFileName();
+	result = result.substr(0, result.find_last_of("\\/"));
 	return result;
 }

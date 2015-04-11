@@ -129,7 +129,7 @@ void aMatchingFaceTrack()
   + Luu vao doi tuong FaceTrack (co ghi ra file).
 */
 //\\ Khoi tao csdl
-void aMeanCosHeadPoseInit(FaceDataSet pFaceDataSet, FaceTrack pFaceTrack, std::string pFaceTracksFolder)
+void aMeanCosHeadPoseInit(FaceDataSet pFaceDataSet, FaceTrack pFaceTrack, std::string pDataSourcePath, std::string pFolderPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
@@ -140,23 +140,13 @@ void aMeanCosHeadPoseInit(FaceDataSet pFaceDataSet, FaceTrack pFaceTrack, std::s
 	FaceDataSetBase* vFaceDataSetBase;
 	HeadPose vHeadPose;
 	//std::string vFolderPath = "../../Data/HeadPose/";
-	std::string vFolderPath = "../../Data/HeadPose/Test/";
+	//std::string vFolderPath = "../../Data/HeadPose/Test/";
 	vFaceDataSetBase = &vHeadPose;
-	//\\ Lay tat ca Ids co trong nguon anh.
-	std::vector<std::string> vAllIds = vFaceDataSetBase->aGetsAllIds();
-	std::vector<std::vector<cv::Mat>> vFaceTracks;
-	size_t vAllIdsSize = vAllIds.size();
-	for (size_t i = 0; i < vAllIdsSize; i++)
-	{
-		std::string vId = vAllIds[i];
-		//\\ Load facetrack. Lay tat ca ten file anh cua 1 nguoi.
-		std::vector<std::string> vAllFileName = vHeadPose.aGetsAllFileName(vId);
-		std::vector<cv::Mat> vFaceTrack = pFaceDataSet.aReadsImage(vAllFileName, vFolderPath + vHeadPose.aGetPath(vId));
-		vFaceTracks.push_back(vFaceTrack);
-	}// for i.
-	pFaceDataSet.aSetFaceTracks(vFaceTracks);
-	//\\ * Khoi tao csdl co ghi ra file.
-	pFaceTrack.aDatabaseInit(vFaceTracks, pFaceTracksFolder);
+
+	//\\ Khoi tao dataset.
+	pFaceDataSet.aDataSetInit(vFaceDataSetBase, pDataSourcePath, pFolderPath);
+	//\\ Khoi tao csdl.
+	pFaceTrack.aDatabaseInit(pFaceDataSet.aGetFaceTraks(), pFolderPath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << util.currentDateTime() << std::endl;
@@ -196,39 +186,24 @@ void aMeanCosHeadPose()
 {
 	FaceDataSet vFaceDataSet;
 	FaceTrack vFaceTrack;
+	Utilites util;
+	std::string vDataSourcePath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/Test/";
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vFaceTracksPath = exePath + "/";
 	//\\ Khoi tao csdl. Chi chay 1 lan.
-	//std::string vFolderPath = "../../Data/HeadPose/Test/";
-	//aMeanCosHeadPoseInit(vFaceDataSet, vFaceTrack);
-	//\\ 
+	aMeanCosHeadPoseInit(vFaceDataSet, vFaceTrack, vDataSourcePath, vFaceTracksPath);
+	//\\ Doc csdl.
+	vFaceTrack.aDatabaseRead("0", "4", "0", "0", vFaceTracksPath);
+	vFaceDataSet.aDataSetRead("0", "4", "0", "5", vFaceTracksPath);
+	//\\ So khop.
 	std::vector<std::vector<cv::Mat>> facetracks = vFaceDataSet.aGetFaceTraks();
 	std::vector<std::vector<cv::Mat>> facetracksMatching = aMeanCosHeadPoseMatching(facetracks[1], facetracks, vFaceTrack);
-}
-
-void Test()
-{
-	FaceDataSet vFaceDataSet;
-	FaceTrack vFaceTrack;
-	//\\ Khoi tao csdl. Chi chay 1 lan.
-	std::string vFolderPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/Test/";
-	aMeanCosHeadPoseInit(vFaceDataSet, vFaceTrack, vFolderPath);
-
-	//FaceTrack vFaceTrack;
-	//vFaceTrack.aDatabaseRead("0", "1", "0", "0", "");
-
-	//Utilites util;
-	//std::string s = "images/lena/.png";
-	//std::string s1 = util.replace(s, "/", "\\");
-	//std::string s2 = util.replaceAll(s, "/", "\\");
-	//cv::Mat image = cv::imread("images/lena.png", CV_8UC1);
-	//util.writeMatBasic(image, "images/lena.avg");
-
-	//cv::Mat lena = util.readMatBasic("images/lena.avg");
 }
 
 // Function main
 int main(void)
 {
-	Test();
 	//aFaceDataSetBase();
 	//aColorFeret();
 	//aHeadPose();
@@ -237,7 +212,7 @@ int main(void)
 	//aCosineTwoVector();
 	//aEuclidTwoVector();
 
-	//aMeanCosHeadPose();
+	aMeanCosHeadPose();
 	
 	cv::waitKey();
 	return 0;

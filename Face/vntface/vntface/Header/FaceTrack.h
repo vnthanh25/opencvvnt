@@ -20,11 +20,10 @@ namespace vnt
 		std::string mFaceTrackName = "FaceTrack";//\\ Ex: "FaceTrack01", "FaceTrack02", ...
 		std::string mFaceTracksFolder = "FaceTracks";
 		std::string mFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
-		std::string mNormalizeFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
-		std::string mNormalizeFeatureFolder = "Normalize";//\\ Thu muc con cua mFaceTrackFolder. Chua vector dac trung trung binh.
-		std::string mFeatureType = ".txt";
-		std::string mDataSetFolder = "DataSet";//\\ Thu muc con cua mFaceTrackFolder. Chua gia tri Mat cua anh.
-		std::string mImageType = ".img";
+		std::string mDBFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
+		std::string mDBFeatureFolder = "Database";//\\ Chua vector dac trung trung binh.
+		std::string mFeatureType = ".fea";
+		std::string mDBFeatureType = ".dbf";
 	public:
 		/********** Constructor **********/
 		FaceTrack();
