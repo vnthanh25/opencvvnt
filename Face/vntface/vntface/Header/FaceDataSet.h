@@ -53,9 +53,6 @@ namespace vnt
 		int aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
 		int aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath, std::string pFolderPath);
-
-		//\\ Luu anh moi FaceTrack lam n FaceTrack 
-		int aVNTDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath, std::string pFolderPath, int n);
 		
 		//\\ Doc cac anh tu file va dua vao csdl.
 		int aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
