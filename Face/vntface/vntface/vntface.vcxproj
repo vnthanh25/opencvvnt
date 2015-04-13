@@ -20,6 +20,7 @@
     <ClCompile Include="Source\FeatureLBP.cpp" />
     <ClCompile Include="Source\HeadPose.cpp" />
     <ClCompile Include="Source\Utilities.cpp" />
+    <ClCompile Include="Source\VNTDataSet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\ColorFeret.h" />
@@ -30,6 +31,7 @@
     <ClInclude Include="Header\FeatureLBP.h" />
     <ClInclude Include="Header\HeadPose.h" />
     <ClInclude Include="Header\Utilities.h" />
+    <ClInclude Include="Header\VNTDataSet.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A126096-05B0-412F-BD4C-477D262D69F4}</ProjectGuid>

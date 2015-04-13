@@ -36,21 +36,21 @@ namespace vnt
 		////\\ So thu tu cua file trong thu muc.
 		//const std::string mNumber = "00,92";
 		////\\ Goc nghien theo chieu dung.
-		//const std::string mTilt = "-90,-60,-30,-15,0,+15,+30,+60,+90";
+		//const std::string mTilt = "-90,-60,-30,-15,+0,+15,+30,+60,+90";
 		////\\ Goc nghien theo chieu ngang.
-		//const std::string mPan = "-90,-75,-60,-45,-30,-15,0,+15,+30,+45,+60,+75,+90";
+		//const std::string mPan = "-90,-75,-60,-45,-30,-15,+0,+15,+30,+45,+60,+75,+90";
 
 		/* Test */
 		//\\ Id dau tien va Id cuoi cung.
-		const std::string mIds = "01,05";
+		const std::string mIds = "00,14";
 		//\\ Chuoi anh.
-		const std::string mSerie = "1";
+		const std::string mSerie = "";
 		//\\ So thu tu cua file trong thu muc.
-		const std::string mNumber = "00,05";
+		const std::string mNumber = "000,185";
 		//\\ Goc nghien theo chieu dung.
-		const std::string mTilt = "-90,-60,+90";
+		const std::string mTilt = "";
 		//\\ Goc nghien theo chieu ngang.
-		const std::string mPan = "-90,-75,-60,-45";
+		const std::string mPan = "";
 
 		/********** Constructor **********/
 		HeadPose();

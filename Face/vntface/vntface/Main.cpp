@@ -3,6 +3,7 @@
 #include "Header\ColorFeret.h"
 #include "Header\HeadPose.h"
 #include "Header\FaceTrack.h"
+#include "Header\VNTDataSet.h"
 
 using namespace vnt;
 
@@ -129,6 +130,29 @@ void aMatchingFaceTrack()
   + Luu vao doi tuong FaceTrack (co ghi ra file).
 */
 //\\ Khoi tao csdl
+void aMeanCosVNTDataSetInit(FaceDataSet pFaceDataSet, FaceTrack pFaceTrack, std::string pDataSourcePath, std::string pFolderPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aMeanCosHeadPoseInit:" << std::endl;
+	cout << util.currentDateTime() << std::endl;
+
+	//\\ * Load tat ca anh vao FaceDataSet.
+	FaceDataSetBase* vFaceDataSetBase;
+	VNTDataSet vVNTDataSet;
+	//std::string vFolderPath = "../../Data/HeadPose/";
+	//std::string vFolderPath = "../../Data/HeadPose/Test/";
+	vFaceDataSetBase = &vVNTDataSet;
+
+	//\\ Khoi tao dataset.
+	pFaceDataSet.aVNTDataSetInit(vFaceDataSetBase, pDataSourcePath, pFolderPath, 6);
+	////\\ Khoi tao csdl.
+	//pFaceTrack.aDatabaseInit(pFaceDataSet.aGetFaceTraks(), pFolderPath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl
 void aMeanCosHeadPoseInit(FaceDataSet pFaceDataSet, FaceTrack pFaceTrack, std::string pDataSourcePath, std::string pFolderPath)
 {
 	Utilites util;
@@ -145,12 +169,13 @@ void aMeanCosHeadPoseInit(FaceDataSet pFaceDataSet, FaceTrack pFaceTrack, std::s
 
 	//\\ Khoi tao dataset.
 	pFaceDataSet.aDataSetInit(vFaceDataSetBase, pDataSourcePath, pFolderPath);
-	//\\ Khoi tao csdl.
-	pFaceTrack.aDatabaseInit(pFaceDataSet.aGetFaceTraks(), pFolderPath);
+	////\\ Khoi tao csdl.
+	//pFaceTrack.aDatabaseInit(pFaceDataSet.aGetFaceTraks(), pFolderPath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << util.currentDateTime() << std::endl;
 }
+
 //\\ So khop facetrack
 std::vector<std::vector<cv::Mat>> aMeanCosHeadPoseMatching(std::vector<cv::Mat> pFaceTrackQuery, std::vector<std::vector<cv::Mat>> pFaceTracks, FaceTrack pFaceTrack)
 {
@@ -187,18 +212,19 @@ void aMeanCosHeadPose()
 	FaceDataSet vFaceDataSet;
 	FaceTrack vFaceTrack;
 	Utilites util;
-	std::string vDataSourcePath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/Test/";
+	std::string vDataSourcePath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/DataSet/";
 	std::string exePath = util.GetExePath();
 	exePath = util.replaceAll(exePath, "\\", "/");
 	std::string vFaceTracksPath = exePath + "/";
 	//\\ Khoi tao csdl. Chi chay 1 lan.
-	aMeanCosHeadPoseInit(vFaceDataSet, vFaceTrack, vDataSourcePath, vFaceTracksPath);
-	//\\ Doc csdl.
-	vFaceTrack.aDatabaseRead("0", "4", "0", "0", vFaceTracksPath);
-	vFaceDataSet.aDataSetRead("0", "4", "0", "5", vFaceTracksPath);
-	//\\ So khop.
-	std::vector<std::vector<cv::Mat>> facetracks = vFaceDataSet.aGetFaceTraks();
-	std::vector<std::vector<cv::Mat>> facetracksMatching = aMeanCosHeadPoseMatching(facetracks[1], facetracks, vFaceTrack);
+	aMeanCosVNTDataSetInit(vFaceDataSet, vFaceTrack, vDataSourcePath, vFaceTracksPath);
+	//aMeanCosHeadPoseInit(vFaceDataSet, vFaceTrack, vDataSourcePath, vFaceTracksPath);
+	////\\ Doc csdl.
+	//vFaceTrack.aDatabaseRead("0", "4", "0", "0", vFaceTracksPath);
+	//vFaceDataSet.aDataSetRead("0", "4", "0", "5", vFaceTracksPath);
+	////\\ So khop.
+	//std::vector<std::vector<cv::Mat>> facetracks = vFaceDataSet.aGetFaceTraks();
+	//std::vector<std::vector<cv::Mat>> facetracksMatching = aMeanCosHeadPoseMatching(facetracks[1], facetracks, vFaceTrack);
 }
 
 // Function main
