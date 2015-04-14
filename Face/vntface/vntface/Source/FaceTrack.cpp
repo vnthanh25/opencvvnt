@@ -346,11 +346,6 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std:
 			std::string fName = std::to_string(j);
 			fName = mFeatureName + util.leftPad(fName, numlengthFeature, '0');
 			util.writeMatBasic(file, mFolderPath + mDBFeatureFolder + "/" + faceTrackNames[i] + "/" + fName + mDBFeatureType);
-			//
-			////\\ Ten file co dang: "Normalize/Feature01", ...
-			//std::string fName = std::to_string(j);
-			//fName = mDBFeatureName + util.leftPad(fName, numlengthFeature, '0');
-			//util.writeMatBasic(file, mFolderPath + fName);
 		}
 	}
 	result = mFaceTrackDatabase.size();

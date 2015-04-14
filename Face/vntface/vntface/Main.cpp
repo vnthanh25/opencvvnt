@@ -122,13 +122,6 @@ void aMatchingFaceTrack()
 	std::vector<std::vector<std::vector<std::vector<int>>>> facetracks = faceTrack.aGetsFeaturesFake(numFaceTrack, numFeature, numRow, numCol);
 }
 
-//\\ Thuat toan sap xep theo mean-cos.
-/*
-- Doc cac file anh trong thu muc cua "HeadPose" thanh doi tuong Mat. Luu cac doi tuong Mat nay vao trong FaceDataSet.
-- Khoi tao csdl:
-  + Rut trich dac trung LBP (la vector 2 chieu kieu int) cua tat ca anh (bo tri theo facetrack).
-  + Luu vao doi tuong FaceTrack (co ghi ra file).
-*/
 //\\ Khoi tao csdl
 void aMeanCosVNTDataSetInit()
 {
@@ -142,14 +135,24 @@ void aMeanCosVNTDataSetInit()
 	VNTDataSet vVNTDataSet;
 	vFaceDataSetBase = &vVNTDataSet;
 
-	std::string vDataSourcePath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/DataSet/";
+	std::string vDataSourcePath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/DataSetHeadPose/";
 	//std::string exePath = util.GetExePath();
 	//exePath = util.replaceAll(exePath, "\\", "/");
-	std::string vFaceTracksPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/DataSetQuery/";
+	std::string vDataSetPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/DataSet/";
 
-	FaceDataSet vFaceDataSet;
-	//\\ Khoi tao VNTDataSet.
-	vVNTDataSet.aVNTDataSetInit(vFaceDataSetBase, vDataSourcePath, vFaceTracksPath, 6);
+	////\\ Khoi tao VNTDataSet.
+	//FaceDataSet vFaceDataSet;
+	//vVNTDataSet.aVNTDataSetInit(vFaceDataSetBase, vDataSourcePath, vDataSetPath, 6);
+
+	//\\ Doc facetrack query.
+	std::string vDataSourcePathQuery = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/";
+	FaceDataSet vFaceDataSetQuery;
+	vFaceDataSetQuery.aDataSetRead("15", "17", "00", "30", vDataSourcePathQuery);
+
+	//\\ Khoi tao csdl.
+	FaceTrack vFaceTrack;
+	std::string vFaceTracksPath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/";
+	vFaceTrack.aDatabaseInit(vFaceDataSetQuery.aGetFaceTraks(), vFaceTracksPath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << util.currentDateTime() << std::endl;
@@ -165,19 +168,16 @@ void aMeanCosHeadPoseInit(FaceDataSet pFaceDataSet, FaceTrack pFaceTrack, std::s
 	//\\ * Load tat ca anh vao FaceDataSet.
 	FaceDataSetBase* vFaceDataSetBase;
 	HeadPose vHeadPose;
-	//std::string vFolderPath = "../../Data/HeadPose/";
-	//std::string vFolderPath = "../../Data/HeadPose/Test/";
 	vFaceDataSetBase = &vHeadPose;
 
 	//\\ Khoi tao dataset.
 	pFaceDataSet.aDataSetInit(vFaceDataSetBase, pDataSourcePath, pFolderPath);
-	////\\ Khoi tao csdl.
-	//pFaceTrack.aDatabaseInit(pFaceDataSet.aGetFaceTraks(), pFolderPath);
+	//\\ Khoi tao csdl.
+	pFaceTrack.aDatabaseInit(pFaceDataSet.aGetFaceTraks(), pFolderPath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << util.currentDateTime() << std::endl;
 }
-
 //\\ So khop facetrack
 std::vector<std::vector<cv::Mat>> aMeanCosHeadPoseMatching(std::vector<cv::Mat> pFaceTrackQuery, std::vector<std::vector<cv::Mat>> pFaceTracks, FaceTrack pFaceTrack)
 {
@@ -209,23 +209,106 @@ std::vector<std::vector<cv::Mat>> aMeanCosHeadPoseMatching(std::vector<cv::Mat> 
 	return result;
 }
 
-void aMeanCosHeadPose()
+//\\ So khop facetrack
+std::vector<int> aMeanCosHeadPoseMatchingIndex(std::vector<cv::Mat> pFaceTrackQuery, FaceTrack pFaceTrack)
+{
+	std::vector<int> result;
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aMeanCosHeadPoseMatching:" << std::endl;
+	cout << util.currentDateTime() << std::endl;
+	//\\ Lay vector dac trung trung binh cua facetrack truy van.
+	std::vector<std::vector<std::vector<int>>> vFeaturesQuery = pFaceTrack.aGetsFeature(pFaceTrackQuery);
+	std::vector<std::vector<double>> vAvgFeatureQuery = pFaceTrack.aAvgFeature(vFeaturesQuery);
+	std::vector<std::vector<std::vector<double>>> vQuery = { vAvgFeatureQuery };
+	//\\ Lay vector dac trung trung binh cua tat ca facetrack.
+	std::vector<std::vector<std::vector<std::vector<double>>>> csdl = pFaceTrack.aGetFaceTrackDatabase();
+	//\\ So khop facetrack truy van va cac facetrack trong csdl.
+	result = pFaceTrack.aMeanCosMatchingIndex(vQuery, csdl);
+	return result;
+}
+
+/*
+- Doc cac file anh trong thu muc cua "HeadPose" thanh doi tuong Mat. Luu cac doi tuong Mat nay vao trong FaceDataSet.
+- Khoi tao csdl:
++ Rut trich dac trung LBP (la vector 2 chieu kieu int) cua tat ca anh (bo tri theo facetrack).
++ Luu vao doi tuong FaceTrack (co ghi ra file).
+*/
+//\\ Thuat toan sap xep theo mean-cos.
+double aMeanCosHeadPose()
 {
 	FaceDataSet vFaceDataSet;
 	FaceTrack vFaceTrack;
 	Utilites util;
-	std::string vDataSourcePath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/";
+	std::string vDataSourcePath = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/VNTDataSet/";
 	std::string exePath = util.GetExePath();
 	exePath = util.replaceAll(exePath, "\\", "/");
 	std::string vFaceTracksPath = exePath + "/";
-	//\\ Khoi tao csdl. Chi chay 1 lan.
-	aMeanCosHeadPoseInit(vFaceDataSet, vFaceTrack, vDataSourcePath, vFaceTracksPath);
-	////\\ Doc csdl.
-	//vFaceTrack.aDatabaseRead("0", "4", "0", "0", vFaceTracksPath);
-	//vFaceDataSet.aDataSetRead("0", "4", "0", "5", vFaceTracksPath);
-	////\\ So khop.
-	//std::vector<std::vector<cv::Mat>> facetracks = vFaceDataSet.aGetFaceTraks();
-	//std::vector<std::vector<cv::Mat>> facetracksMatching = aMeanCosHeadPoseMatching(facetracks[1], facetracks, vFaceTrack);
+	vFaceTracksPath = vDataSourcePath;
+
+	////\\ Khoi tao csdl. Chi chay 1 lan.
+	//aMeanCosHeadPoseInit(vFaceDataSet, vFaceTrack, vDataSourcePath, vFaceTracksPath);
+
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrack.aDatabaseRead("00", "17", "0", "0", vFaceTracksPath); //\\ n = 3, m = 6;
+	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	vFaceDataSet.aDataSetRead("00", "17", "00", "01", vFaceTracksPath);
+
+	////\\ Doc facetrack query.
+	//std::string vDataSourcePathQuery = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/";
+	//FaceDataSet vFaceDataSetQuery;
+	//vFaceDataSetQuery.aDataSetRead("00", "01", "000", "030", vDataSourcePathQuery);
+	//std::vector<std::vector<cv::Mat>> facetracksquery = vFaceDataSetQuery.aGetFaceTraks();
+	//////\\ Tinh vector trung binh cho facetrack query.
+	////std::vector<std::vector<double>> vAvgFeature = vFaceTrack.aAvgFeature(vFaceDataSetQuery.aGetFaceTraks()[0]);
+
+	//\\ So khop.
+	/*
+	- Lap qua 3 mat nguoi goc.
+	- Lap qua 6 mat nguoi duoc chia nho cua tung mat nguoi goc.
+	- So khop tung mat nguoi voi csdl facetrack: ket qua la thu tu so khop.
+	- Tinh do chinh xac MAP.
+	*/
+	std::vector<std::vector<cv::Mat>> facetracks = vFaceDataSet.aGetFaceTraks();
+	std::vector<double> vAPs;
+	size_t m = 6;
+	size_t n = facetracks.size() / 6;
+	//\\ Lap n mat nguoi goc.
+	for (size_t i = 0; i < n; i++)
+	{
+		//\\ Lap qua m mat nguoi dung.
+		for (size_t j = 0; j < m; j++)
+		{
+			//std::vector<std::vector<cv::Mat>> facetracksMatching = aMeanCosHeadPoseMatching(facetracks[1], facetracks, vFaceTrack);
+			std::vector<int> vMatchingIndex = aMeanCosHeadPoseMatchingIndex(facetracks[i * m + j], vFaceTrack);
+			double vAP = 0;
+			double Nr = 1;
+			size_t vMatchingIndexSize = vMatchingIndex.size();
+			//\\ Tim gia tri index dung trong ket qua MatchingIndex tra ve.
+			for (size_t k = 0; k < vMatchingIndexSize; k++)
+			{
+				//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
+				if (i * m <= vMatchingIndex[k] && vMatchingIndex[k] < i * m + m)
+				{
+					//\\ Tinh AP.
+					vAP += Nr / (k + 1);
+					Nr++;
+				}
+			}
+			//\\ Tinh AP trung binh. AP chia m mat nguoi dung. (m = 6).
+			vAP /= m;
+			vAPs.push_back(vAP);
+		}
+	}
+	//\\ Tinh do chinh xac cho n x m truy van.
+	double vMAP = 0;
+	size_t vAPsSize = vAPs.size();
+	for (size_t i = 0; i < vAPsSize; i++)
+	{
+		vMAP += vAPs[i];
+	}
+	vMAP /= vAPsSize;
+	return vMAP;
 }
 
 // Function main
@@ -238,9 +321,10 @@ int main(void)
 	//aAvgFaceTrackAll();
 	//aCosineTwoVector();
 	//aEuclidTwoVector();
-	aMeanCosVNTDataSetInit();
+	//aMeanCosVNTDataSetInit();
 
-	//aMeanCosHeadPose();
+	//\\ Ket qua
+	double vMAP = aMeanCosHeadPose();
 	
 	cv::waitKey();
 	return 0;

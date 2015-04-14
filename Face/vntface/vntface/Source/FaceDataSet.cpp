@@ -104,7 +104,6 @@ int FaceDataSet::aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDa
 	if (vFolderPath.length() > 0)
 		vFolderPath = util.replaceAll(vFolderPath, "/", "\\");
 	util.makeDir(vFolderPath + mDataSetFolder);
-	//\\ * Load tat ca anh vao FaceDataSet.
 	//\\ Lay tat ca Ids co trong nguon anh.
 	std::vector<std::string> vAllIds = mDataSetBase->aGetsAllIds();
 	size_t vAllIdsSize = vAllIds.size();
@@ -126,7 +125,7 @@ int FaceDataSet::aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDa
 	return result;
 }
 
-//\\ Doc cac anh tu file va dua vao csdl.
+//\\ Doc cac anh tu file.
 int FaceDataSet::aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
 {
 	int result = 0;
