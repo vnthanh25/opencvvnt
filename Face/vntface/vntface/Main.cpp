@@ -235,7 +235,7 @@ std::vector<int> aMeanCosHeadPoseMatchingIndex(std::vector<cv::Mat> pFaceTrackQu
 + Luu vao doi tuong FaceTrack (co ghi ra file).
 */
 //\\ Thuat toan sap xep theo mean-cos.
-double aMeanCosHeadPose()
+void aMeanCosHeadPose()
 {
 	FaceDataSet vFaceDataSet;
 	FaceTrack vFaceTrack;
@@ -254,13 +254,28 @@ double aMeanCosHeadPose()
 	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
 	vFaceDataSet.aDataSetRead("00", "17", "00", "01", vFaceTracksPath);
 
-	////\\ Doc facetrack query.
-	//std::string vDataSourcePathQuery = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/";
-	//FaceDataSet vFaceDataSetQuery;
-	//vFaceDataSetQuery.aDataSetRead("00", "01", "000", "030", vDataSourcePathQuery);
-	//std::vector<std::vector<cv::Mat>> facetracksquery = vFaceDataSetQuery.aGetFaceTraks();
-	//////\\ Tinh vector trung binh cho facetrack query.
-	////std::vector<std::vector<double>> vAvgFeature = vFaceTrack.aAvgFeature(vFaceDataSetQuery.aGetFaceTraks()[0]);
+	//\\ Doc facetrack query.
+	std::string vDataSourcePathQuery = "D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/Data/HeadPose/";
+	FaceDataSet vFaceDataSetQuery;
+	vFaceDataSetQuery.aDataSetRead("00", "01", "000", "030", vDataSourcePathQuery);
+	std::vector<std::vector<cv::Mat>> facetracksquery = vFaceDataSetQuery.aGetFaceTraks();
+	std::vector<std::vector<cv::Mat>> facetracks = vFaceDataSet.aGetFaceTraks();
+	std::vector<std::vector<cv::Mat>> facetracksMatching = aMeanCosHeadPoseMatching(facetracksquery[0], facetracks, vFaceTrack);
+}
+
+double aMeanCosHeadPoseMAP1()
+{
+	FaceDataSet vFaceDataSet;
+	FaceTrack vFaceTrack;
+	Utilites util;
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vFaceTracksPath = exePath + "/VNTDataSet/";
+
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrack.aDatabaseRead("00", "17", "0", "0", vFaceTracksPath); //\\ n = 3, m = 6;
+	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	vFaceDataSet.aDataSetRead("00", "17", "00", "01", vFaceTracksPath);
 
 	//\\ So khop.
 	/*
@@ -279,8 +294,68 @@ double aMeanCosHeadPose()
 		//\\ Lap qua m mat nguoi dung.
 		for (size_t j = 0; j < m; j++)
 		{
-			//std::vector<std::vector<cv::Mat>> facetracksMatching = aMeanCosHeadPoseMatching(facetracks[1], facetracks, vFaceTrack);
 			std::vector<int> vMatchingIndex = aMeanCosHeadPoseMatchingIndex(facetracks[i * m + j], vFaceTrack);
+			double vAP = 0;
+			double Nr = 1;
+			size_t vMatchingIndexSize = vMatchingIndex.size();
+			//\\ Tim gia tri index dung trong ket qua MatchingIndex tra ve.
+			for (size_t k = 0; k < vMatchingIndexSize; k++)
+			{
+				//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
+				if (i * m <= vMatchingIndex[k] && vMatchingIndex[k] < i * m + m)
+				{
+					//\\ Tinh AP.
+					vAP += Nr / (k + 1);
+					Nr++;
+				}
+			}
+			//\\ Tinh AP trung binh. AP chia m mat nguoi dung. (m = 6).
+			vAP /= m;
+			vAPs.push_back(vAP);
+		}
+	}
+	//\\ Tinh do chinh xac cho n x m truy van.
+	double vMAP = 0;
+	size_t vAPsSize = vAPs.size();
+	for (size_t i = 0; i < vAPsSize; i++)
+	{
+		vMAP += vAPs[i];
+	}
+	vMAP /= vAPsSize;
+	return vMAP;
+}
+
+double aMeanCosHeadPoseMAP()
+{
+	FaceDataSet vFaceDataSet;
+	FaceTrack vFaceTrack;
+	Utilites util;
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vFaceTracksPath = exePath + "/VNTDataSet/";
+
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrack.aDatabaseRead("00", "17", "0", "0", vFaceTracksPath); //\\ n = 3, m = 6;
+
+	//\\ So khop.
+	/*
+	- Lap qua 3 mat nguoi goc.
+	- Lap qua 6 mat nguoi duoc chia nho cua tung mat nguoi goc.
+	- So khop tung mat nguoi voi csdl facetrack: ket qua la thu tu so khop.
+	- Tinh do chinh xac MAP.
+	*/
+	std::vector<std::vector<std::vector<std::vector<double>>>> csdl = vFaceTrack.aGetFaceTrackDatabase();
+	std::vector<double> vAPs;
+	size_t m = 6;
+	size_t n = csdl.size() / 6;
+	//\\ Lap n mat nguoi goc.
+	for (size_t i = 0; i < n; i++)
+	{
+		//\\ Lap qua m mat nguoi dung.
+		for (size_t j = 0; j < m; j++)
+		{
+			std::vector<int> vMatchingIndex = vFaceTrack.aMeanCosMatchingIndex(csdl[i * m + j], csdl);
+			//std::vector<int> vMatchingIndex = aMeanCosHeadPoseMatchingIndex(facetracks[i * m + j], vFaceTrack);
 			double vAP = 0;
 			double Nr = 1;
 			size_t vMatchingIndexSize = vMatchingIndex.size();
@@ -324,7 +399,8 @@ int main(void)
 	//aMeanCosVNTDataSetInit();
 
 	//\\ Ket qua
-	double vMAP = aMeanCosHeadPose();
+	double vMAP1 = aMeanCosHeadPoseMAP1();//\\ 0.62. Vector dac trung trung binh cua facetrack query khong chuan hoa.
+	double vMAP = aMeanCosHeadPoseMAP();//\\ 0.84. Vector dac trung trung binh cua facetrack query duoc lay tu trong csdl.
 	
 	cv::waitKey();
 	return 0;
