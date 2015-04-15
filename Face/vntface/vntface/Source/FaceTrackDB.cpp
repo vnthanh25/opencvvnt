@@ -3,34 +3,34 @@ VNThanh
 - Face Track.
 */
 
-#include "../Header/FaceTrack.h"
+#include "../Header/FaceTrackDB.h"
 #include "../Header/FeatureLBP.h"
 #include "../Header/Utilities.h"
 
 using namespace vnt;
 
 /********** Constructor **********/
-FaceTrack::FaceTrack()
+FaceTrackDB::FaceTrackDB()
 {
 }
-FaceTrack::~FaceTrack()
+FaceTrackDB::~FaceTrackDB()
 {
 }
 
 /********** public Methods **********/
 //\\ Lay csdl.
-std::vector<std::vector<std::vector<std::vector<double>>>> FaceTrack::aGetFaceTrackDatabase()
+std::vector<std::vector<std::vector<std::vector<double>>>> FaceTrackDB::aGetFaceTrackDatabase()
 {
 	return mFaceTrackDatabase;
 }
 //\\ Gan csdl.
-void FaceTrack::aSetFaceTrackDatabase(std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTrackDatabase)
+void FaceTrackDB::aSetFaceTrackDatabase(std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTrackDatabase)
 {
 	mFaceTrackDatabase = pFaceTrackDatabase;
 }
 
 //\\ Doc tat ca file anh vao trong facetrack.
-std::vector<cv::Mat> FaceTrack::aGestAllImage(std::string pFolderPath, std::vector<std::string> pAllFileName)
+std::vector<cv::Mat> FaceTrackDB::aGestAllImage(std::string pFolderPath, std::vector<std::string> pAllFileName)
 {
 	std::vector<cv::Mat> result;
 	size_t size01 = pAllFileName.size();
@@ -43,7 +43,7 @@ std::vector<cv::Mat> FaceTrack::aGestAllImage(std::string pFolderPath, std::vect
 }
 
 //\\ Lay dac trung cua tung face trong facetrack.
-std::vector<std::vector<std::vector<int>>> FaceTrack::aGetsFeature(const std::vector<cv::Mat> pFaceTrack)
+std::vector<std::vector<std::vector<int>>> FaceTrackDB::aGetsFeature(const std::vector<cv::Mat> pFaceTrack)
 {
 	std::vector<std::vector<std::vector<int>>> result;
 	//\\ Su dung dac trung LBP.
@@ -56,7 +56,7 @@ std::vector<std::vector<std::vector<int>>> FaceTrack::aGetsFeature(const std::ve
 	return result;
 }
 //\\ Tinh vector trung binh cho facetrack.
-std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<std::vector<std::vector<int>>> pFeatures)
+std::vector<std::vector<double>> FaceTrackDB::aAvgFeature(const std::vector<std::vector<std::vector<int>>> pFeatures)
 {
 	std::vector<std::vector<double>> result;
 	//\\ Tinh vector trung binh cho cac dac trung cua facetrack.
@@ -83,7 +83,7 @@ std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<std::v
 	}
 	return result;
 }
-std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<cv::Mat> pFaceTrack)
+std::vector<std::vector<double>> FaceTrackDB::aAvgFeature(const std::vector<cv::Mat> pFaceTrack)
 {
 	std::vector<std::vector<double>> result;
 	//\\ Tinh dac trung LBP cho tat ca face trong facetrack
@@ -92,7 +92,7 @@ std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<cv::Ma
 	return result;
 }
 //\\ Tinh vector trung binh cho tung facetrack. Moi facetrack co danh sach vector dac trung.
-std::vector<std::vector<std::vector<double>>> FaceTrack::aAvgFeatures(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures)
+std::vector<std::vector<std::vector<double>>> FaceTrackDB::aAvgFeatures(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures)
 {
 	std::vector<std::vector<std::vector<double>>> result;
 	//\\ Tinh vector dac trung trung binh cho tung facetrack.
@@ -104,7 +104,7 @@ std::vector<std::vector<std::vector<double>>> FaceTrack::aAvgFeatures(const std:
 	return result;
 }
 //\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co danh sach vector dac trung.
-std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures)
+std::vector<std::vector<double>> FaceTrackDB::aAvgFeature(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures)
 {
 	std::vector<std::vector<double>> result;
 	//\\ Tinh vector trung binh cho cac dac trung cua facetrack.
@@ -136,7 +136,7 @@ std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<std::v
 	return result;
 }
 //\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co 1 vector dac trung trung binh.
-std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<std::vector<std::vector<double>>> pFTFeatures)
+std::vector<std::vector<double>> FaceTrackDB::aAvgFeature(const std::vector<std::vector<std::vector<double>>> pFTFeatures)
 {
 	std::vector<std::vector<double>> result;
 	//\\ Tinh vector trung binh cho cac dac trung cua facetrack.
@@ -165,7 +165,7 @@ std::vector<std::vector<double>> FaceTrack::aAvgFeature(const std::vector<std::v
 }
 
 //\\ Tinh tong cua tich cac phan tu tuong ung trong 2 vector. Co so chieu bang nhau.
-double FaceTrack::aSumMul(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
+double FaceTrackDB::aSumMul(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
 {
 	double result = 0;
 	//\\ Lap qua 9 vung. (truc y)
@@ -181,7 +181,7 @@ double FaceTrack::aSumMul(std::vector<std::vector<double>> pVector1, std::vector
 	return result;
 }
 //\\ Tinh khoang cach cosine cua 2 vector. Co so chieu bang nhau.
-double FaceTrack::aCosine(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
+double FaceTrackDB::aCosine(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
 {
 	double result = 0;
 
@@ -197,7 +197,7 @@ double FaceTrack::aCosine(std::vector<std::vector<double>> pVector1, std::vector
 }
 
 //\\ Tinh tong cua hieu cua binh phuong cac phan tu tuong ung trong 2 vector. Co so chieu bang nhau.
-double FaceTrack::aSumSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
+double FaceTrackDB::aSumSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
 {
 	double result = 0;
 	//\\ Lap qua 9 vung. (truc y)
@@ -214,7 +214,7 @@ double FaceTrack::aSumSub(std::vector<std::vector<double>> pVector1, std::vector
 	return result;
 }
 //\\ Tinh khoang cach hinh hoc cua 2 vector.
-double FaceTrack::aEuclid(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
+double FaceTrackDB::aEuclid(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
 {
 	double result = 0;
 
@@ -226,7 +226,7 @@ double FaceTrack::aEuclid(std::vector<std::vector<double>> pVector1, std::vector
 }
 
 //\\ Tinh hieu cua 2 vector dac trung.
-std::vector<std::vector<double>> FaceTrack::aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
+std::vector<std::vector<double>> FaceTrackDB::aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
 {
 	std::vector<std::vector<double>> result;
 	//\\ Lap qua 9 vung. (truc y)
@@ -245,7 +245,7 @@ std::vector<std::vector<double>> FaceTrack::aSub(std::vector<std::vector<double>
 }
 
 //\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
-int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks)
+int FaceTrackDB::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks)
 {
 	int result = -1;
 	mFaceTrackDatabase.clear();
@@ -274,7 +274,7 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks)
 	return result;
 }
 //\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath)
+int FaceTrackDB::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath)
 {
 	int result = -1;
 	mFaceTrackDatabase.clear();
@@ -352,7 +352,7 @@ int FaceTrack::aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std:
 	return result;
 }
 //\\ Doc cac vector dac trung tu file va dua vao csdl.
-int FaceTrack::aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
+int FaceTrackDB::aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
 {
 	int result = 0;
 	mFaceTrackDatabase.clear();
@@ -387,7 +387,7 @@ int FaceTrack::aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFac
 }
 
 //\\ Sap xep danh sach facetrack theo facetrack truy van. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
-std::vector<std::vector<std::vector<std::vector<double>>>> FaceTrack::aMeanCosMatching(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks)
+std::vector<std::vector<std::vector<std::vector<double>>>> FaceTrackDB::aMeanCosMatching(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks)
 {
 	std::vector<std::vector<std::vector<std::vector<double>>>> result;
 	std::vector<double> resultmeancos;
@@ -430,7 +430,7 @@ std::vector<std::vector<std::vector<std::vector<double>>>> FaceTrack::aMeanCosMa
 	}
 	return result;
 }
-std::vector<int> FaceTrack::aMeanCosMatchingIndex(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks)
+std::vector<int> FaceTrackDB::aMeanCosMatchingIndex(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks)
 {
 	std::vector<int> result;
 	if (pFaceTracks.size() == 0)
@@ -475,7 +475,7 @@ std::vector<int> FaceTrack::aMeanCosMatchingIndex(std::vector<std::vector<std::v
 	return result;
 }
 //\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
-std::vector<std::vector<cv::Mat>> FaceTrack::aMeanCos(std::vector<cv::Mat> pQueryFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks)
+std::vector<std::vector<cv::Mat>> FaceTrackDB::aMeanCos(std::vector<cv::Mat> pQueryFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks)
 {
 	std::vector<std::vector<cv::Mat>> result;
 	//\\ Facetrack truy van.
@@ -498,7 +498,7 @@ std::vector<std::vector<cv::Mat>> FaceTrack::aMeanCos(std::vector<cv::Mat> pQuer
 
 /******************** Gia lap ********************/
 //\\ Gia lap danh sach vector dac trung cua facetrack. 1 facetrack co nhieu vector dac trung.
-std::vector<std::vector<std::vector<int>>> FaceTrack::aGetsFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue)
+std::vector<std::vector<std::vector<int>>> FaceTrackDB::aGetsFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue)
 {
 	std::vector<std::vector<std::vector<int>>> result;
 	//size_t numLists = 3;
@@ -525,7 +525,7 @@ std::vector<std::vector<std::vector<int>>> FaceTrack::aGetsFeatureFake(size_t pN
 	return result;
 }
 //\\ Gia lap danh sach vector dac trung trung binh cua tat ca facetrack. Moi facetrack co 1 vector dac trung trung binh.
-std::vector<std::vector<std::vector<double>>> FaceTrack::aGetsAvgFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue)
+std::vector<std::vector<std::vector<double>>> FaceTrackDB::aGetsAvgFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue)
 {
 	std::vector<std::vector<std::vector<double>>> result;
 	//size_t numLists = 3;
@@ -552,7 +552,7 @@ std::vector<std::vector<std::vector<double>>> FaceTrack::aGetsAvgFeatureFake(siz
 	return result;
 }
 //\\ Gia lap danh sach cua danh sach vector dac trung cua facetrack. Moi  facetrack co nhieu vector dac trung.
-std::vector<std::vector<std::vector<std::vector<int>>>> FaceTrack::aGetsFeaturesFake(size_t pNumLists, size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue)
+std::vector<std::vector<std::vector<std::vector<int>>>> FaceTrackDB::aGetsFeaturesFake(size_t pNumLists, size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue)
 {
 	std::vector<std::vector<std::vector<std::vector<int>>>> result;
 	//size_t numLists = 3;
@@ -564,7 +564,7 @@ std::vector<std::vector<std::vector<std::vector<int>>>> FaceTrack::aGetsFeatures
 	return result;
 }
 //\\ Gia lap vector dac trung trung binh.
-std::vector<std::vector<double>> FaceTrack::aAvgFetureFake(size_t pNumRows, size_t pNumCols, double pValue)
+std::vector<std::vector<double>> FaceTrackDB::aAvgFetureFake(size_t pNumRows, size_t pNumCols, double pValue)
 {
 	std::vector<std::vector<double>> result;
 	//size_t numRows = 1;
@@ -585,7 +585,7 @@ std::vector<std::vector<double>> FaceTrack::aAvgFetureFake(size_t pNumRows, size
 	return result;
 }
 //\\ Gia lap facetrack.
-std::vector<cv::Mat> FaceTrack::aFaceTrackFake(size_t numList, int pNumRows, int pNumCols, uchar pValue)
+std::vector<cv::Mat> FaceTrackDB::aFaceTrackFake(size_t numList, int pNumRows, int pNumCols, uchar pValue)
 {
 	std::vector<cv::Mat> result;
 	//size_t numList = 3;

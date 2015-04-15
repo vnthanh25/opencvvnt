@@ -16,7 +16,7 @@
     <ClCompile Include="Source\FaceDataSet.cpp" />
     <ClCompile Include="Source\FaceDataSetBase.cpp" />
     <ClCompile Include="Source\FaceDetect.cpp" />
-    <ClCompile Include="Source\FaceTrack.cpp" />
+    <ClCompile Include="Source\FaceTrackDB.cpp" />
     <ClCompile Include="Source\FeatureLBP.cpp" />
     <ClCompile Include="Source\HeadPose.cpp" />
     <ClCompile Include="Source\Utilities.cpp" />
@@ -27,7 +27,7 @@
     <ClInclude Include="Header\FaceDataSet.h" />
     <ClInclude Include="Header\FaceDataSetBase.h" />
     <ClInclude Include="Header\FaceDetect.h" />
-    <ClInclude Include="Header\FaceTrack.h" />
+    <ClInclude Include="Header\FaceTrackDB.h" />
     <ClInclude Include="Header\FeatureLBP.h" />
     <ClInclude Include="Header\HeadPose.h" />
     <ClInclude Include="Header\Utilities.h" />

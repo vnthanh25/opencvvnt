@@ -12,7 +12,7 @@ VNThanh
 
 namespace vnt
 {
-	class FaceTrack
+	class FaceTrackDB
 	{
 	private:
 		std::vector<std::vector<std::vector<std::vector<double>>>> mFaceTrackDatabase;
@@ -26,8 +26,8 @@ namespace vnt
 		std::string mDBFeatureType = ".dbf";
 	public:
 		/********** Constructor **********/
-		FaceTrack();
-		~FaceTrack();
+		FaceTrackDB();
+		~FaceTrackDB();
 
 		/********** public Methods **********/
 		//\\ Lay csdl.
@@ -81,7 +81,7 @@ namespace vnt
 		//\\ Gia lap danh sach vector dac trung cua facetrack. 1 facetrack co nhieu vector dac trung.
 		std::vector<std::vector<std::vector<int>>> aGetsFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue = -1);
 		//\\ Gia lap danh sach vector dac trung trung binh cua tat ca facetrack. Moi facetrack co 1 vector dac trung trung binh.
-		std::vector<std::vector<std::vector<double>>> FaceTrack::aGetsAvgFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue = -1);
+		std::vector<std::vector<std::vector<double>>> aGetsAvgFeatureFake(size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue = -1);
 		//\\ Gia lap danh sach cua danh sach vector dac trung cua facetrack. Moi  facetrack co nhieu vector dac trung.
 		std::vector<std::vector<std::vector<std::vector<int>>>> aGetsFeaturesFake(size_t pNumLists, size_t pNumList, size_t pNumRows, size_t pNumCols, int pValue = -1);
 		//\\ Gia lap vector dac trung trung binh.
