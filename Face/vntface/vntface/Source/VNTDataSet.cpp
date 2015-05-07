@@ -189,6 +189,25 @@ std::vector<std::string> VNTDataSet::aGetsAllFileName(const std::string pId)
 	}// serie
 	return result;
 }
+//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+std::vector<int> VNTDataSet::aGetsAllPose(const std::string pId)
+{
+	std::vector<int> result;
+	std::string fName = mImageName;
+	//\\ Lay tat ca Number theo thu tu tang dan.
+	std::vector<std::string> number = aGetsAllNumbers();
+
+	//\\ Ghep chuoi de tao ten file.
+	int pose;
+	int len = 0;
+	size_t number_size = number.size();
+	for (size_t i = 0; i < number_size; i++)
+	{
+		pose = 0;//\\ Chua tinh
+		result.push_back(pose);
+	}// serie
+	return result;
+}
 //\\ Lay tat ca cac ten anh mat nguoi co trong thu muc. Format: "Image[Number].jpg". Co duong dan tuong doi.
 std::vector<std::string> VNTDataSet::aGetsAllFullFileName(const std::string pId, const std::string pPath)
 {

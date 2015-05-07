@@ -184,6 +184,51 @@ int FaceDataSet::aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDa
 	result = mFaceTracks.size();
 	return result;
 }
+//\\ Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file.
+int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pFolderPath, const int n)
+{
+	int result = -1;
+	mDataSetBase = pFaceDataSetBase;
+	mFolderPath = pFolderPath;
+	Utilites util;
+	//\\ Lay tat ca Ids co trong nguon anh.
+	std::vector<std::string> vAllIds = pFaceDataSetBase->aGetsAllIds();
+	size_t vAllIdsSize = vAllIds.size();
+	int numlengthFaceTrack = std::to_string(vAllIdsSize * n).length();
+	int vFaceTrackIndex = 0;
+	for (size_t i = 0; i < vAllIdsSize; i++)
+	{
+		std::string vId = vAllIds[i];
+		//\\ Load facetrack. Lay tat ca ten file anh cua 1 nguoi.
+		std::vector<std::string> vAllFileName = pFaceDataSetBase->aGetsAllFileName(vId);
+		//\\ Lay tat ca pose tuong ung voi ten file.
+		std::vector<int> vAllPose = mDataSetBase->aGetsAllPose(vId);
+		size_t vAllFileNameSize = vAllFileName.size() / n;
+		int numFilesLength = std::to_string(vAllFileNameSize).length();
+		//\\ Chia lam n thu muc facetrack con.
+		for (size_t j = 0; j < n; j++)
+		{
+			//\\ Tao thu muc cho facetrack thu j.
+			std::string vFaceTrackPath = mFolderPath + mDataSetFolder + "/" + mFaceTrackName + util.leftPad(std::to_string(vFaceTrackIndex), numlengthFaceTrack, '0');
+			util.makeDir(util.replaceAll(vFaceTrackPath, "/", "\\"));
+			vFaceTrackPath += "/";
+			vFaceTrackIndex++;
+			//\\ Luu ten file cua cac anh trong facetrack con.
+			std::vector<std::string> vAllFileNameDiv;
+			std::vector<int> vAllPoseDiv;
+			for (size_t k = 0; k < vAllFileNameSize; k++)
+			{
+				vAllFileNameDiv.push_back(vAllFileName[j * n + k]);
+				vAllPoseDiv.push_back(vAllPose[j * n + k]);
+			}
+			//\\ Doc anh va ghi ra file.
+			std::vector<cv::Mat> vFaceTrack = aReadsImage(vAllFileNameDiv, vAllPoseDiv, pDataSourcePath + mDataSetBase->aGetPath(vId), vFaceTrackPath);
+			mFaceTracks.push_back(vFaceTrack);
+		}
+	}// for i.
+	result = vAllIdsSize;
+	return result;
+}
 
 //\\ Doc cac anh tu file.
 int FaceDataSet::aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)

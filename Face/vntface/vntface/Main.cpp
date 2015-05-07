@@ -1,8 +1,9 @@
 #include "Header\Utilities.h"
 #include "Header\FaceDataSet.h"
+#include "Header\ColorFeret.h"
+#include "Header\HeadPose.h"
 #include "Header\FaceTrackDB.h"
 #include "Header\VNTDataSet.h"
-#include "Header\HeadPose.h"
 
 using namespace vnt;
 
@@ -14,7 +15,7 @@ using namespace vnt;
 */
 
 //\\ Khoi tao dataset
-void aMeanCosVNTDataSetInit()
+void aMeanCosHeadPoseDataSetInit()
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
@@ -23,14 +24,60 @@ void aMeanCosVNTDataSetInit()
 	//\\ Duong dan den nguon du lieu.
 	std::string exePath = util.GetExePath();
 	exePath = util.replaceAll(exePath, "\\", "/");
-	std::string vFaceTracksPath = exePath + "/VNTDataSet/";
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
 
 	FaceDataSet vFaceDataSet;
 	//\\ Khoi tao dataset.
 	FaceDataSetBase* vFaceDataSetBase;
 	HeadPose vHeadPose;
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInit(vFaceDataSetBase, vFaceTracksPath + "DataSetHeadPoseDownload/", vFaceTracksPath);
+	vFaceDataSet.aDataSetInit(vFaceDataSetBase, vDataSetPath + "DataSetHeadPoseDownload/", vDataSetPath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aMeanCosVNTDataSetInit: " << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl
+void aMeanCosHeadPoseDatabaseInit()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aMeanCosVNTDataSetInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+
+	FaceDataSet vFaceDataSet;
+	//\\ Doc facetrack vao DataSet.
+	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vDataSetPath);
+
+	//\\ Khoi tao csdl.
+	FaceTrackDB vFaceTrackDB;
+	vFaceTrackDB.aDatabaseInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetSumPose(), vDataSetPath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aMeanCosVNTDataSetInit: " << util.currentDateTime() << std::endl;
+}
+
+//\\ Khoi tao dataset
+void aMeanCosDataSetInitDiv()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aMeanCosVNTDataSetInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+
+	FaceDataSet vFaceDataSet;
+	//\\ Khoi tao dataset.
+	FaceDataSetBase* vFaceDataSetBase;
+	HeadPose vHeadPose;
+	vFaceDataSetBase = &vHeadPose;
+	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vDataSetPath + "DataSetHeadPoseDownload/", vDataSetPath, 3);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aMeanCosVNTDataSetInit: " << util.currentDateTime() << std::endl;
@@ -45,15 +92,15 @@ void aMeanCosVNTDatabaseInit()
 	//\\ Duong dan den nguon du lieu.
 	std::string exePath = util.GetExePath();
 	exePath = util.replaceAll(exePath, "\\", "/");
-	std::string vFaceTracksPath = exePath + "/VNTDataSet/";
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vFaceTracksPath);
+	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vDataSetPath);
 
 	//\\ Khoi tao csdl.
 	FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aDatabaseInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetSumPose(), vFaceTracksPath);
+	vFaceTrackDB.aDatabaseInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetSumPose(), vDataSetPath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aMeanCosVNTDataSetInit: " << util.currentDateTime() << std::endl;
@@ -221,7 +268,7 @@ int main(void)
 	//int sum = 11280;
 	//double avg = 1.0 * pose / sum;
 	//aMeanCosVNTDataSetInit();
-	aMeanCosVNTDatabaseInit();
+	aMeanCosDataSetInitDiv();
 	////\\ Ket qua
 	//double vMAP = aMeanCosHeadPoseMAP();//\\ 0.84. Vector dac trung trung binh cua facetrack query duoc lay tu trong csdl.
 	//cout << "vMAP: " << vMAP << std::endl;

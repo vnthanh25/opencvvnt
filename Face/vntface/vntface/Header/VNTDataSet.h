@@ -32,7 +32,7 @@ namespace vnt
 		//\\ Id dau tien va Id cuoi cung.
 		const std::string mIds = "00,14";
 		//\\ So thu tu cua file trong thu muc.
-		const std::string mNumber = "000,185";
+		const std::string mNumber = "000,092";//\\ Tu 93 den 185 la seri 2 dung de test.
 		std::string mImageType = ".img";
 
 		/********** Constructor **********/
@@ -59,6 +59,8 @@ namespace vnt
 		std::string aGetPath(const std::string pId);
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm"
 		std::vector<std::string> aGetsAllFileName(const std::string pId);
+		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+		std::vector<int> aGetsAllPose(const std::string pId);
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.
 		std::vector<std::string> aGetsAllFullFileName(const std::string pId, const std::string pPath);
 	
