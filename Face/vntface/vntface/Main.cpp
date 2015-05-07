@@ -83,7 +83,7 @@ void aMeanCosDataSetInitDiv()
 	cout << "aMeanCosVNTDataSetInit: " << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao csdl
-void aMeanCosVNTDatabaseInit()
+void aMeanCosDatabaseInitDiv()
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
@@ -96,7 +96,7 @@ void aMeanCosVNTDatabaseInit()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vDataSetPath);
+	vFaceDataSet.aDataSetRead("00", "44", "00", "30", vDataSetPath);
 
 	//\\ Khoi tao csdl.
 	FaceTrackDB vFaceTrackDB;
@@ -268,7 +268,8 @@ int main(void)
 	//int sum = 11280;
 	//double avg = 1.0 * pose / sum;
 	//aMeanCosVNTDataSetInit();
-	aMeanCosDataSetInitDiv();
+	//aMeanCosDataSetInitDiv();
+	aMeanCosDatabaseInitDiv();
 	////\\ Ket qua
 	//double vMAP = aMeanCosHeadPoseMAP();//\\ 0.84. Vector dac trung trung binh cua facetrack query duoc lay tu trong csdl.
 	//cout << "vMAP: " << vMAP << std::endl;

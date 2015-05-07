@@ -255,11 +255,11 @@ int FaceDataSet::aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFa
 		for (size_t j = vNumFeatureStart; j <= vNumFeatureEnd; j++)
 		{
 			//std::string vFeaturePath = vFaceTrackPath + mDBFeatureFolder + "/" + vFaceTrackName + "/";
-			std::string vImageName = util.leftPad(std::to_string(j), featueLength, '0');
-			cv::Mat vImageMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + vFaceTrackName + "/" + mImageName + vImageName + mImageType);
+			std::string vNumber = util.leftPad(std::to_string(j), featueLength, '0');
+			cv::Mat vImageMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + vFaceTrackName + "/" + mImageName + vNumber + mImageType);
 			facetrack.push_back(vImageMat);
 			//\\ Doc file pose ung voi tung anh trong facetrack.
-			cv::Mat vPoseMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + vFaceTrackName + "/" + mPoseName + vImageName + mImageType);
+			cv::Mat vPoseMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + vFaceTrackName + "/" + mPoseName + vNumber + mImageType);
 			int pose = vPoseMat.at<int>(0, 0);
 			poses.push_back(pose);
 		}
@@ -299,8 +299,8 @@ int FaceDataSet::aDataSetReadNotPose(std::string pNumFaceTrackStart, std::string
 		for (size_t j = vNumFeatureStart; j <= vNumFeatureEnd; j++)
 		{
 			//std::string vFeaturePath = vFaceTrackPath + mDBFeatureFolder + "/" + vFaceTrackName + "/";
-			std::string vImageName = mImageName + util.leftPad(std::to_string(j), featueLength, '0');
-			cv::Mat vImageMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + vFaceTrackName + "/" + vImageName + mImageType);
+			std::string vNumber = mImageName + util.leftPad(std::to_string(j), featueLength, '0');
+			cv::Mat vImageMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + vFaceTrackName + "/" + vNumber + mImageType);
 			facetrack.push_back(vImageMat);
 		}
 		mFaceTracks.push_back(facetrack);
