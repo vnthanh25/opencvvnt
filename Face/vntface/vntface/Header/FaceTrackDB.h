@@ -16,6 +16,9 @@ namespace vnt
 	{
 	private:
 		std::vector<std::vector<std::vector<std::vector<double>>>> mFaceTrackDatabase;
+		std::vector<std::vector<std::vector<std::vector<int>>>> mFacetrackFeatures;
+		std::vector<std::vector<int>> mPoses;
+		int mSumPose;
 		std::string mFolderPath = "";
 		std::string mFaceTrackName = "FaceTrack";//\\ Ex: "FaceTrack01", "FaceTrack02", ...
 		std::string mFaceTracksFolder = "FaceTracks";
@@ -24,6 +27,8 @@ namespace vnt
 		std::string mDBFeatureFolder = "Database";//\\ Chua vector dac trung trung binh.
 		std::string mFeatureType = ".fea";
 		std::string mDBFeatureType = ".dbf";
+		std::string mPoseName = "Pose";
+		std::string mSumPoseName = "SumPose";
 	public:
 		/********** Constructor **********/
 		FaceTrackDB();
@@ -34,6 +39,21 @@ namespace vnt
 		std::vector<std::vector<std::vector<std::vector<double>>>> aGetFaceTrackDatabase();
 		//\\ Gan csdl.
 		void aSetFaceTrackDatabase(std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTrackDatabase);
+
+		//\\ Lay feature.
+		std::vector<std::vector<std::vector<std::vector<int>>>> aGetFacetrackFeatures();
+		//\\ Gan feature.
+		void aSetFacetrackFeatures(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures);
+
+		//\\ Lay Poses.
+		std::vector<std::vector<int>> aGetPoses();
+		//\\ Gan Poses.
+		void aSetPoses(std::vector<std::vector<int>> pPoses);
+
+		//\\ Lay SumPose.
+		int aGetSumPose();
+		//\\ Gan SumPose.
+		void aSetSumPose(int pSumPose);
 
 		//\\ Doc tat ca file anh vao trong facetrack.
 		std::vector<cv::Mat> aGestAllImage(std::string pFolderPath, std::vector<std::string> pAllFileName);
@@ -70,14 +90,24 @@ namespace vnt
 		//\\ Tinh hieu cua 2 vector dac trung.
 		std::vector<std::vector<double>> aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
 		
+		//\\ Khoi tao vector dac trung.
+		int aFeatureInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, std::string pFolderPath);
+		//\\ Khoi tao vector dac trung.
+		int aFeatureInitNotPose(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath);
+		//\\ Doc cac vector dac trung tu file va dua vao csdl.
+		int aFeatureRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
+		//\\ Doc cac vector dac trung tu file va dua vao csdl.
+		int aFeatureReadNotPose(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
+
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
 		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, int pSumPose);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
 		int aDatabaseInitNotPose(std::vector<std::vector<cv::Mat>> pFaceTracks);
+
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, int pSumPose, std::string pFolderPath);
+		int aDatabaseInit(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<int>> pPoses, int pSumPose, std::string pFolderPath);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDatabaseInitNotPose(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath);
+		int aDatabaseInitNotPose(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::string pFolderPath);
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
 

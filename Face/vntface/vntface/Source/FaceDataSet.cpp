@@ -97,8 +97,7 @@ std::vector<cv::Mat> FaceDataSet::aReadsImage(std::vector<std::string> pAllFileN
 			sumPose += pPoses[i];
 		}
 	}
-	//\\ Luu tong pose cua tat ca cac anh trong facetrack.
-	//\\sumPose = 22560;
+	//\\ Luu tong pose cua tat ca cac anh trong facetrack. sumPose = 22560;
 	cv::Mat matSumPose = cv::Mat(1, 1, CV_32SC1, sumPose);
 	//\\ Ghi gia tri sumpose ra file.
 	util.writeMatBasic(matSumPose, pFolderPath + mSumPoseName + mImageType);
