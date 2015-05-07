@@ -51,5 +51,8 @@ namespace vnt
 
 		std::string GetExeFileName();
 		std::string GetExePath();
+
+		//\\ std::string methods:
+		std::string subStringAfter(std::string pStr, std::string pFind);
 	};
 }

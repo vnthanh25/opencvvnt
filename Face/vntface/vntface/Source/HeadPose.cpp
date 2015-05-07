@@ -372,6 +372,50 @@ std::vector<std::string> HeadPose::aGetsAllFileName(const std::string pId)
 	}// serie
 	return result;
 }
+//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+std::vector<int> HeadPose::aGetsAllPose(const std::string pId)
+{
+	std::vector<int> result;
+	std::string fName = mImageName;
+	//\\ Lay tat ca Serie.
+	std::vector<std::string> serie = aGetsAllSerie();
+	//\\ Lay tat ca Number theo thu tu tang dan.
+	std::vector<std::string> number = aGetsAllNumbers();
+	//\\ Lay tat ca Tilt.
+	std::vector<std::string> tilt = aGetsAllTilt();
+	//\\ Lay tat ca Pan.
+	std::vector<std::string> pan = aGetsAllPan();
+
+	Utilites util;
+	//\\ Ghep chuoi de tao ten file.
+	int pose;
+	int len = 0;
+	size_t serie_size = serie.size();
+	size_t tilt_size = tilt.size();
+	size_t pan_size = pan.size();
+	//\\ Co 2 serie.
+	for (size_t i = 0; i < serie_size; i++)
+	{
+		//\\ File anh "...-90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
+		pose = 110;
+		result.push_back(pose);
+		for (size_t j = 1; j < tilt_size - 1; j++) //\\ Bo gia tri dau (-90) va gia tri cuoi (+90).
+		{
+			for (size_t k = 0; k < pan_size; k++)
+			{
+				int itilt = std::atoi(tilt[j].c_str());//\\ Vertical.
+				int ipan = std::atoi(pan[k].c_str());//\\ Horizontal.
+				pose = (mMaxPose - abs(itilt)) + (mMaxPose - abs(ipan));
+
+				result.push_back(pose);
+			}// pan
+		}// tilt
+		//\\ File anh "...-90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
+		pose = 110;
+		result.push_back(pose);
+	}// serie
+	return result;
+}
 //\\ Lay tat ca cac ten anh mat nguoi co trong thu muc. Format: "person[Id][Serie][Number][Tilt][Pan].jpg". Co duong dan tuong doi.
 std::vector<std::string> HeadPose::aGetsAllFullFileName(const std::string pId, const std::string pPath)
 {

@@ -27,6 +27,8 @@ namespace vnt
 		virtual std::string aGetPath(const std::string pId) = 0;
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm"
 		virtual std::vector<std::string> aGetsAllFileName(const std::string pId) = 0;
+		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+		virtual std::vector<int> aGetsAllPose(const std::string pId) = 0;
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.
 		virtual std::vector<std::string> aGetsAllFullFileName(const std::string pId, const std::string pPath) = 0;
 	};

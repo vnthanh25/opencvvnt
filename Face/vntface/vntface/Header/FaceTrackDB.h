@@ -41,12 +41,19 @@ namespace vnt
 		//\\ Lay dac trung cua tung face trong facetrack.
 		std::vector<std::vector<std::vector<int>>> aGetsFeature(const std::vector<cv::Mat> pFaceTrack);
 		//\\ Tinh vector trung binh cho facetrack.
-		std::vector<std::vector<double>> aAvgFeature(const std::vector<std::vector<std::vector<int>>> pFeatures);
-		std::vector<std::vector<double>> aAvgFeature(const std::vector<cv::Mat> pFaceTrack);
+		std::vector<std::vector<double>> aAvgFeature(const std::vector<std::vector<std::vector<int>>> pFeatures, const std::vector<int> pFTPoses, int pSumPose);
+		//\\ Tinh vector trung binh cho facetrack.
+		std::vector<std::vector<double>> aAvgFeatureNotPose(const std::vector<std::vector<std::vector<int>>> pFeatures);
+		std::vector<std::vector<double>> aAvgFeature(const std::vector<cv::Mat> pFaceTrack, const std::vector<int> pFTPoses, int pSumPose);
+		std::vector<std::vector<double>> aAvgFeatureNotPose(const std::vector<cv::Mat> pFaceTrack);
 		//\\ Tinh vector trung binh cho tung facetrack. Moi facetrack co danh sach vector dac trung.
-		std::vector<std::vector<std::vector<double>>> aAvgFeatures(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures);
+		std::vector<std::vector<std::vector<double>>> aAvgFeatures(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures, const std::vector<std::vector<int>> pFTPoses, int pSumPose);
+		//\\ Tinh vector trung binh cho tung facetrack. Moi facetrack co danh sach vector dac trung.
+		std::vector<std::vector<std::vector<double>>> aAvgFeaturesNotPose(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures);
 		//\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co danh sach vector dac trung.
-		std::vector<std::vector<double>> aAvgFeature(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures);
+		std::vector<std::vector<double>> aAvgFeature(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures, const std::vector<std::vector<int>> pFTPoses, int pSumPose);
+		//\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co danh sach vector dac trung.
+		std::vector<std::vector<double>> aAvgFeatureNotPose(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures);
 		//\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co 1 vector dac trung trung binh.
 		std::vector<std::vector<double>> aAvgFeature(const std::vector<std::vector<std::vector<double>>> pFTFeatures);
 
@@ -64,9 +71,13 @@ namespace vnt
 		std::vector<std::vector<double>> aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
 		
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
-		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks);
+		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, int pSumPose);
+		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
+		int aDatabaseInitNotPose(std::vector<std::vector<cv::Mat>> pFaceTracks);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath);
+		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, int pSumPose, std::string pFolderPath);
+		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
+		int aDatabaseInitNotPose(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath);
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
 
@@ -74,7 +85,9 @@ namespace vnt
 		std::vector<std::vector<std::vector<std::vector<double>>>> aMeanCosMatching(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks);
 		std::vector<int> aMeanCosMatchingIndex(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks);
 		//\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
-		std::vector<std::vector<cv::Mat>> aMeanCos(std::vector<cv::Mat> pFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks);
+		std::vector<std::vector<cv::Mat>> aMeanCos(std::vector<cv::Mat> pFaceTrack, std::vector<int> pPose, std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, int pSumPose);
+		//\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
+		std::vector<std::vector<cv::Mat>> aMeanCosNotPose(std::vector<cv::Mat> pFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks);
 
 
 		/******************** Gia lap ********************/

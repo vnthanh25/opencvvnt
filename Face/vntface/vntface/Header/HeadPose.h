@@ -31,14 +31,16 @@ namespace vnt
 		const std::string mImageName = "person[Id][Serie][Number][Tilt][Pan].jpg";
 		//\\ Id dau tien va Id cuoi cung.
 		const std::string mIds = "01,15";
-		//\\ Chuoi anh.
-		const std::string mSerie = "1,2";
+		//\\ Chuoi anh: Seri 1 tranning, seri 2 test.
+		const std::string mSerie = "1";//\\= "1,2";
 		//\\ So thu tu cua file trong thu muc.
 		const std::string mNumber = "00,92";
 		//\\ Goc nghien theo chieu dung.
 		const std::string mTilt = "-90,-60,-30,-15,+0,+15,+30,+60,+90";
 		//\\ Goc nghien theo chieu ngang.
 		const std::string mPan = "-90,-75,-60,-45,-30,-15,+0,+15,+30,+45,+60,+75,+90";
+		//\\ Goc nghien lon nhat.
+		const int mMaxPose = 100;
 
 		///* Test */
 		////\\ Id dau tien va Id cuoi cung.
@@ -88,6 +90,8 @@ namespace vnt
 		std::string aGetPath(const std::string pId);
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm"
 		std::vector<std::string> aGetsAllFileName(const std::string pId);
+		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+		std::vector<int> aGetsAllPose(const std::string pId);
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.
 		std::vector<std::string> aGetsAllFullFileName(const std::string pId, const std::string pPath);
 	};
