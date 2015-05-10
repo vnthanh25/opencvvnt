@@ -97,7 +97,7 @@ std::vector<cv::Mat> FaceDataSet::aReadsImage(std::vector<std::string> pAllFileN
 			sumPose += pPoses[i];
 		}
 	}
-	//\\ Luu tong pose cua tat ca cac anh trong facetrack. sumPose = 22560;
+	//\\ Luu tong pose cua tat ca cac anh trong facetrack. sumPose = 3350;
 	cv::Mat matSumPose = cv::Mat(1, 1, CV_32SC1, sumPose);
 	//\\ Ghi gia tri sumpose ra file.
 	util.writeMatBasic(matSumPose, pFolderPath + mSumPoseName + mImageType);
@@ -195,6 +195,7 @@ int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::s
 	size_t vAllIdsSize = vAllIds.size();
 	int numlengthFaceTrack = std::to_string(vAllIdsSize * n).length();
 	int vFaceTrackIndex = 0;
+	int sumAllPose = 0;
 	for (size_t i = 0; i < vAllIdsSize; i++)
 	{
 		std::string vId = vAllIds[i];
@@ -217,14 +218,20 @@ int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::s
 			std::vector<int> vAllPoseDiv;
 			for (size_t k = 0; k < vAllFileNameSize; k++)
 			{
-				vAllFileNameDiv.push_back(vAllFileName[j * n + k]);
-				vAllPoseDiv.push_back(vAllPose[j * n + k]);
+				vAllFileNameDiv.push_back(vAllFileName[j * vAllFileNameSize + k]);
+				vAllPoseDiv.push_back(vAllPose[j * vAllFileNameSize + k]);
+				sumAllPose += vAllPose[j * vAllFileNameSize + k];
 			}
 			//\\ Doc anh va ghi ra file.
 			std::vector<cv::Mat> vFaceTrack = aReadsImage(vAllFileNameDiv, vAllPoseDiv, pDataSourcePath + mDataSetBase->aGetPath(vId), vFaceTrackPath);
 			mFaceTracks.push_back(vFaceTrack);
 		}
 	}// for i.
+	sumAllPose /= vAllIdsSize;
+	//\\ Luu tong pose cua tat ca cac anh trong facetrack. sumPose = 11280.
+	cv::Mat matSumPose = cv::Mat(1, 1, CV_32SC1, sumAllPose);
+	//\\ Ghi gia tri sumpose ra file.
+	util.writeMatBasic(matSumPose, mFolderPath + mDataSetFolder + "/" + mSumPoseName + mImageType);
 	result = vAllIdsSize;
 	return result;
 }
@@ -241,7 +248,6 @@ int FaceDataSet::aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFa
 	//\\ Doc tung facetrack.
 	size_t vNumFaceTrackStart = std::atoi(pNumFaceTrackStart.c_str());
 	size_t vNumFaceTrackEnd = std::atoi(pNumFaceTrackEnd.c_str());
-	mSumPose = 0;
 	for (size_t i = vNumFaceTrackStart; i <= vNumFaceTrackEnd; i++)
 	{
 		//\\ Doc tung vector dac trung (trung binh) cua facetrack.
@@ -266,12 +272,10 @@ int FaceDataSet::aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFa
 		facetrack.clear();
 		mPoses.push_back(poses);
 		poses.clear();
-		//\\ Doc file sumpose.
-		cv::Mat vSumPoseMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + vFaceTrackName + "/" + mSumPoseName + mImageType);
-		mSumPose += vSumPoseMat.at<int>(0, 0);
 	}
-	//\\ Tinh gia tri trung binh cho sumpose.
-	mSumPose /= (vNumFaceTrackEnd - vNumFaceTrackStart + 1);
+	//\\ Doc file sumpose.
+	cv::Mat vSumPoseMat = util.readMatBasic(mFolderPath + mDataSetFolder + "/" + mSumPoseName + mImageType);
+	mSumPose = vSumPoseMat.at<int>(0, 0);
 	result = mFaceTracks.size();
 	return result;
 }

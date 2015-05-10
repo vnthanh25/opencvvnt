@@ -1,0 +1,23 @@
+﻿* Test (ngày 10/5):
+- Tạo tổ hợp 4 database cho từng serie1 và serie2.
+* So khớp:
+- Không pose + không chuẩn hóa + query trong csdl: MAP = 0.791873.
+- Không pose + không chuẩn hóa + query ngoài csdl: MAP = 0.490369.
+
+- Không pose + chuẩn hóa + query trong csdl: MAP = 0.811797.
+- Không pose + chuẩn hóa + query ngoài csdl: MAP = 0.542968.
+
+- Pose + không chuẩn hóa + query trong csdl: MAP = 0.800895.
+- Pose + không chuẩn hóa + query ngoài csdl: MAP = 0.487015.
+
+- Pose + chuẩn hóa + query trong csdl: MAP = 0.554319.
+- Pose + chuẩn hóa + query ngoài csdl: MAP = 0.386786.
+
+* Dữ liệu csdl không chia, csdl test chia 3.
+- Không pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45.
+
+- Không pose + chuẩn hóa + query ngoài csdl: MAP = 23/45.
+
+- Pose + không chuẩn hóa + query ngoài csdl: MAP = 20/45.
+
+- Pose + chuẩn hóa + query ngoài csdl: MAP = 18/45.

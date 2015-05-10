@@ -32,7 +32,7 @@ namespace vnt
 		//\\ Id dau tien va Id cuoi cung.
 		const std::string mIds = "01,15";
 		//\\ Chuoi anh: Seri 1 tranning, seri 2 test.
-		const std::string mSerie = "1";//\\= "1,2";
+		const std::string mSerie = "1,2";//\\= "1,2";
 		//\\ So thu tu cua file trong thu muc.
 		const std::string mNumber = "00,92";
 		//\\ Goc nghien theo chieu dung.

@@ -33,6 +33,9 @@
     <ClInclude Include="Header\Utilities.h" />
     <ClInclude Include="Header\VNTDataSet.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Doc\History.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7A126096-05B0-412F-BD4C-477D262D69F4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
