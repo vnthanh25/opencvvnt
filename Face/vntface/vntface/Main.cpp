@@ -248,56 +248,323 @@ double aMeanCosMAPDivTest()
 	return vMAP;
 }
 
-//\\ So khop: query lay tu csdl test. 
-double aMeanCosMAPNotDivTest()
+
+//\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + Normalize (csdl co chuan hoa).
+void aDatabaseInit_NotDiv_NotPoseNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "MAP: " << util.currentDateTime() << std::endl;
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
 
-	FaceTrackDB vFaceTrackDB;
-	FaceTrackDB vFaceTrackDBTest;
 	//\\ Duong dan den nguon du lieu.
 	std::string exePath = util.GetExePath();
 	exePath = util.replaceAll(exePath, "\\", "/");
-	std::string vFaceTracksPath = exePath + "/VNTDataSet/";
-	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
-	vFaceTrackDB.aDatabaseRead("00", "14", "0", "0", vFaceTracksPath); //\\ n = 15, m = 3;
-	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
-	//vFaceTrackDBTest.aDatabaseRead("00", "14", "0", "0", vFaceTracksPath); //\\ n = 15, m = 3;
-	vFaceTrackDBTest.aDatabaseRead("00", "44", "0", "0", vFaceTracksPath + "Test/"); //\\ n = 15, m = 3;
+	std::string vDataSetPath = exePath + "/VNTDataSet/NotDiv/" + pTestPath;
 
-	//\\ So khop.
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureReadNotPose("00", "14", "00", "92", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_NotPoseNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vDataSetPath + "Database_NotPoseNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
+void aDatabaseInit_NotDiv_NotPoseNotNormalize(std::string pTestPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/NotDiv/" + pTestPath;
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureReadNotPose("00", "14", "00", "92", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_NotPoseNotNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vDataSetPath + "Database_NotPoseNotNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
+void aDatabaseInit_NotDiv_PoseNormalize(std::string pTestPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/NotDiv/" + pTestPath;
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead("00", "14", "00", "92", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_PoseNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vDataSetPath + "Database_PoseNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
+void aDatabaseInit_NotDiv_PoseNotNormalize(std::string pTestPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/NotDiv/" + pTestPath;
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead("00", "14", "00", "92", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_PoseNotNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vDataSetPath + "Database_PoseNotNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+
+//\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + Normalize (csdl co chuan hoa).
+void aDatabaseInit_Div_NotPoseNormalize(std::string pTestPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/Div/" + pTestPath;
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureReadNotPose("00", "44", "00", "30", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_NotPoseNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vDataSetPath + "Database_NotPoseNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
+void aDatabaseInit_Div_NotPoseNotNormalize(std::string pTestPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/Div/" + pTestPath;
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureReadNotPose("00", "44", "00", "30", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_NotPoseNotNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vDataSetPath + "Database_NotPoseNotNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
+void aDatabaseInit_Div_PoseNormalize(std::string pTestPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/Div/" + pTestPath;
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead("00", "44", "00", "30", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_PoseNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vDataSetPath + "Database_PoseNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+//\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
+void aDatabaseInit_Div_PoseNotNormalize(std::string pTestPath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/Div/" + pTestPath;
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead("00", "44", "00", "30", vDataSetPath);
+	//\\ Khoi tao csdl.
+	util.makeDir(util.replaceAll(vDataSetPath + "Database_PoseNotNormalize", "/", "\\"));
+	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vDataSetPath + "Database_PoseNotNormalize/");
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "DatabaseInit: " << util.currentDateTime() << std::endl;
+}
+
+
+
+int aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBTest, int pNum)
+{
+	std::vector<std::vector<std::vector<std::vector<double>>>> csdl = pFaceTrackDB.aGetFaceTrackDatabase();
+	std::vector<std::vector<std::vector<std::vector<double>>>> csdlTest = pFaceTrackDBTest.aGetFaceTrackDatabase();
 	/*
 	- Lap qua 15 mat nguoi goc.
 	- Lap qua 3 mat nguoi duoc chia nho cua tung mat nguoi goc.
 	- So khop tung mat nguoi voi csdl facetrack: ket qua la thu tu so khop.
 	- Tinh do chinh xac MAP.
 	*/
-	std::vector<std::vector<std::vector<std::vector<double>>>> csdl = vFaceTrackDB.aGetFaceTrackDatabase();
-	std::vector<std::vector<std::vector<std::vector<double>>>> csdlTest = vFaceTrackDBTest.aGetFaceTrackDatabase();
 	std::vector<double> vAPs;
-	size_t m = 3;
-	size_t n = csdlTest.size() / m;
+	size_t n = csdlTest.size() / pNum;
 	int countTrue = 0;
 	//\\ Lap n mat nguoi goc.
 	for (size_t i = 0; i < n; i++)
 	{
 		//\\ Lap qua m mat nguoi dung.
-		for (size_t j = 0; j < m; j++)
+		for (size_t j = 0; j < pNum; j++)
 		{
-			int indexQuery = i * m + j;
+			int indexQuery = i * pNum + j;
 			//\\ Lay query tu csdl1.
 			std::vector<std::vector<std::vector<double>>> vQuery = csdlTest[indexQuery];
 			//\\ So khop.
-			std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex(vQuery, csdl);
+			std::vector<int> vMatchingIndex = pFaceTrackDB.aMeanCosMatchingIndex(vQuery, csdl);
 			if (vMatchingIndex[0] == i)
 				countTrue++;
 		}
 	}
+	return countTrue;
+}
+//\\ So khop: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + Normalize (csdl co chuan hoa).
+double aMatching_NotDivInDiv_NotPoseNormalize()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aNotDivInDiv_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+
+	FaceTrackDB vFaceTrackDB;
+	FaceTrackDB vFaceTrackDBTest;
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrackDB.aDatabaseRead("00", "14", "0", "0", vDataSetPath + "NotDiv/Database_NotPoseNormalize/"); //\\ n = 15, m = 3;
+	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	//vFaceTrackDBTest.aDatabaseRead("00", "14", "0", "0", vFaceTracksPath); //\\ n = 15, m = 3;
+	vFaceTrackDBTest.aDatabaseRead("00", "44", "0", "0", vDataSetPath + "Div/Database_NotPoseNormalize/"); //\\ n = 15, m = 3;
+
+	//\\ So khop tung facetrack trong DBTest.
+	int countTrue = aMatching(vFaceTrackDB, vFaceTrackDBTest, 3);
+	size_t testSize = vFaceTrackDBTest.aGetFaceTrackDatabase().size();
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aMeanCosMAPNotDivTest: " << util.currentDateTime() << std::endl;
-	cout << "countTrue: " << countTrue << std::endl;
+	cout << "aNotDivInDiv_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "countTrue: " << countTrue << "/ " << testSize << " = " << 1.0 * countTrue / testSize << std::endl;
+	return countTrue;
+}
+//\\ So khop: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
+double aMatching_NotDivInDiv_NotPoseNotNormalize()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aNotDivInDiv_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+
+	FaceTrackDB vFaceTrackDB;
+	FaceTrackDB vFaceTrackDBTest;
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrackDB.aDatabaseRead("00", "14", "0", "0", vDataSetPath + "NotDiv/Database_NotPoseNotNormalize/"); //\\ n = 15, m = 3;
+	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	//vFaceTrackDBTest.aDatabaseRead("00", "14", "0", "0", vFaceTracksPath); //\\ n = 15, m = 3;
+	vFaceTrackDBTest.aDatabaseRead("00", "44", "0", "0", vDataSetPath + "Div/Database_NotPoseNotNormalize/"); //\\ n = 15, m = 3;
+
+	//\\ So khop tung facetrack trong DBTest.
+	int countTrue = aMatching(vFaceTrackDB, vFaceTrackDBTest, 3);
+	size_t testSize = vFaceTrackDBTest.aGetFaceTrackDatabase().size();
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aNotDivInDiv_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "countTrue: " << countTrue << "/ " << testSize << " = " << 1.0 * countTrue / testSize << std::endl;
+	return countTrue;
+}
+//\\ So khop: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
+double aMatching_NotDivInDiv_PoseNormalize()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aNotDivInDiv_PoseNormalize: " << util.currentDateTime() << std::endl;
+
+	FaceTrackDB vFaceTrackDB;
+	FaceTrackDB vFaceTrackDBTest;
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrackDB.aDatabaseRead("00", "14", "0", "0", vDataSetPath + "NotDiv/Database_PoseNormalize/"); //\\ n = 15, m = 3;
+	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	//vFaceTrackDBTest.aDatabaseRead("00", "14", "0", "0", vFaceTracksPath); //\\ n = 15, m = 3;
+	vFaceTrackDBTest.aDatabaseRead("00", "44", "0", "0", vDataSetPath + "Div/Database_PoseNormalize/"); //\\ n = 15, m = 3;
+
+	//\\ So khop tung facetrack trong DBTest.
+	int countTrue = aMatching(vFaceTrackDB, vFaceTrackDBTest, 3);
+	size_t testSize = vFaceTrackDBTest.aGetFaceTrackDatabase().size();
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aNotDivInDiv_PoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "countTrue: " << countTrue << "/ " << testSize << " = " << 1.0 * countTrue / testSize << std::endl;
+	return countTrue;
+}
+//\\ So khop: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
+double aMatching_NotDivInDiv_PoseNotNormalize()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aNotDivInDiv_PoseNotNormalize: " << util.currentDateTime() << std::endl;
+
+	FaceTrackDB vFaceTrackDB;
+	FaceTrackDB vFaceTrackDBTest;
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrackDB.aDatabaseRead("00", "14", "0", "0", vDataSetPath + "NotDiv/Database_PoseNotNormalize/"); //\\ n = 15, m = 3;
+	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	//vFaceTrackDBTest.aDatabaseRead("00", "14", "0", "0", vFaceTracksPath); //\\ n = 15, m = 3;
+	vFaceTrackDBTest.aDatabaseRead("00", "44", "0", "0", vDataSetPath + "Div/Database_PoseNotNormalize/"); //\\ n = 15, m = 3;
+
+	//\\ So khop tung facetrack trong DBTest.
+	int countTrue = aMatching(vFaceTrackDB, vFaceTrackDBTest, 3);
+	size_t testSize = vFaceTrackDBTest.aGetFaceTrackDatabase().size();
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aNotDivInDiv_PoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "countTrue: " << countTrue << "/ " << testSize << " = " << 1.0 * countTrue / testSize << std::endl;
 	return countTrue;
 }
 
@@ -310,7 +577,33 @@ int main(void)
 	//aMeanCosDatabaseInitDivNotPose();
 	//aMeanCosMAPDiv();//\\ csdl khong chuan hoa + query lay tu csdl. MAP = 1.
 	//aMeanCosMAPDivTest();//\\ csdl khong chuan hoa + query lay tu facetrack. MAP = 1.
-	aMeanCosMAPNotDivTest();
+
+	////\\ Khoi tao csdl.
+	//aDatabaseInit_NotDiv_NotPoseNormalize("");
+	//aDatabaseInit_NotDiv_NotPoseNotNormalize("");
+	//aDatabaseInit_NotDiv_PoseNormalize("");
+	//aDatabaseInit_NotDiv_PoseNotNormalize("");
+	//aDatabaseInit_Div_NotPoseNormalize("");
+	//aDatabaseInit_Div_NotPoseNotNormalize("");
+	//aDatabaseInit_Div_PoseNormalize("");
+	//aDatabaseInit_Div_PoseNotNormalize("");
+
+	//aDatabaseInit_NotDiv_NotPoseNormalize("Test/");
+	//aDatabaseInit_NotDiv_NotPoseNotNormalize("Test/");
+	//aDatabaseInit_NotDiv_PoseNormalize("Test/");
+	//aDatabaseInit_NotDiv_PoseNotNormalize("Test/");
+	//aDatabaseInit_Div_NotPoseNormalize("Test/");
+	//aDatabaseInit_Div_NotPoseNotNormalize("Test/");
+	//aDatabaseInit_Div_PoseNormalize("Test/");
+	//aDatabaseInit_Div_PoseNotNormalize("Test/");
+
+	//\\ So khop.
+	aMatching_NotDivInDiv_NotPoseNormalize();
+	aMatching_NotDivInDiv_NotPoseNotNormalize();
+	aMatching_NotDivInDiv_PoseNormalize();
+	aMatching_NotDivInDiv_PoseNotNormalize();
+
+	cout << "Done." << std::endl;
 	_getwch();
 	return 0;
 }

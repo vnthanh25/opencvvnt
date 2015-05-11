@@ -103,14 +103,21 @@ std::vector<std::vector<double>> FaceTrackDB::aAvgFeature(const std::vector<std:
 			for (size_t j = 0; j < pFeatures[0][0].size(); j++)
 			{
 				double avg = 0;
+				int vSumPose = 0;
 				//\\ Lap qua danh sach dac trung. (truc z)
 				for (size_t k = 0; k < pFeatures.size(); k++)
 				{
-					//\\ Tich hop pose.
-					double avgPose = 1.0 * pFTPoses[k] / pSumPose;//\\ Tinh gia tri pose trung binh.
-					avg += pFeatures[k][i][j] * avgPose;
+					////\\ Tich hop pose: moi dac trung nhan voi he so pose.
+					//double avgPose = 1.0 * pFTPoses[k] / pSumPose;//\\ Tinh gia tri pose trung binh.
+					//avg += pFeatures[k][i][j] * avgPose;
+					//\\ Chua tich hop pose.
+					avg += pFeatures[k][i][j];
+					vSumPose += pFTPoses[k];
 				}
-				avg = avg / pFeatures.size();
+				////\\ Tich hop pose: moi dac trung nhan voi he so pose.
+				//avg = avg / pFeatures.size();
+				//\\ Tich hop pose: gia tri trung binh chia cho tong pose.
+				avg = avg / (pFeatures.size() * vSumPose);
 				lbp.push_back(avg);
 			}
 			result.push_back(lbp);
@@ -201,18 +208,25 @@ std::vector<std::vector<double>> FaceTrackDB::aAvgFeature(const std::vector<std:
 			for (size_t j = 0; j < pFTFeatures[0][0][0].size(); j++)
 			{
 				double avg = 0;
+				int vSumPose = 0;
 				//\\ Lap qua danh sach facetrack. (truc z).
 				for (size_t k = 0; k < pFTFeatures.size(); k++)
 				{
 					//\\ Lap qua danh sach dac trung. (truc t)
 					for (size_t l = 0; l < pFTFeatures[0].size(); l++)
 					{
-						//\\ Tich hop pose.
-						double avgPose = 1.0 * pFTPoses[k][l] / pSumPose;//\\ Tinh gia tri pose trung binh.
-						avg += pFTFeatures[k][l][i][j] * avgPose;
+						////\\ Tich hop pose: moi dac trung nhan voi he so pose.
+						//double avgPose = 1.0 * pFTPoses[k][l] / pSumPose;//\\ Tinh gia tri pose trung binh.
+						//avg += pFTFeatures[k][l][i][j] * avgPose;
+						//\\ Chua tich hop pose.
+						avg += pFTFeatures[k][l][i][j];
+						vSumPose += pFTPoses[k][l];
 					}
 				}
-				avg = avg / (pFTFeatures.size() * pFTFeatures[0].size());
+				////\\ Tich hop pose: moi dac trung nhan voi he so pose.
+				//avg = avg / (pFTFeatures.size() * pFTFeatures[0].size());
+				//\\ Tich hop pose: gia tri trung binh chia cho tong pose.
+				avg = avg / (pFTFeatures.size() * pFTFeatures[0].size() * vSumPose);
 				lbp.push_back(avg);
 			}
 			result.push_back(lbp);

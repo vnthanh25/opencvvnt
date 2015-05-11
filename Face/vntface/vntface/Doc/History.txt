@@ -1,11 +1,11 @@
 ﻿* Test (ngày 10/5):
 - Tạo tổ hợp 4 database cho từng serie1 và serie2.
 * So khớp:
-- Không pose + không chuẩn hóa + query trong csdl: MAP = 0.791873.
-- Không pose + không chuẩn hóa + query ngoài csdl: MAP = 0.490369.
-
 - Không pose + chuẩn hóa + query trong csdl: MAP = 0.811797.
 - Không pose + chuẩn hóa + query ngoài csdl: MAP = 0.542968.
+
+- Không pose + không chuẩn hóa + query trong csdl: MAP = 0.791873.
+- Không pose + không chuẩn hóa + query ngoài csdl: MAP = 0.490369.
 
 - Pose + không chuẩn hóa + query trong csdl: MAP = 0.800895.
 - Pose + không chuẩn hóa + query ngoài csdl: MAP = 0.487015.
@@ -14,10 +14,23 @@
 - Pose + chuẩn hóa + query ngoài csdl: MAP = 0.386786.
 
 * Dữ liệu csdl không chia, csdl test chia 3.
-- Không pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45.
+- Không pose + chuẩn hóa + query trong csdl: MAP = 39/45 = 0.866667.
+- Không pose + chuẩn hóa + query ngoài csdl: MAP = 23/45 = 0.511111.
 
-- Không pose + chuẩn hóa + query ngoài csdl: MAP = 23/45.
+- Không pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889.
+- Không pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45 = 0.422222.
 
-- Pose + không chuẩn hóa + query ngoài csdl: MAP = 20/45.
+- Pose + chuẩn hóa + query trong csdl: MAP = 35/45 = 0.777778.
+- Pose + chuẩn hóa + query ngoài csdl: MAP = 18/45 = 0.4.
 
-- Pose + chuẩn hóa + query ngoài csdl: MAP = 18/45.
+- Pose + không chuẩn hóa + query trong csdl: MAP = 39/45 = 0.866667.
+- Pose + không chuẩn hóa + query ngoài csdl: MAP = 20/45 = 0.444444.
+
+* Tích hợp Pose lại: lấy giá trị trung bình chia cho tổng pose. KQ: khong pose == co pose.
+- Không pose + chuẩn hóa + query trong csdl: MAP = 39/45 = 0.866667.
+
+- Không pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889.
+
+- Pose + chuẩn hóa + query trong csdl: MAP = 39/45 = 0.866667.
+
+- Pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889.
