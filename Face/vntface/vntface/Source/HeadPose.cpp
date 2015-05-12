@@ -210,7 +210,7 @@ std::vector<std::string> HeadPose::aGetsAllSerie()
 		item = aGetSerie(index);
 		if (item == "")
 			break;
-		if (item == "1")
+		if (item == "2")
 		result.push_back(item);
 		index++;
 	}

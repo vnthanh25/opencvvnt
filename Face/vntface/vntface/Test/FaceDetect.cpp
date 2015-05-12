@@ -1,4 +1,8 @@
+#include "Header\Utilities.h"
 #include "Header\FaceDetect.h"
+#include "Header\HeadPose.h"
+
+using namespace vnt;
 
 //\\ Phat hien mat nguoi trong anh.
 void FaceDetect1()
@@ -36,6 +40,65 @@ void FaceDetectFromCamera1()
 			if (cv::waitKey(30) >= 0) break;
 		}
 	}
+}
+
+//\\ Detect HeadPose with serie 1.
+void aHeadPoseFaceDetect()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aHeadPoseFaceDetect: " << util.currentDateTime() << std::endl;
+
+	vnt::FaceDetect detFace;
+	detFace.aLoadFaceCascade("cascades/lbpcascade_frontalface.xml");
+
+	std::string vPath = util.GetExePath();
+	vPath = util.replaceAll(vPath, "\\", "/");
+	std::string vFolderName = "Person";
+	std::string vImagePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
+	std::string vSavePath = vPath + "/VNTDataSet/DetectedFace/lbpcascade_frontalface/";
+
+	HeadPose vHeadPose;
+	std::string vFaceTrackIndex = "01";
+	while (vFaceTrackIndex != "16")
+	{
+		//\\ Tao thu muc.
+		util.makeDir(util.replaceAll(vSavePath, "/", "\\") + vFolderName + vFaceTrackIndex);
+		std::vector<std::string> vImageNames = vHeadPose.aGetsAllFileName(vFaceTrackIndex);
+		detFace.aGetsMat(vImageNames, vImagePath + vFolderName + vFaceTrackIndex + "/", vSavePath + vFolderName + vFaceTrackIndex + "/");
+		vFaceTrackIndex = util.increaseNumber(vFaceTrackIndex, 1);
+	}
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aHeadPoseFaceDetect: " << util.currentDateTime() << std::endl;
+}
+//\\ Detect HeadPose with serie 2.
+void aHeadPoseFaceTestDetect()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aHeadPoseFaceDetect: " << util.currentDateTime() << std::endl;
+
+	vnt::FaceDetect detFace;
+	detFace.aLoadFaceCascade("cascades/lbpcascade_frontalface.xml");
+
+	std::string vPath = util.GetExePath();
+	vPath = util.replaceAll(vPath, "\\", "/");
+	std::string vFolderName = "Person";
+	std::string vImagePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
+	std::string vSavePath = vPath + "/VNTDataSet/DetectedFace/lbpcascade_frontalface/Test/";
+
+	HeadPose vHeadPose;
+	std::string vFaceTrackIndex = "01";
+	while (vFaceTrackIndex != "16")
+	{
+		//\\ Tao thu muc.
+		util.makeDir(util.replaceAll(vSavePath, "/", "\\") + vFolderName + vFaceTrackIndex);
+		std::vector<std::string> vImageNames = vHeadPose.aGetsAllFileName(vFaceTrackIndex);
+		detFace.aGetsMat(vImageNames, vImagePath + vFolderName + vFaceTrackIndex + "/", vSavePath + vFolderName + vFaceTrackIndex + "/");
+		vFaceTrackIndex = util.increaseNumber(vFaceTrackIndex, 1);
+	}
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aHeadPoseFaceDetect: " << util.currentDateTime() << std::endl;
 }
 
 //\\ Phat hien mat nguoi trong anh.
@@ -95,10 +158,12 @@ void aFaceDetectFromCamera()
 int main(void)
 {
 	//\\ Phat hien mat nguoi trong anh.
-	FaceDetect();
-	//\\ Phat hien mat nguoi trong camera.
-	FaceDetectFromCamera();
+	//aHeadPoseFaceDetect();
+	aHeadPoseFaceTestDetect();
+	////\\ Phat hien mat nguoi trong camera.
+	//aFaceDetectFromCamera();
 
-	cv::waitKey();
+	cout << "Done.";
+	_getwch();
 	return 0;
 }

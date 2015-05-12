@@ -39,3 +39,11 @@
 
 - Pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889. (*)
 - Pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45 = 0.422222.
+
+* Face Detect:
+- 
+
+* Tích hợp lại:
+- So sánh từng face trong query với csdl tương ứng góc nhìn (nếu có 3 facce query thì so sánh 3 lần). Sau đó công các index
+của các Facetrack để xếp hạng:
++ Nếu hạng bằng nhau thì so sánh vector đăc trưng trung bình. Và nhờ vào đây để giải quyết thứ tự khi bằng nhau.
