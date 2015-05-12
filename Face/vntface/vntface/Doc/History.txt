@@ -1,8 +1,8 @@
 ﻿* Test (ngày 10/5):
 - Tạo tổ hợp 4 database cho từng serie1 và serie2.
-* So khớp:
-- Không pose + chuẩn hóa + query trong csdl: MAP = 0.811797.
-- Không pose + chuẩn hóa + query ngoài csdl: MAP = 0.542968.
+* So khớp MeanCos:
+- Không pose + chuẩn hóa + query trong csdl: MAP = 0.811797. (*)
+- Không pose + chuẩn hóa + query ngoài csdl: MAP = 0.542968. (*)
 
 - Không pose + không chuẩn hóa + query trong csdl: MAP = 0.791873.
 - Không pose + không chuẩn hóa + query ngoài csdl: MAP = 0.490369.
@@ -13,11 +13,12 @@
 - Pose + chuẩn hóa + query trong csdl: MAP = 0.554319.
 - Pose + chuẩn hóa + query ngoài csdl: MAP = 0.386786.
 
+* So khớp đếm số lần chính xác:
 * Dữ liệu csdl không chia, csdl test chia 3.
 - Không pose + chuẩn hóa + query trong csdl: MAP = 39/45 = 0.866667.
-- Không pose + chuẩn hóa + query ngoài csdl: MAP = 23/45 = 0.511111.
+- Không pose + chuẩn hóa + query ngoài csdl: MAP = 23/45 = 0.511111. (*)
 
-- Không pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889.
+- Không pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889. (*)
 - Không pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45 = 0.422222.
 
 - Pose + chuẩn hóa + query trong csdl: MAP = 35/45 = 0.777778.
@@ -28,9 +29,13 @@
 
 * Tích hợp Pose lại: lấy giá trị trung bình chia cho tổng pose. KQ: khong pose == co pose.
 - Không pose + chuẩn hóa + query trong csdl: MAP = 39/45 = 0.866667.
+- Không pose + chuẩn hóa + query ngoài csdl: MAP = 23/45 = 0.511111. (*)
 
-- Không pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889.
+- Không pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889. (*)
+- Không pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45 = 0.422222.
 
 - Pose + chuẩn hóa + query trong csdl: MAP = 39/45 = 0.866667.
+- Pose + chuẩn hóa + query ngoài csdl: MAP = 19/45 = 0.422222.
 
-- Pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889.
+- Pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889. (*)
+- Pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45 = 0.422222.
