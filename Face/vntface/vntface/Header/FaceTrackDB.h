@@ -119,6 +119,8 @@ namespace vnt
 		int aDatabaseInitNotPoseNotNormalize(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::string pFolderPath);
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
+		//\\ Doc cac vector dac trung tu file va dua vao csdl.
+		int aDatabaseRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath);
 
 		//\\ Sap xep danh sach facetrack theo facetrack truy van. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
 		std::vector<std::vector<std::vector<std::vector<double>>>> aMeanCosMatching(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks);

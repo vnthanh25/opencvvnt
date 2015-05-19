@@ -622,6 +622,84 @@ void aDatabaseInit()
 	aDatabaseInit_Serie12_Div_PoseNotNormalize("Test/");
 }
 
+
+std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBTest, int pNum)
+{
+	std::vector<int> result;
+	std::vector<std::vector<std::vector<std::vector<double>>>> csdl = pFaceTrackDB.aGetFaceTrackDatabase();
+	std::vector<std::vector<std::vector<std::vector<double>>>> csdlTest = pFaceTrackDBTest.aGetFaceTrackDatabase();
+	/*
+	- Lap qua 15 mat nguoi goc.
+	- Lap qua 3 mat nguoi duoc chia nho cua tung mat nguoi goc.
+	- So khop tung mat nguoi voi csdl facetrack: ket qua la thu tu so khop.
+	- Tinh do chinh xac MAP.
+	*/
+	std::vector<double> vAPs;
+	size_t n = csdlTest.size() / pNum;
+	//\\ Lap n mat nguoi goc.
+	for (size_t i = 0; i < n; i++)
+	{
+		//\\ Lap qua m mat nguoi dung.
+		for (size_t j = 0; j < pNum; j++)
+		{
+			int indexQuery = i * pNum + j;
+			//\\ Lay query tu csdl1.
+			std::vector<std::vector<std::vector<double>>> vQuery = csdlTest[indexQuery];
+			//\\ So khop.
+			std::vector<int> vMatchingIndex = pFaceTrackDB.aMeanCosMatchingIndex(vQuery, csdl);
+			if (vMatchingIndex[0] == i)
+			{
+				result.push_back(indexQuery);
+			}
+		}
+	}
+	return result;
+}
+//\\ So khop: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia).
+std::vector<int> aMatchingHeadPose_NotDiv_Div(std::string pDatabasePath, std::string pQueryPath, int pNum)
+{
+	std::vector<int> result;
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << pDatabasePath + " - " + pQueryPath + " : " << util.currentDateTime() << std::endl;
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+
+	FaceTrackDB vFaceTrackDB;
+	FaceTrackDB vFaceTrackDBQuery;
+	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
+	vFaceTrackDB.aDatabaseRead(0, 14, 0, 0, vDataSetPath + pDatabasePath);
+	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	vFaceTrackDBQuery.aDatabaseRead(0, 44, 0, 0, vDataSetPath + pQueryPath);
+
+	//\\ So khop tung facetrack trong DBTest.
+	result = aMatching(vFaceTrackDB, vFaceTrackDBQuery, pNum);
+	int countTrue = result.size();
+	size_t querySize = vFaceTrackDBQuery.aGetFaceTrackDatabase().size();
+	//\\ Hien thi thoi gian ket thuc.
+	cout << pDatabasePath + " - " + pQueryPath + " : " << util.currentDateTime() << std::endl;
+	cout << "countTrue: " << countTrue << "/ " << querySize << " = " << 1.0 * countTrue / querySize << std::endl;
+	return result;
+}
+//\\ So khop:
+void aMatchingHeadPose()
+{
+	//\\ Csdl khong chia. Query chia 3. Query trong csdl.
+	std::vector<int> result1 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/Normalize/", "Div/NotPose/Normalize/", 3);//\\ Khong co Pose + csdl co chuan hoa.
+	std::vector<int> result2 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/NotPose/NotNormalize/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
+	std::vector<int> result3 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/Normalize/", "Div/Pose/Normalize/", 3);//\\ Co Pose + co chuan hoa.
+	std::vector<int> result4 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Pose/NotNormalize/", 3);//\\ Co Pose + khong chuan hoa.
+
+	//\\ Csdl khong chia. Query chia 3. Query trong test.
+	std::vector<int> result5 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/Normalize/", "Div/Test/NotPose/Normalize/", 3);//\\ Khong co Pose + csdl co chuan hoa.
+	std::vector<int> result6 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/Test/NotPose/NotNormalize/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
+	std::vector<int> result7 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/Normalize/", "Div/Test/Pose/Normalize/", 3);//\\ Co Pose + co chuan hoa.
+	std::vector<int> result8 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Test/Pose/NotNormalize/", 3);//\\ Co Pose + khong chuan hoa.
+}
+
+
 // Function main
 int main(void)
 {
@@ -636,6 +714,9 @@ int main(void)
 
 	//\\ Khoi tao Database
 	//aDatabaseInit();
+
+	//\\ So khop
+	aMatchingHeadPose();
 
 	cout << "Done.";
 	_getwch();

@@ -1002,6 +1002,42 @@ int FaceTrackDB::aDatabaseRead(std::string pNumFaceTrackStart, std::string pNumF
 	result = mFaceTrackDatabase.size();
 	return result;
 }
+//\\ Doc cac vector dac trung tu file va dua vao csdl.
+int FaceTrackDB::aDatabaseRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath)
+{
+	int result = 0;
+	mFaceTrackDatabase.clear();
+	Utilites util;
+	mFolderPath = pFolderPath;
+	//int facetrackLength = pNumFaceTrackEnd.length();
+	//int featueLength = pNumFeatureEnd.length();
+	//\\ Doc tung facetrack.
+	//size_t vNumFaceTrackStart = std::atoi(pNumFaceTrackStart.c_str());
+	//size_t vNumFaceTrackEnd = std::atoi(pNumFaceTrackEnd.c_str());
+	for (size_t i = pNumFaceTrackStart; i <= pNumFaceTrackEnd; i++)
+	{
+		//\\ Doc tung vector dac trung (trung binh) cua facetrack.
+		//std::string vFaceTrackPath = mFolderPath + mFaceTracksFolder + "/";
+		//\\std::string vFaceTrackName = mFaceTrackName + util.leftPad(std::to_string(i), facetrackLength, '0');
+		std::string vFaceTrackName = mFaceTrackName + std::to_string(i);
+		std::vector<std::vector<std::vector<double>>> facetrack;
+		//size_t vNumFeatureStart = std::atoi(pNumFeatureStart.c_str());
+		//size_t vNumFeatureEnd = std::atoi(pNumFeatureEnd.c_str());
+		for (size_t j = pNumFeatureStart; j <= pNumFeatureEnd; j++)
+		{
+			//std::string vFeaturePath = vFaceTrackPath + mDBFeatureFolder + "/" + vFaceTrackName + "/";
+			//\\std::string fNum = util.leftPad(std::to_string(j), featueLength, '0');
+			std::string fNum = std::to_string(j);
+			cv::Mat featureMat = util.readMatBasic(mFolderPath + mDBFeatureFolder + "/" + vFaceTrackName + "/" + mDBFeatureName + fNum + mDBFeatureType);
+			std::vector<std::vector<double>> feature = util.convertMatToV2D(featureMat);
+			facetrack.push_back(feature);
+		}
+		mFaceTrackDatabase.push_back(facetrack);
+		facetrack.clear();
+	}
+	result = mFaceTrackDatabase.size();
+	return result;
+}
 
 //\\ Sap xep danh sach facetrack theo facetrack truy van. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
 std::vector<std::vector<std::vector<std::vector<double>>>> FaceTrackDB::aMeanCosMatching(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks)
