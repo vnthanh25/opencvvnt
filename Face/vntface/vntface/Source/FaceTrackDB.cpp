@@ -213,7 +213,7 @@ std::vector<std::vector<double>> FaceTrackDB::aAvgFeature(const std::vector<std:
 				for (size_t k = 0; k < pFTFeatures.size(); k++)
 				{
 					//\\ Lap qua danh sach dac trung. (truc t)
-					for (size_t l = 0; l < pFTFeatures[0].size(); l++)
+					for (size_t l = 0; l < pFTFeatures[k].size(); l++)
 					{
 						////\\ Tich hop pose: moi dac trung nhan voi he so pose.
 						//double avgPose = 1.0 * pFTPoses[k][l] / pSumPose;//\\ Tinh gia tri pose trung binh.
@@ -253,7 +253,7 @@ std::vector<std::vector<double>> FaceTrackDB::aAvgFeatureNotPose(const std::vect
 				for (size_t k = 0; k < pFTFeatures.size(); k++)
 				{
 					//\\ Lap qua danh sach dac trung. (truc t)
-					for (size_t l = 0; l < pFTFeatures[0].size(); l++)
+					for (size_t l = 0; l < pFTFeatures[k].size(); l++)
 					{
 						avg += pFTFeatures[k][l][i][j];
 					}
@@ -504,12 +504,15 @@ int FaceTrackDB::aFeatureRead(std::string pNumFaceTrackStart, std::string pNumFa
 			//std::string vFeaturePath = vFaceTrackPath + mDBFeatureFolder + "/" + vFaceTrackName + "/";
 			std::string featureName = util.leftPad(std::to_string(j), featueLength, '0');
 			cv::Mat featureMat = util.readMatBasic(mFolderPath + mFaceTracksFolder + "/" + vFaceTrackName + "/" + mDBFeatureName + featureName + mFeatureType);
-			std::vector<std::vector<int>> feature = util.convertMatToV2I(featureMat);
-			facetrack.push_back(feature);
-			//\\ Doc pose tu file.
-			cv::Mat poseMat = util.readMatBasic(mFolderPath + mFaceTracksFolder + "/" + vFaceTrackName + "/" + mPoseName + featureName + mFeatureType);
-			int pose = poseMat.at<int>(0, 0);
-			vPose.push_back(pose);
+			if (!featureMat.empty())
+			{
+				std::vector<std::vector<int>> feature = util.convertMatToV2I(featureMat);
+				facetrack.push_back(feature);
+				//\\ Doc pose tu file.
+				cv::Mat poseMat = util.readMatBasic(mFolderPath + mFaceTracksFolder + "/" + vFaceTrackName + "/" + mPoseName + featureName + mFeatureType);
+				int pose = poseMat.at<int>(0, 0);
+				vPose.push_back(pose);
+			}
 		}
 		mFacetrackFeatures.push_back(facetrack);
 		facetrack.clear();
@@ -546,8 +549,11 @@ int FaceTrackDB::aFeatureReadNotPose(std::string pNumFaceTrackStart, std::string
 			//std::string vFeaturePath = vFaceTrackPath + mDBFeatureFolder + "/" + vFaceTrackName + "/";
 			std::string featureName = mDBFeatureName + util.leftPad(std::to_string(j), featueLength, '0');
 			cv::Mat featureMat = util.readMatBasic(mFolderPath + mFaceTracksFolder + "/" + vFaceTrackName + "/" + featureName + mFeatureType);
-			std::vector<std::vector<int>> feature = util.convertMatToV2I(featureMat);
-			facetrack.push_back(feature);
+			if (!featureMat.empty())
+			{
+				std::vector<std::vector<int>> feature = util.convertMatToV2I(featureMat);
+				facetrack.push_back(feature);
+			}
 		}
 		mFacetrackFeatures.push_back(facetrack);
 		facetrack.clear();
@@ -711,6 +717,10 @@ int FaceTrackDB::aDatabaseInitNotPose(std::vector<std::vector<std::vector<std::v
 	//size_t facetrackfeaturesize = facetrackfeature.size();
 	for (size_t i = 0; i < vFaceTrackSize; i++)
 	{
+		if (i == 42)
+		{
+			int aaa = 1;
+		}
 		//\\ Tao thu muc cho facetrack thu i.
 		util.makeDir(vFolderPath + "\\" + mDBFeatureFolder + "\\" + faceTrackNames[i]);
 		//\\ Chuan hoa cac vector dac trung trung binh.

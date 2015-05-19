@@ -40,10 +40,46 @@
 - Pose + không chuẩn hóa + query trong csdl: MAP = 40/45 = 0.888889. (*)
 - Pose + không chuẩn hóa + query ngoài csdl: MAP = 19/45 = 0.422222.
 
-* Face Detect:
-- 
-
 * Tích hợp lại:
 - So sánh từng face trong query với csdl tương ứng góc nhìn (nếu có 3 facce query thì so sánh 3 lần). Sau đó công các index
 của các Facetrack để xếp hạng:
 + Nếu hạng bằng nhau thì so sánh vector đăc trưng trung bình. Và nhờ vào đây để giải quyết thứ tự khi bằng nhau.
+
+* Face Detect:
+- CascadeName = "haarcascade_frontalface_default";
++ Serie 1: khoảng 10 phút (13:19 - 22:17).
++ Serie 2: khoảng 10 phút (22:17 - 31:31).
+- haarcascade_profileface:
++ Serie 1: khoảng 10 phút (36:10 - 45:11).
++ Serie 2: khoảng 10 phút (45:11 - 54:45).
+- Trộn lại:
++ Xóa bớt trong "haarcascade_frontalface_default" trước.
++ Copy all từ "haarcascade_profileface". Paste vào "haarcascade_frontalface_default"
+(Không ghi đè file cũ. Move những file mới copy để xóa bớt. Rồi move ngược trở lại).
+
+* Khoi tao DataSet:
+- Serie 1 - không chia: (02:39 - 03:06).
+- Serie 1 - chia 3: (08:56 - 09:13).
+- Serie 2 - không chia: (35:29 - 37:11).
+- Serie 2 - chia 3: (37:11 - 37:39).
+
+* Khởi tạo Feature:
+- Serie 1 - không chia:
++ Có Pose: (07:01 - 08:46).
++ Không Pose: (08:46 - 10:27).
+- Serie 1 - chia 3:
++ Có Pose: (10:27 - 12:12).
++ Không Pose: (12:12 - 13:54).
+- Serie 2 - không chia:
++ Có Pose: (39:15 - 40:57).
++ Không Pose: (40:57 - 42:37).
+- Serie 2 - chia 3:
++ Có Pose: (42:37 - 44:17).
++ Không Pose: (44:17 - 45:56).
+
+* Khởi tạo Database:
+- Serie 1:
++ NotDiv + NotPose + Normalize: (33:27 - 33:31).
++ NotDiv + NotPose + NotNormalize: (33:31 - 33:35).
++ NotDiv + NotPose + Normalize: (33:35 - 33:40).
++ NotDiv + NotPose + Normalize: (33:40 - 33:44).

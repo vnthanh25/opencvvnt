@@ -24,15 +24,12 @@ namespace vnt
 
 		/********** private Methods **********/
 
-	public:
-		/********** public Members **********/
-
 		//\\ Image format: "person[Id][Serie][Number][Tilt][Pan].jpg".
 		const std::string mImageName = "person[Id][Serie][Number][Tilt][Pan].jpg";
 		//\\ Id dau tien va Id cuoi cung.
 		const std::string mIds = "01,15";
 		//\\ Chuoi anh: Seri 1 tranning, seri 2 test.
-		const std::string mSerie = "1,2";//\\= "1,2";
+		std::string mSerie = "1,2";//\\= "1,2";
 		//\\ So thu tu cua file trong thu muc.
 		const std::string mNumber = "00,92";
 		//\\ Goc nghien theo chieu dung.
@@ -54,11 +51,17 @@ namespace vnt
 		////\\ Goc nghien theo chieu ngang.
 		//const std::string mPan = "-90,-75,-60,-45";
 
+	public:
 		/********** Constructor **********/
 		HeadPose();
 		~HeadPose();
 
 		/********** public Methods **********/
+		//\\ Lay Serie.
+		std::string aGetSerie();
+		//\\ Gan Serie.
+		void aSetSerie(std::string pSerie);
+
 		//\\ Get Subject Id.
 		std::string aGetId(const int pIndex);
 		//\\ Get Serie.

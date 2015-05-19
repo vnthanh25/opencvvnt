@@ -17,6 +17,17 @@ HeadPose::~HeadPose()
 }
 
 /********** public Methods **********/
+//\\ Lay Serie.
+std::string HeadPose::aGetSerie()
+{
+	return mSerie;
+}
+//\\ Gan Serie.
+void HeadPose::aSetSerie(std::string pSerie)
+{
+	mSerie = pSerie;
+}
+
 //\\ Get Subject Id.
 std::string HeadPose::aGetId(const int pIndex)
 {
@@ -210,7 +221,7 @@ std::vector<std::string> HeadPose::aGetsAllSerie()
 		item = aGetSerie(index);
 		if (item == "")
 			break;
-		if (item == "2")
+		//if (item == "2")
 		result.push_back(item);
 		index++;
 	}

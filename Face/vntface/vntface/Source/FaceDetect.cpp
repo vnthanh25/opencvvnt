@@ -1,4 +1,5 @@
 #include "..\Header\FaceDetect.h"
+#include "..\Header\Utilities.h"
 
 using namespace vnt;
 /********** Constructor **********/
@@ -95,6 +96,7 @@ std::vector<cv::Mat> FaceDetect::aGetsMat(const cv::Mat pImage, const std::strin
 std::vector<cv::Mat> FaceDetect::aGetsMat(const std::vector<std::string> pFileNames, const std::string pSourcePath, const std::string pSavePath)
 {
 	std::vector<cv::Mat> result;
+	Utilites util;
 	size_t fileSize = pFileNames.size();
 	for (size_t i = 0; i < fileSize; i++)
 	{
@@ -103,14 +105,14 @@ std::vector<cv::Mat> FaceDetect::aGetsMat(const std::vector<std::string> pFileNa
 		//\\ Detect face.
 
 		//std::vector<cv::Mat> faces = detFace.aGetsMat(cv::imread("images/lena.png", CV_8UC1));
-		std::vector<cv::Mat> faces = aGetsMat(vFace);
+		std::vector<cv::Mat> vFaces = aGetsMat(vFace);
 
 		//\\ Find face larger.
 		int vFaceSize = 0;
 		int vIndex = 0;
-		for (size_t j = 0; j < faces.size(); j++)
+		for (size_t j = 0; j < vFaces.size(); j++)
 		{
-			cv::Size vSize = faces[j].size();
+			cv::Size vSize = vFaces[j].size();
 			if (vFaceSize < vSize.height * vSize.width)
 			{
 				vIndex = j;
@@ -121,8 +123,20 @@ std::vector<cv::Mat> FaceDetect::aGetsMat(const std::vector<std::string> pFileNa
 		if (vFaceSize > 0)
 		{
 			//cv::imshow("image_" + vImageIndex + "_" + std::to_string(i), faces[i]);
-			cv::imwrite(pSavePath + pFileNames[i], faces[vIndex]);
-			result.push_back(faces[vIndex]);
+			cv::imwrite(pSavePath + pFileNames[i], vFaces[vIndex]);
+			result.push_back(vFaces[vIndex]);
+		}
+		//\\ Ghi lai cac file trung.
+		size_t vFacesSize = vFaces.size();
+		if (vFacesSize > 1)
+		{
+			int idx = pFileNames[i].find_last_of(".");
+			std::string fName = pFileNames[i].substr(0, idx);
+			std::string tName = util.subStringAfter(pFileNames[i], ".");
+			for (size_t j = 0; j < vFacesSize; j++)
+			{
+				cv::imwrite(pSavePath + fName + "_" + std::to_string(j) + "." + tName, vFaces[j]);
+			}
 		}
 	}
 	return result;
