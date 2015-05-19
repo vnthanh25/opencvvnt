@@ -127,7 +127,15 @@ void aHeadPoseDataSetInitSerie1Div()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("1");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 3);
+	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
+	//\\ Do kich thuoc cac facetrack khong bang nhau nen phai chia lai:
+	std::vector<std::vector<cv::Mat>> vFaceTracks = vFaceDataSet.aGetFaceTraks();
+	size_t vFaceTracksSize = vFaceTracks.size();
+	for (size_t i = 0; i < vFaceTracksSize; i++)
+	{
+		size_t vFaceTrackSize = vFaceTracks[i].size();
+
+	}
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie1Div: " << util.currentDateTime() << std::endl;
@@ -177,7 +185,7 @@ void aHeadPoseDataSetInitSerie2Div()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("2");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 3);
+	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie2Div: " << util.currentDateTime() << std::endl;
@@ -208,7 +216,7 @@ void aFeaturesInitSerie1NotDivPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -233,7 +241,7 @@ void aFeaturesInitSerie1NotDivNotPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -258,7 +266,7 @@ void aFeaturesInitSerie1DivPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "44", "00", "30", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -283,7 +291,7 @@ void aFeaturesInitSerie1DivNotPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "44", "00", "30", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -308,7 +316,7 @@ void aFeaturesInitSerie2NotDivPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -333,7 +341,7 @@ void aFeaturesInitSerie2NotDivNotPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "14", "00", "92", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -358,7 +366,7 @@ void aFeaturesInitSerie2DivPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "44", "00", "30", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -383,7 +391,7 @@ void aFeaturesInitSerie2DivNotPose()
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead("00", "44", "00", "30", vSourePath);
+	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
@@ -407,11 +415,11 @@ void aFeaturesInit()
 
 
 //\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + Normalize (csdl co chuan hoa).
-void aDatabaseInit_Serie1_NotDiv_NotPoseNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_NotDiv_NotPoseNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_NotDiv_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -422,19 +430,19 @@ void aDatabaseInit_Serie1_NotDiv_NotPoseNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose("00", "14", "00", "92", vSourcePath);
+	vFaceTrackDB.aFeatureReadNotPose(0, 14, 0, 92, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_NotDiv_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
-void aDatabaseInit_Serie1_NotDiv_NotPoseNotNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_NotDiv_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -445,19 +453,19 @@ void aDatabaseInit_Serie1_NotDiv_NotPoseNotNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose("00", "14", "00", "92", vSourcePath);
+	vFaceTrackDB.aFeatureReadNotPose(0, 14, 0, 92, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_NotDiv_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
-void aDatabaseInit_Serie1_NotDiv_PoseNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_NotDiv_PoseNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_NotDiv_PoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie1_NotDiv_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -468,19 +476,19 @@ void aDatabaseInit_Serie1_NotDiv_PoseNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead("00", "14", "00", "92", vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 14, 0, 92, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_NotDiv_PoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_NotDiv_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao csdl: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
-void aDatabaseInit_Serie1_NotDiv_PoseNotNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_NotDiv_PoseNotNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_NotDiv_PoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_NotDiv_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -491,20 +499,20 @@ void aDatabaseInit_Serie1_NotDiv_PoseNotNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead("00", "14", "00", "92", vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 14, 0, 92, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_NotDiv_PoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_NotDiv_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 
 //\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + Normalize (csdl co chuan hoa).
-void aDatabaseInit_Serie1_Div_NotPoseNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_Div_NotPoseNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_Div_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -515,19 +523,19 @@ void aDatabaseInit_Serie1_Div_NotPoseNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose("00", "44", "00", "30", vSourcePath);
+	vFaceTrackDB.aFeatureReadNotPose(0, 44, 0, 30, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_Div_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
-void aDatabaseInit_Serie1_Div_NotPoseNotNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_Div_NotPoseNotNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_Div_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -538,19 +546,19 @@ void aDatabaseInit_Serie1_Div_NotPoseNotNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose("00", "44", "00", "30", vSourcePath);
+	vFaceTrackDB.aFeatureReadNotPose(0, 44, 0, 30, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_Div_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
-void aDatabaseInit_Serie1_Div_PoseNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_Div_PoseNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_Div_PoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -561,19 +569,19 @@ void aDatabaseInit_Serie1_Div_PoseNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead("00", "44", "00", "30", vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 44, 0, 30, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_Div_PoseNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
-void aDatabaseInit_Serie1_Div_PoseNotNormalize(std::string pTestPath)
+void aDatabaseInit_Serie12_Div_PoseNotNormalize(std::string pTestPath)
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aDatabaseInit_Serie1_Div_PoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
@@ -584,25 +592,34 @@ void aDatabaseInit_Serie1_Div_PoseNotNormalize(std::string pTestPath)
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead("00", "44", "00", "30", vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 44, 0, 30, vSourcePath);
 	//\\ Khoi tao csdl.
 	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aDatabaseInit_Serie1_Div_PoseNotNormalize: " << util.currentDateTime() << std::endl;
+	cout << "aDatabaseInit_Serie12_Div_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 
 //\\ Khoi tao csdl.
 void aDatabaseInit()
 {
-	//aDatabaseInit_Serie1_NotDiv_NotPoseNormalize("");
-	//aDatabaseInit_Serie1_NotDiv_NotPoseNotNormalize("");
-	//aDatabaseInit_Serie1_NotDiv_PoseNormalize("");
-	//aDatabaseInit_Serie1_NotDiv_PoseNotNormalize("");
-	aDatabaseInit_Serie1_Div_NotPoseNormalize("");
-	aDatabaseInit_Serie1_Div_NotPoseNotNormalize("");
-	aDatabaseInit_Serie1_Div_PoseNormalize("");
-	aDatabaseInit_Serie1_Div_PoseNotNormalize("");
+	aDatabaseInit_Serie12_NotDiv_NotPoseNormalize("");
+	aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize("");
+	aDatabaseInit_Serie12_NotDiv_PoseNormalize("");
+	aDatabaseInit_Serie12_NotDiv_PoseNotNormalize("");
+	aDatabaseInit_Serie12_Div_NotPoseNormalize("");
+	aDatabaseInit_Serie12_Div_NotPoseNotNormalize("");
+	aDatabaseInit_Serie12_Div_PoseNormalize("");
+	aDatabaseInit_Serie12_Div_PoseNotNormalize("");
+
+	aDatabaseInit_Serie12_NotDiv_NotPoseNormalize("Test/");
+	aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize("Test/");
+	aDatabaseInit_Serie12_NotDiv_PoseNormalize("Test/");
+	aDatabaseInit_Serie12_NotDiv_PoseNotNormalize("Test/");
+	aDatabaseInit_Serie12_Div_NotPoseNormalize("Test/");
+	aDatabaseInit_Serie12_Div_NotPoseNotNormalize("Test/");
+	aDatabaseInit_Serie12_Div_PoseNormalize("Test/");
+	aDatabaseInit_Serie12_Div_PoseNotNormalize("Test/");
 }
 
 // Function main
@@ -618,7 +635,7 @@ int main(void)
 	//aFeaturesInit();
 
 	//\\ Khoi tao Database
-	aDatabaseInit();
+	//aDatabaseInit();
 
 	cout << "Done.";
 	_getwch();

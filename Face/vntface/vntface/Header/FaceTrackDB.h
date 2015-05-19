@@ -94,10 +94,15 @@ namespace vnt
 		int aFeatureInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, int pSumPose, std::string pFolderPath);
 		//\\ Khoi tao vector dac trung.
 		int aFeatureInitNotPose(std::vector<std::vector<cv::Mat>> pFaceTracks, std::string pFolderPath);
+
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aFeatureRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aFeatureReadNotPose(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
+		//\\ Doc cac vector dac trung tu file va dua vao csdl.
+		int aFeatureRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath);
+		//\\ Doc cac vector dac trung tu file va dua vao csdl.
+		int aFeatureReadNotPose(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath);
 
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
 		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, int pSumPose);
