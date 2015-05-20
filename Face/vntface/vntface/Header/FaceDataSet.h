@@ -8,6 +8,7 @@ VNThanh
 #include "opencv2/imgproc/imgproc.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <stdio.h>
 
 #ifndef _FaceDataSetBase_
@@ -22,19 +23,20 @@ namespace vnt
 	{
 	private:
 		FaceDataSetBase* mDataSetBase;
+		//\\ Danh sach ten file.
+		std::vector<std::vector<std::string>> mFileNames;
 		//\\ Danh sach facetrack
 		std::vector<std::vector<cv::Mat>> mFaceTracks;
 		//\\ Danh sach pose cua tung anh trong moi facetrack.
 		std::vector<std::vector<int>> mPoses;
 		//\\ Tong cac tri pose.
-		int mSumPose;
 		std::string mFolderPath = "";
 		std::string mFaceTrackName = "FaceTrack";//\\ Ex: "FaceTrack01", "FaceTrack02", ...
 		std::string mDataSetFolder = "DataSet";//\\ Chua gia tri Mat cua anh.
 		std::string mImageType = ".img";
 		std::string mImageName = "Image";
 		std::string mPoseName = "Pose";
-		std::string mSumPoseName = "SumPose";
+		std::string mFileType = ".txt";
 	public:
 		/********** Constructor **********/
 		FaceDataSet();
@@ -45,6 +47,10 @@ namespace vnt
 		FaceDataSetBase* aGetDataSetBase();
 		//\\ Gan nguon anh.
 		void aSetDataSetBase(FaceDataSetBase* pDataSetBase);
+		//\\ Lay danh sach ten file.
+		std::vector<std::vector<std::string>> aGetFileNames();
+		//\\ Gan danh sach ten file.
+		void aSetFileNames(std::vector<std::vector<std::string>> pFileNames);
 		//\\ Lay danh sach facetrack.
 		std::vector<std::vector<cv::Mat>> aGetFaceTraks();
 		//\\ Gan danh sach facetrack.
@@ -53,24 +59,20 @@ namespace vnt
 		std::vector<std::vector<int>> aGetPoses();
 		//\\ Gan danh sach pose.
 		void aSetPoses(std::vector<std::vector<int>> pPoses);
-		//\\ Lay tong pose.
-		int aGetSumPose();
-		//\\ Gan tong pose.
-		void aSetSumPose(int pSumPose);
 
 		//\\ Doc tat ca cac anh. Roi gan vao danh sach facetrack.
 		std::vector<cv::Mat> aReadsImage(std::vector<std::string> pAllFileName, const std::string pDataSourcePath);
-		//\\ Doc tat ca cac anh. Roi gan vao danh sach facetrack. Co luu ra file.
-		std::vector<cv::Mat> aReadsImage(std::vector<std::string> pAllFileName, std::vector<int> pPoses, const std::string pDataSourcePath, std::string pFolderPath);
+		//\\ (Use) Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
+		void aReadsImage(std::vector<std::string> pAllFileName, std::vector<int> pPoses, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ Doc tat ca cac anh. Roi gan vao danh sach facetrack. Co luu ra file.
 		std::vector<cv::Mat> aReadsImageNotPose(std::vector<std::string> pAllFileName, const std::string pDataSourcePath, std::string pFolderPath);
 
-		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
+		//\\ (Use) Khoi tao DataSet (chuyen doi anh thanh doi tuong Mat).
 		int aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath);
-		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath, std::string pFolderPath);
+		//\\ (Use) Khoi tao DataSet (chuyen doi anh thanh doi tuong Mat). Co ghi csdl ra file.
+		int aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath, std::string pSavePath, const bool pCheckFile = false);
 		//\\ Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong?
-		int aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pFolderPath, const int pNum, const bool pCheckFile = false);
+		int aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pNum, const bool pCheckFile = false);
 	
 		//\\ Doc cac anh tu file.
 		int aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
@@ -80,6 +82,12 @@ namespace vnt
 		int aDataSetRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath);
 		//\\ Doc cac anh tu file.
 		int aDataSetReadNotPose(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath);
+		//\\ (Use) Doc cac anh  va thong tin tu file.
+		int aDataSetRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, bool pIsPose = true);
 
+		//\\ (Use) Luu ra file: Anh Mat, anh goc, gia tri pose. pFileName: co phan mo rong.
+		void aSaveToFile(cv::Mat pFace, int pPose, std::string pFileName, std::string pSavePath);
+		//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
+		void aSaveToFile(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath);
 	};
 }

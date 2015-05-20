@@ -201,216 +201,108 @@ void aHeadPoseDataSetInit()
 
 
 //\\ Khoi tao features: Serie1 + Khong chia + co Pose.
-void aFeaturesInitSerie1NotDivPose()
+void aFeaturesInitSerie1NotDiv()
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie1NotDivPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie1NotDiv: " << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
 	std::string vSourePath = vPath + "/VNTDataSet/NotDiv/";
-	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/Pose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\Pose");
+	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/";
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
+	vFaceDataSet.aDataSetRead(0, 14, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie1NotDivPose: " << util.currentDateTime() << std::endl;
-}
-//\\ Khoi tao features: Serie1 + Khong chia + khong Pose.
-void aFeaturesInitSerie1NotDivNotPose()
-{
-	Utilites util;
-	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie1NotDivNotPose: " << util.currentDateTime() << std::endl;
-
-	//\\ Duong dan den nguon du lieu.
-	std::string vExePath = util.GetExePath();
-	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourePath = vPath + "/VNTDataSet/NotDiv/";
-	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/NotPose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\NotPose");
-
-	FaceDataSet vFaceDataSet;
-	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
-
-	FaceTrackDB vFaceTrackDB;
-	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInitNotPose(vFaceDataSet.aGetFaceTraks(), vSavePath);
-
-	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie1NotDivNotPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie1NotDiv: " << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao features: Serie1 + chia + co Pose.
-void aFeaturesInitSerie1DivPose()
+void aFeaturesInitSerie1Div()
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie1DivPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie1Div: " << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
 	std::string vSourePath = vPath + "/VNTDataSet/Div/";
-	std::string vSavePath = vPath + "/VNTDataSet/Div/Pose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\Div\\Pose");
+	std::string vSavePath = vPath + "/VNTDataSet/Div/";
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
+	vFaceDataSet.aDataSetRead(0, 44, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie1DivPose: " << util.currentDateTime() << std::endl;
-}
-//\\ Khoi tao features: Serie1 + chia + khong Pose.
-void aFeaturesInitSerie1DivNotPose()
-{
-	Utilites util;
-	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie1DivNotPose: " << util.currentDateTime() << std::endl;
-
-	//\\ Duong dan den nguon du lieu.
-	std::string vExePath = util.GetExePath();
-	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourePath = vPath + "/VNTDataSet/Div/";
-	std::string vSavePath = vPath + "/VNTDataSet/Div/NotPose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\Div\\NotPose");
-
-	FaceDataSet vFaceDataSet;
-	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
-
-	FaceTrackDB vFaceTrackDB;
-	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInitNotPose(vFaceDataSet.aGetFaceTraks(), vSavePath);
-
-	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie1DivNotPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie1Div: " << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao features: Serie2 + Khong chia + co Pose.
-void aFeaturesInitSerie2NotDivPose()
+void aFeaturesInitSerie2NotDiv()
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie2NotDivPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie2NotDiv: " << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
 	std::string vSourePath = vPath + "/VNTDataSet/NotDiv/Test/";
-	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/Test/Pose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\Test\\Pose");
+	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/Test/";
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
+	vFaceDataSet.aDataSetRead(0, 14, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie2NotDivPose: " << util.currentDateTime() << std::endl;
-}
-//\\ Khoi tao features: Serie2 + Khong chia + khong Pose.
-void aFeaturesInitSerie2NotDivNotPose()
-{
-	Utilites util;
-	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie2NotDivNotPose: " << util.currentDateTime() << std::endl;
-
-	//\\ Duong dan den nguon du lieu.
-	std::string vExePath = util.GetExePath();
-	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourePath = vPath + "/VNTDataSet/NotDiv/Test/";
-	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/Test/NotPose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\Test\\NotPose");
-
-	FaceDataSet vFaceDataSet;
-	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 14, 0, 92, vSourePath);
-
-	FaceTrackDB vFaceTrackDB;
-	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInitNotPose(vFaceDataSet.aGetFaceTraks(), vSavePath);
-
-	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie2NotDivNotPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie2NotDiv: " << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao features: Serie2 + chia + co Pose.
-void aFeaturesInitSerie2DivPose()
+void aFeaturesInitSerie2Div()
 {
 	Utilites util;
 	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie2DivPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie2Div: " << util.currentDateTime() << std::endl;
 
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
 	std::string vSourePath = vPath + "/VNTDataSet/Div/Test/";
-	std::string vSavePath = vPath + "/VNTDataSet/Div/Test/Pose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\Div\\Test\\Pose");
+	std::string vSavePath = vPath + "/VNTDataSet/Div/Test/";
 
 	FaceDataSet vFaceDataSet;
 	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
+	vFaceDataSet.aDataSetRead(0, 44, vSourePath);
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aFeatureInit(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie2DivPose: " << util.currentDateTime() << std::endl;
-}
-//\\ Khoi tao features: Serie2 + chia + khong Pose.
-void aFeaturesInitSerie2DivNotPose()
-{
-	Utilites util;
-	//\\ Hien thi thoi gian bat dau.
-	cout << "aFeaturesInitSerie2DivNotPose: " << util.currentDateTime() << std::endl;
-
-	//\\ Duong dan den nguon du lieu.
-	std::string vExePath = util.GetExePath();
-	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourePath = vPath + "/VNTDataSet/Div/Test/";
-	std::string vSavePath = vPath + "/VNTDataSet/Div/Test/NotPose/";
-	util.makeDir(vExePath + "\\VNTDataSet\\Div\\Test\\NotPose");
-
-	FaceDataSet vFaceDataSet;
-	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead(0, 44, 0, 30, vSourePath);
-
-	FaceTrackDB vFaceTrackDB;
-	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInitNotPose(vFaceDataSet.aGetFaceTraks(), vSavePath);
-
-	//\\ Hien thi thoi gian ket thuc.
-	cout << "aFeaturesInitSerie2DivNotPose: " << util.currentDateTime() << std::endl;
+	cout << "aFeaturesInitSerie2Div: " << util.currentDateTime() << std::endl;
 }
 //\\ Khoi tao feature
 void aFeaturesInit()
 {
-	aFeaturesInitSerie1NotDivPose();
-	aFeaturesInitSerie1NotDivNotPose();
-	aFeaturesInitSerie1DivPose();
-	aFeaturesInitSerie1DivNotPose();
-	aFeaturesInitSerie2NotDivPose();
-	aFeaturesInitSerie2NotDivNotPose();
-	aFeaturesInitSerie2DivPose();
-	aFeaturesInitSerie2DivNotPose();
+	aFeaturesInitSerie1NotDiv();
+	aFeaturesInitSerie1Div();
+	aFeaturesInitSerie2NotDiv();
+	aFeaturesInitSerie2Div();
 }
 
 
@@ -424,15 +316,15 @@ void aDatabaseInit_Serie12_NotDiv_NotPoseNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "NotPose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "NotPose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\" + util.replaceAll(pTestPath, "/", "\\") + "NotPose\\Normalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose(0, 14, 0, 92, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -447,15 +339,15 @@ void aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "NotPose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "NotPose/NotNormalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\" + util.replaceAll(pTestPath, "/", "\\") + "NotPose\\NotNormalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose(0, 14, 0, 92, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -470,15 +362,15 @@ void aDatabaseInit_Serie12_NotDiv_PoseNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "Pose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "Pose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\" + util.replaceAll(pTestPath, "/", "\\") + "Pose\\Normalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead(0, 14, 0, 92, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -493,15 +385,15 @@ void aDatabaseInit_Serie12_NotDiv_PoseNotNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "Pose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/" + pTestPath + "Pose/NotNormalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv\\" + util.replaceAll(pTestPath, "/", "\\") + "Pose\\NotNormalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead(0, 14, 0, 92, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -517,15 +409,15 @@ void aDatabaseInit_Serie12_Div_NotPoseNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath + "NotPose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/Div/" + pTestPath + "NotPose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\Div\\" + util.replaceAll(pTestPath, "/", "\\") + "NotPose\\Normalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose(0, 44, 0, 30, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -540,15 +432,15 @@ void aDatabaseInit_Serie12_Div_NotPoseNotNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath + "NotPose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/Div/" + pTestPath + "NotPose/NotNormalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\Div\\" + util.replaceAll(pTestPath, "/", "\\") + "NotPose\\NotNormalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureReadNotPose(0, 44, 0, 30, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -563,15 +455,15 @@ void aDatabaseInit_Serie12_Div_PoseNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath + "Pose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/Div/" + pTestPath + "Pose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\Div\\" + util.replaceAll(pTestPath, "/", "\\") + "Pose\\Normalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead(0, 44, 0, 30, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -586,15 +478,15 @@ void aDatabaseInit_Serie12_Div_PoseNotNormalize(std::string pTestPath)
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath + "Pose/";
+	std::string vSourcePath = vPath + "/VNTDataSet/Div/" + pTestPath;
 	std::string vSavePath = vPath + "/VNTDataSet/Div/" + pTestPath + "Pose/NotNormalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\Div\\" + util.replaceAll(pTestPath, "/", "\\") + "Pose\\NotNormalize");
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Doc features.
-	vFaceTrackDB.aFeatureRead(0, 44, 0, 30, vSourcePath);
+	vFaceTrackDB.aFeatureRead(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetPoses(), vFaceTrackDB.aGetSumPose(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -700,6 +592,30 @@ void aMatchingHeadPose()
 }
 
 
+void aMatchingHeadPoseFull()
+{
+	//Utilites util;
+	////\\ Hien thi thoi gian bat dau.
+	//cout << "aMatchingHeadPoseFull: " << util.currentDateTime() << std::endl;
+
+	////\\ Duong dan den nguon du lieu.
+	//std::string vExePath = util.GetExePath();
+	//std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	//std::string vSourePath1 = vPath + "/VNTDataSet/DataSetHeadPoseDetectedFace/";
+	//std::string vSourePath2 = vPath + "/VNTDataSet/DataSetHeadPoseDetectedFace/";
+
+	//FaceDataSet vFaceDataSet;
+	////\\ Khoi tao dataset.
+	//FaceDataSetBase* vFaceDataSetBase;
+	//HeadPose vHeadPose;
+	//vHeadPose.aSetSerie("1");
+	//vFaceDataSetBase = &vHeadPose;
+	//vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 1);
+
+	////\\ Hien thi thoi gian ket thuc.
+	//cout << "aMatchingHeadPoseFull: " << util.currentDateTime() << std::endl;
+}
+
 // Function main
 int main(void)
 {
@@ -713,10 +629,10 @@ int main(void)
 	//aFeaturesInit();
 
 	//\\ Khoi tao Database
-	//aDatabaseInit();
+	aDatabaseInit();
 
 	//\\ So khop
-	aMatchingHeadPose();
+	//aMatchingHeadPose();
 
 	cout << "Done.";
 	_getwch();

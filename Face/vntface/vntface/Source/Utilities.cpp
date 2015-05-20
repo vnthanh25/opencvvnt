@@ -291,3 +291,11 @@ std::string Utilites::subStringAfter(std::string pStr, std::string pFind)
 	result = pStr.substr(iIndex, pStr.length() - iIndex);
 	return result;
 }
+//\\ std::string methods:
+std::string Utilites::subStringBefor(std::string pStr, std::string pFind)
+{
+	std::string result;
+	int iIndex = pStr.find_last_of(pFind);
+	result = pStr.substr(0, iIndex);
+	return result;
+}

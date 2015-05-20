@@ -54,5 +54,7 @@ namespace vnt
 
 		//\\ std::string methods:
 		std::string subStringAfter(std::string pStr, std::string pFind);
+		//\\ std::string methods:
+		std::string subStringBefor(std::string pStr, std::string pFind);
 	};
 }

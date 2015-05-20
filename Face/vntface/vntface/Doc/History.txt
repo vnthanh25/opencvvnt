@@ -58,10 +58,10 @@ của các Facetrack để xếp hạng:
 (Không ghi đè file cũ. Move những file mới copy để xóa bớt. Rồi move ngược trở lại).
 
 * Khoi tao DataSet:
-- Serie 1 - không chia: (02:39 - 03:06).
-- Serie 1 - chia 3: (08:56 - 09:13).
-- Serie 2 - không chia: (35:29 - 37:11).
-- Serie 2 - chia 3: (37:11 - 37:39).
+- Serie 1 - không chia: (55:27 - 56:26).
+- Serie 1 - chia 3: (05:24 - 05:39).
+- Serie 2 - không chia: (05:39 - 05:57).
+- Serie 2 - chia 3: (05:57 - 06:13).
 
 * Khởi tạo Feature:
 - Serie 1 - không chia:
