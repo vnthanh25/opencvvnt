@@ -21,6 +21,7 @@ namespace vnt
 		//\\ Ghi Mat ra file.
 		void writeMatUChar(Mat img, string fname);
 		void writeMatInt(Mat img, string fname);
+		void writeMatDouble(Mat img, string fname);
 		void writeMatBasic(Mat img, string fname);
 		Mat Utilites::readMatBasic(string fname);
 

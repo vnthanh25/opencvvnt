@@ -289,7 +289,7 @@ int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::s
 }
 
 //\\ Doc cac anh tu file.
-int FaceDataSet::aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
+int FaceDataSet::aDataSetRead1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
 {
 	int result = 0;
 	mFaceTracks.clear();
@@ -334,7 +334,7 @@ int FaceDataSet::aDataSetRead(std::string pNumFaceTrackStart, std::string pNumFa
 	return result;
 }
 //\\ Doc cac anh tu file.
-int FaceDataSet::aDataSetReadNotPose(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
+int FaceDataSet::aDataSetReadNotPose1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
 {
 	int result = 0;
 	mFaceTracks.clear();
@@ -369,7 +369,7 @@ int FaceDataSet::aDataSetReadNotPose(std::string pNumFaceTrackStart, std::string
 	return result;
 }
 //\\ Doc cac anh tu file.
-int FaceDataSet::aDataSetRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath)
+int FaceDataSet::aDataSetRead2(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath)
 {
 	int result = 0;
 	mFaceTracks.clear();
@@ -413,7 +413,7 @@ int FaceDataSet::aDataSetRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, int 
 	return result;
 }
 //\\ Doc cac anh tu file.
-int FaceDataSet::aDataSetReadNotPose(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath)
+int FaceDataSet::aDataSetReadNotPose2(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath)
 {
 	int result = 0;
 	mFaceTracks.clear();
@@ -448,7 +448,7 @@ int FaceDataSet::aDataSetReadNotPose(int pNumFaceTrackStart, int pNumFaceTrackEn
 	return result;
 }
 //\\ (Use) Doc cac anh  va thong tin tu file.
-int FaceDataSet::aDataSetRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, bool pIsPose)
+int FaceDataSet::aDataSetRead3(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, bool pIsPose)
 {
 	int result = 0;
 	mFileNames.clear();
@@ -498,6 +498,7 @@ void FaceDataSet::aSaveToFile(cv::Mat pFace, int pPose, std::string pFileName, s
 	//\\ Ghi anh Mat.
 	std::string vFileName = util.subStringBefor(pFileName, ".");
 	util.writeMatBasic(pFace, pSavePath + vFileName + mImageType);
+	util.writeMatUChar(pFace, pSavePath + vFileName + ".txt");
 	//\\ Ghi anh goc.
 	cv::imwrite(pSavePath + pFileName, pFace);
 	////\\ Ghi gia tri pose co kieu Mat ra file.

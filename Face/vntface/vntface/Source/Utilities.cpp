@@ -87,6 +87,38 @@ void Utilites::writeMatInt(Mat img, string fname)
 	file << "]";
 	file.release();
 }
+void Utilites::writeMatDouble(Mat img, string fname)
+{
+	FileStorage file(fname, FileStorage::WRITE);
+	//file << "mat" << img;
+	file << "mat" << "[:";
+	string sValue = "";
+	for (int x = 0; x < img.cols; x++)
+	{
+		stringstream out;
+		out << x;
+		string value = out.str();
+		sValue += leftPad(value, 3, ' ') + " ";
+	}
+	file << "{" << "x" << sValue + "-1" << "}";
+	for (int y = 0; y < img.rows; y++)
+	{
+		sValue = "";
+		for (int x = 0; x < img.cols; x++)
+		{
+			double iv = img.at<double>(Point(x, y));
+			stringstream out;
+			out << iv;
+			string value = out.str();
+			sValue += leftPad(value, 3, ' ') + " ";
+		}
+		stringstream out;
+		out << y;
+		file << "{" << "y" << sValue + out.str() << "}";
+	}
+	file << "]";
+	file.release();
+}
 void Utilites::writeMatBasic(Mat img, string fname)
 {
 	FileStorage storage(fname, cv::FileStorage::WRITE);
@@ -147,7 +179,7 @@ std::string Utilites::convertUnsignedIntToBinary(int pValue)
 //\\ Chuyen vector<vector<int>> thanh Mat.
 cv::Mat Utilites::convertV2IToMat(std::vector<std::vector<int>> lbpFeature, int width, int height)
 {
-	cv::Mat result = cv::Mat::zeros(height, width, CV_32FC1);
+	cv::Mat result = cv::Mat::zeros(height, width, CV_32SC1);
 	for (size_t y = 0; y < lbpFeature.size(); y++)
 	{
 		for (size_t x = 0; x < lbpFeature[y].size(); x++)
