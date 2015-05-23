@@ -315,6 +315,30 @@ std::string Utilites::GetExePath()
 	return result;
 }
 
+
+//\\ Copy file
+bool Utilites::FileCopy(std::string pSource, std::string pDest)
+{
+	char buf[BUFSIZ];
+	size_t size;
+
+	FILE* source = fopen(pSource.c_str(), "rb");
+	FILE* dest = fopen(pDest.c_str(), "wb");
+
+	// clean and more secure
+	// feof(FILE* stream) returns non-zero if the end of file indicator for stream is set
+
+	while (size = fread(buf, 1, BUFSIZ, source)) {
+		fwrite(buf, 1, size, dest);
+	}
+
+	fclose(source);
+	fclose(dest);
+
+	return true;
+}
+
+
 //\\ std::string methods:
 std::string Utilites::subStringAfter(std::string pStr, std::string pFind)
 {

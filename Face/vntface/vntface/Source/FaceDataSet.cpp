@@ -103,6 +103,8 @@ void FaceDataSet::aReadsImage(std::vector<std::string> pAllFileName, std::vector
 			if (pIsSaveToFile)
 			{
 				aSaveToFile(face, pPoses[i], pAllFileName[i], pSavePath);
+				//\\ Ghi anh goc
+				util.FileCopy(pDataSourcePath + pAllFileName[i], pSavePath + pAllFileName[i]);
 			}
 			//\\ Cong them gia tri pose tuong ung vao ten file.
 			sumPose += pPoses[i];
@@ -499,8 +501,8 @@ void FaceDataSet::aSaveToFile(cv::Mat pFace, int pPose, std::string pFileName, s
 	std::string vFileName = util.subStringBefor(pFileName, ".");
 	util.writeMatBasic(pFace, pSavePath + vFileName + mImageType);
 	util.writeMatUChar(pFace, pSavePath + vFileName + ".txt");
-	//\\ Ghi anh goc.
-	cv::imwrite(pSavePath + pFileName, pFace);
+	////\\ Ghi anh goc.
+	//cv::imwrite(pSavePath + pFileName, pFace);
 	////\\ Ghi gia tri pose co kieu Mat ra file.
 	//cv::Mat matPose = cv::Mat(1, 1, CV_32SC1, pPose);
 	//util.writeMatBasic(matPose, pSavePath + vFileName + mImageType);

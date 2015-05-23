@@ -53,6 +53,9 @@ namespace vnt
 		std::string GetExeFileName();
 		std::string GetExePath();
 
+		//\\ Copy file
+		bool FileCopy(std::string pSource, std::string pDest);
+
 		//\\ std::string methods:
 		std::string subStringAfter(std::string pStr, std::string pFind);
 		//\\ std::string methods:

@@ -128,14 +128,6 @@ void aHeadPoseDataSetInitSerie1Div()
 	vHeadPose.aSetSerie("1");
 	vFaceDataSetBase = &vHeadPose;
 	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
-	//\\ Do kich thuoc cac facetrack khong bang nhau nen phai chia lai:
-	std::vector<std::vector<cv::Mat>> vFaceTracks = vFaceDataSet.aGetFaceTraks();
-	size_t vFaceTracksSize = vFaceTracks.size();
-	for (size_t i = 0; i < vFaceTracksSize; i++)
-	{
-		size_t vFaceTrackSize = vFaceTracks[i].size();
-
-	}
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie1Div: " << util.currentDateTime() << std::endl;
@@ -772,10 +764,15 @@ int main(void)
 	//aDatabaseInit();
 
 	//\\ So khop
-	aMatchingHeadPose();
+	//aMatchingHeadPose();
 
 	//\\ Kiem tra so khop.
 	//aMatchingHeadPoseCheck();
+
+	//////\\ 
+	////Utilites util;
+	////util.FileCopy("D:/Temp/person04100-90+0.jpg", "D:/Temp/1person04100-90+0.jpg");
+	//cv::Mat vMat = imread("D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/vntface/vntface/Debug/VNTDataSet/Div/DataSet/FaceTrack9/person04100-90+0.jpg", CV_8UC1);
 
 	cout << "Done.";
 	_getwch();
