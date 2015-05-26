@@ -211,7 +211,7 @@ void aFeaturesInitSerie1NotDiv()
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit2(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
+	vFaceTrackDB.aFeatureInit3(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aFeaturesInitSerie1NotDiv: " << util.currentDateTime() << std::endl;
@@ -235,7 +235,7 @@ void aFeaturesInitSerie1Div()
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit2(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
+	vFaceTrackDB.aFeatureInit3(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aFeaturesInitSerie1Div: " << util.currentDateTime() << std::endl;
@@ -259,7 +259,7 @@ void aFeaturesInitSerie2NotDiv()
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit2(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
+	vFaceTrackDB.aFeatureInit3(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aFeaturesInitSerie2NotDiv: " << util.currentDateTime() << std::endl;
@@ -283,7 +283,7 @@ void aFeaturesInitSerie2Div()
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao features.
-	vFaceTrackDB.aFeatureInit2(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vSavePath);
+	vFaceTrackDB.aFeatureInit3(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aFeaturesInitSerie2Div: " << util.currentDateTime() << std::endl;
@@ -291,10 +291,10 @@ void aFeaturesInitSerie2Div()
 //\\ Khoi tao feature
 void aFeaturesInit()
 {
-	aFeaturesInitSerie1NotDiv();
+	//aFeaturesInitSerie1NotDiv();
 	aFeaturesInitSerie1Div();
-	aFeaturesInitSerie2NotDiv();
-	aFeaturesInitSerie2Div();
+	//aFeaturesInitSerie2NotDiv();
+	//aFeaturesInitSerie2Div();
 }
 
 
@@ -510,8 +510,12 @@ void aDatabaseInit()
 std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQuery, int pNum)
 {
 	std::vector<int> result;
-	std::vector<std::vector<std::vector<std::vector<double>>>> csdl = pFaceTrackDB.aGetFaceTrackDatabase();
-	std::vector<std::vector<std::vector<std::vector<double>>>> csdlQuery = pFaceTrackDBQuery.aGetFaceTrackDatabase();
+	std::vector<std::vector<std::vector<std::vector<double>>>> vDatabase = pFaceTrackDB.aGetFaceTrackDatabase();
+	std::vector<std::vector<std::vector<std::vector<double>>>> vDatabaseQuery = pFaceTrackDBQuery.aGetFaceTrackDatabase();
+	std::vector<std::vector<std::vector<std::vector<int>>>> vFeatrues = pFaceTrackDB.aGetFacetrackFeatures();
+	std::vector<std::vector<std::vector<std::vector<int>>>> vFeatruesQuery = pFaceTrackDBQuery.aGetFacetrackFeatures();
+	std::vector<std::vector<std::string>> vPoseNames = pFaceTrackDB.aGetPoseNames();
+	std::vector<std::vector<std::string>> vPoseNamesQuery = pFaceTrackDBQuery.aGetPoseNames();
 	/*
 	- Lap qua 15 mat nguoi goc.
 	- Lap qua 3 mat nguoi duoc chia nho cua tung mat nguoi goc.
@@ -519,7 +523,7 @@ std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQue
 	- Tinh do chinh xac MAP.
 	*/
 	std::vector<double> vAPs;
-	size_t n = csdlQuery.size() / pNum;
+	size_t n = vDatabaseQuery.size() / pNum;
 
 	ofstream of("Doc/Matching.txt", std::ofstream::app);
 	std::vector<int> vFalses;
@@ -530,10 +534,14 @@ std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQue
 		for (size_t j = 0; j < pNum; j++)
 		{
 			int indexQuery = i * pNum + j;
-			//\\ Lay query tu csdl1.
-			std::vector<std::vector<std::vector<double>>> vQuery = csdlQuery[indexQuery];
+			//\\ Lay query tu csdl.
+			std::vector<std::vector<std::vector<double>>> vQuery = vDatabaseQuery[indexQuery];
+			//\\ Lay feature cua query.
+			std::vector<std::vector<std::vector<int>>> vFeatureQuery = vFeatruesQuery[indexQuery];
+			//\\ Lay filename cua query.
+			std::vector<std::string> vPoseName = vPoseNamesQuery[indexQuery];
 			//\\ So khop.
-			std::vector<int> vMatchingIndex = pFaceTrackDB.aMeanCosMatchingIndex(vQuery, csdl);
+			std::vector<int> vMatchingIndex = pFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames);
 
 			of << "MatchingIndex " << std::to_string(indexQuery) << " - " << std::to_string(i) << " : ";
 			for (size_t k = 0; k < vMatchingIndex.size(); k++)
@@ -566,7 +574,7 @@ std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQue
  	return result;
 }
 //\\ So khop: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia).
-std::vector<int> aMatchingHeadPose_NotDiv_Div(std::string pDatabasePath, std::string pQueryPath, int pNum)
+std::vector<int> aMatchingHeadPose_NotDiv_Div(std::string pDatabasePath, std::string pQueryPath, std::string pDatabaseFeaturePath, std::string pQueryFeaturePath, int pNum)
 {
 	ofstream of("Doc/Matching.txt", std::ofstream::app);
 	std::vector<int> result;
@@ -581,16 +589,18 @@ std::vector<int> aMatchingHeadPose_NotDiv_Div(std::string pDatabasePath, std::st
 
 	FaceTrackDB vFaceTrackDB;
 	FaceTrackDB vFaceTrackDBQuery;
-	//\\ Doc csdl: Co n x m mat nguoi (moi mat nguoi goc chia thanh m mat nguoi)
-	vFaceTrackDB.aDatabaseRead3(0, 14, vDataSetPath + pDatabasePath);
-	//\\ Doc dataset: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
-	vFaceTrackDBQuery.aDatabaseRead3(0, 44, vDataSetPath + pQueryPath);
+
+	//\\ Doc csdl: Co n mat nguoi goc.
+	vFaceTrackDB.aDatabaseAndFeatureRead(0, 14, vDataSetPath + pDatabasePath, vDataSetPath + pDatabaseFeaturePath);
+	//\\ Doc csdl: Co n x m mat nguoi tuong ung voi csdl de kiem tra.
+	vFaceTrackDBQuery.aDatabaseAndFeatureRead(0, 44, vDataSetPath + pQueryPath, vDataSetPath + pQueryFeaturePath);
 
 	//\\ So khop tung facetrack trong DBTest.
 	result = aMatching(vFaceTrackDB, vFaceTrackDBQuery, pNum);
+
+	//\\ Hien thi thoi gian va ket qua.
 	int countTrue = result.size();
 	size_t querySize = vFaceTrackDBQuery.aGetFaceTrackDatabase().size();
-	//\\ Hien thi thoi gian ket thuc.
 	cout << pDatabasePath + " - " + pQueryPath + " : " << util.currentDateTime() << std::endl;
 	cout << "countTrue: " << countTrue << " / " << querySize << " = " << 1.0 * countTrue / querySize << std::endl;
 	of << "MatchingHeadPose: " << pDatabasePath + " - " + pQueryPath + " : " << util.currentDateTime() << " ";
@@ -613,16 +623,16 @@ void aMatchingHeadPose()
 	//of.close();
 
 	////\\ Csdl khong chia. Query chia 3. Query trong csdl.
-	//std::vector<int> result1 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/Normalize/", "Div/NotPose/Normalize/", 3);//\\ Khong co Pose + csdl co chuan hoa.
-	std::vector<int> result2 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/NotPose/NotNormalize/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
-	//std::vector<int> result3 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/Normalize/", "Div/Pose/Normalize/", 3);//\\ Co Pose + co chuan hoa.
-	//std::vector<int> result4 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Pose/NotNormalize/", 3);//\\ Co Pose + khong chuan hoa.
+	//std::vector<int> result1 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/Normalize/", "Div/NotPose/Normalize/", "NotDiv/", "Div/", 3);//\\ Khong co Pose + csdl co chuan hoa.
+	//std::vector<int> result2 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/NotPose/NotNormalize/", "NotDiv/", "Div/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
+	//std::vector<int> result3 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/Normalize/", "Div/Pose/Normalize/", "NotDiv/", "Div/", 3);//\\ Co Pose + co chuan hoa.
+	//std::vector<int> result4 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Pose/NotNormalize/", "NotDiv/", "Div/", 3);//\\ Co Pose + khong chuan hoa.
 
 	////\\ Csdl khong chia. Query chia 3. Query trong test.
-	//std::vector<int> result5 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/Normalize/", "Div/Test/NotPose/Normalize/", 3);//\\ Khong co Pose + csdl co chuan hoa.
-	//std::vector<int> result6 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/Test/NotPose/NotNormalize/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
-	//std::vector<int> result7 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/Normalize/", "Div/Test/Pose/Normalize/", 3);//\\ Co Pose + co chuan hoa.
-	//std::vector<int> result8 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Test/Pose/NotNormalize/", 3);//\\ Co Pose + khong chuan hoa.
+	//std::vector<int> result5 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/Normalize/", "Div/Test/NotPose/Normalize/", "NotDiv/", "Div/Test/", 3);//\\ Khong co Pose + csdl co chuan hoa.
+	//std::vector<int> result6 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/Test/NotPose/NotNormalize/", "NotDiv/", "Div/Test/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
+	//std::vector<int> result7 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/Normalize/", "Div/Test/Pose/Normalize/", "NotDiv/", "Div/Test/", 3);//\\ Co Pose + co chuan hoa.
+	std::vector<int> result8 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Test/Pose/NotNormalize/", "NotDiv/", "Div/Test/", 3);//\\ Co Pose + khong chuan hoa.
 }
 
 
@@ -717,7 +727,7 @@ void aMatchingHeadPoseCheck(bool pIsPose)
 	FaceTrackDB vFaceTrackDB;
 	for (size_t i = 0; i < vFeatureAvgs.size(); i++)
 	{
-		double vCosine = vFaceTrackDB.aCosine(vFeatureAvgQuery, vFeatureAvgs[i]);
+		double vCosine = vFaceTrackDB.aCosine1(vFeatureAvgQuery, vFeatureAvgs[i]);
 		cout << std::to_string(i) << " vCosine: " << vCosine << std::endl;
 		of << std::to_string(i) << " vCosine: " << vCosine << std::endl;
 	}
@@ -764,7 +774,7 @@ int main(void)
 	//aDatabaseInit();
 
 	//\\ So khop
-	//aMatchingHeadPose();
+	aMatchingHeadPose();
 
 	//\\ Kiem tra so khop.
 	//aMatchingHeadPoseCheck();

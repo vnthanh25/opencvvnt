@@ -428,6 +428,33 @@ std::vector<int> ColorFeret::aGetsAllPose(const std::string pId)
 	}
 	return result;
 }
+//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+std::vector<std::string> ColorFeret::aGetsAllPoseName(const std::string pId)
+{
+	std::vector<std::string> result;
+	std::string fName = mImageName;
+	//\\ Lay tat ca Date.
+	std::vector<std::string> dates = aGetsAllDate();
+	//\\ Lay tat ca Pose.
+	std::vector<std::string> poses = aGetsAllPose();
+	//\\ Lay tat ca Meta. Them phan tu rong.
+	std::vector<std::string> metas = aGetsAllMeta();
+	metas.push_back("");
+	//\\ Ghep chuoi de tao ten file.
+	std::string imageName;
+	int len = 0;
+	for (size_t i = 0; i < dates.size(); i++)
+	{
+		for (size_t j = 0; j < poses.size(); j++)
+		{
+			for (size_t k = 0; k < metas.size(); k++)
+			{
+				result.push_back("");//\\ Hien tai chua tinh.
+			}
+		}
+	}
+	return result;
+}
 //\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.
 std::vector<std::string> ColorFeret::aGetsAllFullFileName(const std::string pId, const std::string pPath)
 {

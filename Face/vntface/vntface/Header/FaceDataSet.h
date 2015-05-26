@@ -29,6 +29,8 @@ namespace vnt
 		std::vector<std::vector<cv::Mat>> mFaceTracks;
 		//\\ Danh sach pose cua tung anh trong moi facetrack.
 		std::vector<std::vector<int>> mPoses;
+		//\\ Danh sach pose cua tung anh trong moi facetrack.
+		std::vector<std::vector<std::string>> mPoseNames;
 		//\\ Tong cac tri pose.
 		std::string mFolderPath = "";
 		std::string mFaceTrackName = "FaceTrack";//\\ Ex: "FaceTrack01", "FaceTrack02", ...
@@ -36,6 +38,7 @@ namespace vnt
 		std::string mImageType = ".img";
 		std::string mImageName = "Image";
 		std::string mPoseName = "Pose";
+		std::string mPoseNameName = "PoseName";
 		std::string mFileType = ".txt";
 	public:
 		/********** Constructor **********/
@@ -59,11 +62,17 @@ namespace vnt
 		std::vector<std::vector<int>> aGetPoses();
 		//\\ Gan danh sach pose.
 		void aSetPoses(std::vector<std::vector<int>> pPoses);
+		//\\ Lay danh sach pose name.
+		std::vector<std::vector<std::string>> aGetPoseNames();
+		//\\ Gan danh sach pose name.
+		void aSetPoseNames(std::vector<std::vector<std::string>> pPoseNames);
 
 		//\\ Doc tat ca cac anh. Roi gan vao danh sach facetrack.
 		std::vector<cv::Mat> aReadsImage(std::vector<std::string> pAllFileName, const std::string pDataSourcePath);
+		//\\ Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
+		void aReadsImage1(std::vector<std::string> pAllFileName, std::vector<int> pPoses, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ (Use) Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
-		void aReadsImage(std::vector<std::string> pAllFileName, std::vector<int> pPoses, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile = true);
+		void aReadsImage2(std::vector<std::string> pAllFileName, std::vector<int> pPoses, std::vector<std::string> pPoseNames, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ Doc tat ca cac anh. Roi gan vao danh sach facetrack. Co luu ra file.
 		std::vector<cv::Mat> aReadsImageNotPose(std::vector<std::string> pAllFileName, const std::string pDataSourcePath, std::string pFolderPath);
 
@@ -87,7 +96,9 @@ namespace vnt
 
 		//\\ (Use) Luu ra file: Anh Mat, anh goc, gia tri pose. pFileName: co phan mo rong.
 		void aSaveToFile(cv::Mat pFace, int pPose, std::string pFileName, std::string pSavePath);
+		//\\ Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
+		void aSaveToFile1(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath);
 		//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
-		void aSaveToFile(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath);
+		void aSaveToFile2(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::vector<std::string> pPoseNames, std::string pSavePath);
 	};
 }

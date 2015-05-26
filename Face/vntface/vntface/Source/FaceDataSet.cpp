@@ -53,6 +53,16 @@ void FaceDataSet::aSetPoses(std::vector<std::vector<int>> pPoses)
 {
 	mPoses = pPoses;
 }
+//\\ Lay danh sach pose name.
+std::vector<std::vector<std::string>> FaceDataSet::aGetPoseNames()
+{
+	return mPoseNames;
+}
+//\\ Gan danh sach pose name.
+void FaceDataSet::aSetPoseNames(std::vector<std::vector<std::string>> pPoseNames)
+{
+	mPoseNames = pPoseNames;
+}
 
 
 //\\ Doc tat ca cac anh. Roi gan vao danh sach facetrack.
@@ -68,8 +78,8 @@ std::vector<cv::Mat> FaceDataSet::aReadsImage(std::vector<std::string> pAllFileN
 	}
 	return result;
 }
-//\\ (Use) Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
-void FaceDataSet::aReadsImage(std::vector<std::string> pAllFileName, std::vector<int> pPoses, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile)
+//\\ Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
+void FaceDataSet::aReadsImage1(std::vector<std::string> pAllFileName, std::vector<int> pPoses, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile)
 {
 	std::vector<std::string> vFileNames;
 	std::vector<cv::Mat> vFaceTrack;
@@ -114,7 +124,50 @@ void FaceDataSet::aReadsImage(std::vector<std::string> pAllFileName, std::vector
 	if (pIsSaveToFile)
 	{
 		//\\ Ghi thong tin ve ten file anh va pose.
-		aSaveToFile(vFileNames, vPoses, pSavePath);
+		aSaveToFile1(vFileNames, vPoses, pSavePath);
+	}
+	//\\ Giu lai danh sach dac trung va pose tuong ung.
+	mFileNames.push_back(vFileNames);
+	mFaceTracks.push_back(vFaceTrack);
+	mPoses.push_back(vPoses);
+}
+//\\ (Use) Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
+void FaceDataSet::aReadsImage2(std::vector<std::string> pAllFileName, std::vector<int> pPoses, std::vector<std::string> pPoseNames, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile)
+{
+	std::vector<std::string> vFileNames;
+	std::vector<cv::Mat> vFaceTrack;
+	std::vector<int> vPoses;
+	std::vector<std::string> vPoseNames;
+	Utilites util;
+	size_t vAllFileNameSize = pAllFileName.size();
+	int numFilesLength = std::to_string(vAllFileNameSize).length();
+	int sumPose = 0;
+	for (size_t i = 0; i < vAllFileNameSize; i++)
+	{
+		cv::Mat face = cv::imread(pDataSourcePath + pAllFileName[i], CV_8UC1);
+		if (!face.empty())
+		{
+			vFileNames.push_back(pAllFileName[i]);
+			vFaceTrack.push_back(face);
+			vPoses.push_back(pPoses[i]);
+			vPoseNames.push_back(pPoseNames[i]);
+
+			//\\ Ghi file.
+			if (pIsSaveToFile)
+			{
+				aSaveToFile(face, pPoses[i], pAllFileName[i], pSavePath);
+				//\\ Ghi anh goc
+				util.FileCopy(pDataSourcePath + pAllFileName[i], pSavePath + pAllFileName[i]);
+			}
+			//\\ Cong them gia tri pose tuong ung vao ten file.
+			sumPose += pPoses[i];
+		}
+	}
+	//\\ Ghi gia tri sumpose va thong tin ve anh ra file.
+	if (pIsSaveToFile)
+	{
+		//\\ Ghi thong tin ve ten file anh va pose.
+		aSaveToFile2(vFileNames, vPoses, vPoseNames, pSavePath);
 	}
 	//\\ Giu lai danh sach dac trung va pose tuong ung.
 	mFileNames.push_back(vFileNames);
@@ -216,7 +269,7 @@ int FaceDataSet::aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDa
 		util.makeDir(util.replaceAll(vFaceTrackPath, "/", "\\"));
 		vFaceTrackPath += "/";
 		//\\ Doc anh va ghi ra file.
-		aReadsImage(vAllFileName, vAllPose, vSourcePath, vFaceTrackPath);
+		aReadsImage1(vAllFileName, vAllPose, vSourcePath, vFaceTrackPath);
 	}// for i.
 	result = mFaceTracks.size();
 	return result;
@@ -229,7 +282,7 @@ int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::s
 	mFolderPath = pSavePath;
 	Utilites util;
 	//\\ Lay tat ca Ids co trong nguon anh.
-	std::vector<std::string> vAllIds = pFaceDataSetBase->aGetsAllIds();
+	std::vector<std::string> vAllIds = mDataSetBase->aGetsAllIds();
 	size_t vAllIdsSize = vAllIds.size();
 	int numlengthFaceTrack = std::to_string(vAllIdsSize * pNum).length();
 	int vFaceTrackIndex = 0;
@@ -240,13 +293,16 @@ int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::s
 		std::string vId = vAllIds[i];
 		std::string vSourcePath = pDataSourcePath + mDataSetBase->aGetPath(vId);
 		//\\ Load facetrack. Lay tat ca ten file anh cua 1 nguoi.
-		std::vector<std::string> vAllFileName = pFaceDataSetBase->aGetsAllFileName(vId);
+		std::vector<std::string> vAllFileName = mDataSetBase->aGetsAllFileName(vId);
 		//\\ Lay tat ca pose tuong ung voi ten file.
 		std::vector<int> vAllPose = mDataSetBase->aGetsAllPose(vId);
+		//\\ Lay tat ca pose name tuong ung voi ten file.
+		std::vector<std::string> vAllPoseName = mDataSetBase->aGetsAllPoseName(vId);
 		if (pCheckFile)
 		{
 			std::vector<std::string> vAllFileName1;
 			std::vector<int> vAllPose1;
+			std::vector<std::string> vAllPoseName1;
 			for (size_t j = 0; j < vAllFileName.size(); j++)
 			{
 				cv::Mat face = cv::imread(vSourcePath + vAllFileName[j], CV_8UC1);
@@ -254,12 +310,15 @@ int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::s
 				{
 					vAllFileName1.push_back(vAllFileName[j]);
 					vAllPose1.push_back(vAllPose[j]);
+					vAllPoseName1.push_back(vAllPoseName[j]);
 				}
 			}
 			vAllFileName.clear();
-			vAllFileName = vAllFileName1;
 			vAllPose.clear();
+			vAllPoseName.clear();
+			vAllFileName = vAllFileName1;
 			vAllPose = vAllPose1;
+			vAllPoseName = vAllPoseName1;
 		}
 		size_t vAllFileNameSize = vAllFileName.size() / pNum;
 		int numFilesLength = std::to_string(vAllFileNameSize).length();
@@ -276,14 +335,16 @@ int FaceDataSet::aDataSetInitDiv(FaceDataSetBase* pFaceDataSetBase, const std::s
 			//\\ Luu ten file cua cac anh trong facetrack con.
 			std::vector<std::string> vAllFileNameDiv;
 			std::vector<int> vAllPoseDiv;
+			std::vector<std::string> vAllPoseNameDiv;
 			for (size_t k = 0; k < vAllFileNameSize; k++)
 			{
 				vAllFileNameDiv.push_back(vAllFileName[j * vAllFileNameSize + k]);
 				vAllPoseDiv.push_back(vAllPose[j * vAllFileNameSize + k]);
+				vAllPoseNameDiv.push_back(vAllPoseName[j * vAllFileNameSize + k]);
 				//sumAllPose += vAllPose[j * vAllFileNameSize + k];
 			}
 			//\\ Doc anh va ghi ra file.
-			aReadsImage(vAllFileNameDiv, vAllPoseDiv, vSourcePath, vFaceTrackPath);
+			aReadsImage2(vAllFileNameDiv, vAllPoseDiv, vAllPoseNameDiv, vSourcePath, vFaceTrackPath);
 		}
 	}// for i.
 	result = vAllIdsSize;
@@ -466,27 +527,34 @@ int FaceDataSet::aDataSetRead3(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 		std::vector<std::string> vFileNames;
 		std::vector<cv::Mat> vImageMats;
 		std::vector<int> vPoses;
+		std::vector<std::string> vPoseNames;
 		//\\ Doc ten file anh va pose tuong ung.
 		std::ifstream ifImage(vFaceTrackPath + mImageName + mFileType);
 		std::ifstream ifPose(vFaceTrackPath + mPoseName + mFileType);
+		std::ifstream ifPoseName(vFaceTrackPath + mPoseNameName + mFileType);
 		std::string vFileName;
 		std::string vPose;
+		std::string vPoseName;
 		cv::Mat vImageMat;
 		while (!ifImage.eof())
 		{
 			std::getline(ifImage, vFileName);
 			std::getline(ifPose, vPose);
+			std::getline(ifPoseName, vPoseName);
 			vImageMat = util.readMatBasic(vFaceTrackPath + vFileName + mImageType);
 			vFileNames.push_back(vFileName);
 			vPoses.push_back(std::atoi(vPose.c_str()));
+			vPoseNames.push_back(vPoseName);
 			vImageMats.push_back(vImageMat);
 		}
 		ifImage.close();
 		ifPose.close();
+		ifPoseName.close();
 
 		mFileNames.push_back(vFileNames);
 		mFaceTracks.push_back(vImageMats);
 		mPoses.push_back(vPoses);
+		mPoseNames.push_back(vPoseNames);
 	}
 	result = mFaceTracks.size();
 	return result;
@@ -508,8 +576,8 @@ void FaceDataSet::aSaveToFile(cv::Mat pFace, int pPose, std::string pFileName, s
 	//util.writeMatBasic(matPose, pSavePath + vFileName + mImageType);
 }
 
-//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
-void FaceDataSet::aSaveToFile(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath)
+//\\ Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
+void FaceDataSet::aSaveToFile1(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath)
 {
 	std::ofstream ofImage(pSavePath + mImageName + mFileType);
 	std::ofstream ofPose(pSavePath + mPoseName + mFileType);
@@ -532,4 +600,39 @@ void FaceDataSet::aSaveToFile(std::vector<std::string> pFileNames, std::vector<i
 	vFileName = vFileName.substr(0, vIndex);
 	ofImage << vFileName;
 	ofPose << pPoses[pFileNamesSize - 1];
+
+	ofImage.close();
+	ofPose.close();
+}
+//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
+void FaceDataSet::aSaveToFile2(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::vector<std::string> pPoseNames, std::string pSavePath)
+{
+	std::ofstream ofImage(pSavePath + mImageName + mFileType);
+	std::ofstream ofPose(pSavePath + mPoseName + mFileType);
+	std::ofstream ofPoseName(pSavePath + mPoseNameName + mFileType);
+	std::string vFileName;
+	int vIndex;
+	size_t pFileNamesSize = pFileNames.size();
+	for (size_t i = 0; i < pFileNamesSize - 1; i++)
+	{
+		//\\ Bo ten file mo rong.
+		vFileName = pFileNames[i];
+		vIndex = vFileName.find_last_of('.');
+		vFileName = vFileName.substr(0, vIndex);
+		//\\ Ghi ra file.
+		ofImage << vFileName << endl;
+		ofPose << pPoses[i] << endl;
+		ofPoseName << pPoseNames[i] << endl;
+	}
+	//\\ Ghi phan tu cuoi.
+	vFileName = pFileNames[pFileNamesSize - 1];
+	vIndex = vFileName.find_last_of('.');
+	vFileName = vFileName.substr(0, vIndex);
+	ofImage << vFileName;
+	ofPose << pPoses[pFileNamesSize - 1];
+	ofPoseName << pPoseNames[pFileNamesSize - 1];
+
+	ofImage.close();
+	ofPose.close();
+	ofPoseName.close();
 }
