@@ -1585,7 +1585,8 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 		return result;
 
 	size_t facetracksize = pFaceTracks.size();
-	std::vector<int> vFaceTrackMatch(facetracksize);
+	//std::vector<int> vFaceTrackMatch(facetracksize);
+	std::vector<double> vFaceTrackMatch(facetracksize);
 	std::vector<int> vFaceTrack(facetracksize);
 	std::vector<double> resultmeancos;
 	std::vector<int> resultDB;
@@ -1647,7 +1648,8 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 		for (size_t k = 0; k < result.size(); k++)
 		{
 			int vFaceTrackIndex = result[k];
-			vFaceTrackMatch[vFaceTrackIndex] += k;
+			//vFaceTrackMatch[vFaceTrackIndex] += k;
+			vFaceTrackMatch[vFaceTrackIndex] += resultmeancos[k];
 		}
 		resultDB = result;
 		of << std::endl;
@@ -1724,7 +1726,8 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 			for (size_t k = 0; k < result.size(); k++)
 			{
 				int vFaceTrackIndex = result[k];
-				vFaceTrackMatch[vFaceTrackIndex] += k;
+				//vFaceTrackMatch[vFaceTrackIndex] += k;
+				vFaceTrackMatch[vFaceTrackIndex] += resultmeancos[k];
 			}
 			of << " : " + pPoseName[f];
 		}
@@ -1741,7 +1744,8 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 	{
 		for (size_t j = i + 1; j < facetracksize; j++)
 		{
-			if (vFaceTrackMatch[i] > vFaceTrackMatch[j])
+			//if (vFaceTrackMatch[i] > vFaceTrackMatch[j])
+			if (vFaceTrackMatch[i] < vFaceTrackMatch[j])
 			{
 				int vTemp = vFaceTrackMatch[i];
 				vFaceTrackMatch[i] = vFaceTrackMatch[j];
