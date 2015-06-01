@@ -1610,8 +1610,14 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 				continue;
 
 			meancos = aCosine1(pFaceTrack[f], pFaceTracks[i][f]);
+			//\\ Khoi tao thu tu facetrack.
+			vFaceTrack[i] = i;
 
-			of << std::to_string(i) + "(" << std::to_string(meancos) << ") ";
+			////\\ Cach chinh:
+			////\\ Giu lai gia tri so khop cua facetrack.
+			//vFaceTrackMatch[i] += meancos;
+			//of << std::to_string(i) + "(" << std::to_string(meancos) << ") ";
+			//\\ End. Cach chinh.
 
 			std::vector<double> resultmeancostemp;
 			std::vector<int> resulttemp;
@@ -1641,16 +1647,22 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 			resultmeancostemp.clear();
 			result = resulttemp;
 			resulttemp.clear();
-			//\\ Khoi tao thu tu facetrack.
-			vFaceTrack[i] = i;
 		}// for i (facetrack)
-		//\\ Giu lai thu tu so khop cua facetrack.
+
+
+
+		//\\ Cach kiem tra: Giu lai thu tu so khop cua facetrack.
 		for (size_t k = 0; k < result.size(); k++)
 		{
 			int vFaceTrackIndex = result[k];
-			//vFaceTrackMatch[vFaceTrackIndex] += k;
-			vFaceTrackMatch[vFaceTrackIndex] += resultmeancos[k];
+			//vFaceTrackMatch[vFaceTrackIndex] += k;//\\ Theo thu tu.
+			vFaceTrackMatch[vFaceTrackIndex] += resultmeancos[k];//\\ Theo meancos.
+			of << std::to_string(vFaceTrackIndex) + "(" + std::to_string(resultmeancos[k]) + ") ";
 		}
+		//\\ End. Cach kiem tra.
+
+
+
 		resultDB = result;
 		of << std::endl;
 	}// for f (feature).
@@ -1660,9 +1672,14 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 
 	int vTopFaceTracksize = facetracksize;// / 2; //\\ chi so sanh 1/2 facetrack dau.
 	int vCount = 0;
+	//\\ So lan dac trung toi da.
+	int vCountMax = 0; //pFeatureFaceTrack.size();
 	//\\ Lap qua tung vector dac trung trung binh.
 	for (size_t f = 0; f < pFeatureFaceTrack.size(); f++)
 	{
+		//\\ Chi qua mot so dac trung co pose lon
+		if (vCount == vCountMax)
+			break;
 		result.clear();
 		resultmeancos.clear();
 		bool vFound = false;
@@ -1685,8 +1702,15 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 				break;
 
 			meancos = aCosine2(pFeatureFaceTrack[f], pFeatureFaceTracks[i][k]);
-			of << std::to_string(f) + ":" + std::to_string(i) + ":" + std::to_string(k) + "(" + std::to_string(meancos) + ") ";
 
+			////\\ Cach chinh:
+			//result.push_back(i);
+			//resultmeancos.push_back(meancos);
+			////\\ End. Cach chinh.
+
+
+
+			//\\ Cach kiem tra: Sep xep result de xem log.
 			std::vector<double> resultmeancostemp;
 			std::vector<int> resulttemp;
 			size_t j = 0;
@@ -1715,26 +1739,26 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 			resultmeancostemp.clear();
 			result = resulttemp;
 			resulttemp.clear();
-			////\\ Khoi tao thu tu facetrack.
-			//vFaceTrack[i] = i;
+			//\\ End. Cach kiem tra.
+
+
+
 		}// for t (facetrack)
 		//\\ Neu tat ca facetrack deu co anh cung goc nhin voi query.
 		if (vFound)
 		{
+			of << pPoseName[f] + ": ";
 			vCount++;
 			//\\ Giu lai thu tu so khop cua facetrack.
 			for (size_t k = 0; k < result.size(); k++)
 			{
 				int vFaceTrackIndex = result[k];
-				//vFaceTrackMatch[vFaceTrackIndex] += k;
-				vFaceTrackMatch[vFaceTrackIndex] += resultmeancos[k];
+				//vFaceTrackMatch[vFaceTrackIndex] += k;//\\ Theo thu tu.
+				vFaceTrackMatch[vFaceTrackIndex] += resultmeancos[k];//\\ Theo meancos.
+				of << std::to_string(vFaceTrackIndex) + "(" + std::to_string(resultmeancos[k]) + ") ";
 			}
-			of << " : " + pPoseName[f];
 		}
 		of << std::endl;
-		//\\ Chi qua mot so dac trung co pose lon
-		if (vCount == 4)
-			break;
 	}// for f (feature).
 
 
@@ -1744,8 +1768,8 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 	{
 		for (size_t j = i + 1; j < facetracksize; j++)
 		{
-			//if (vFaceTrackMatch[i] > vFaceTrackMatch[j])
-			if (vFaceTrackMatch[i] < vFaceTrackMatch[j])
+			//if (vFaceTrackMatch[i] > vFaceTrackMatch[j])//\\ Theo thu tu.
+			if (vFaceTrackMatch[i] < vFaceTrackMatch[j])//\\ Theo meancos.
 			{
 				int vTemp = vFaceTrackMatch[i];
 				vFaceTrackMatch[i] = vFaceTrackMatch[j];

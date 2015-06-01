@@ -630,9 +630,9 @@ void aMatchingHeadPose()
 
 	////\\ Csdl khong chia. Query chia 3. Query trong test.
 	//std::vector<int> result5 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/Normalize/", "Div/Test/NotPose/Normalize/", "NotDiv/", "Div/Test/", 3);//\\ Khong co Pose + csdl co chuan hoa.
-	//std::vector<int> result6 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/Test/NotPose/NotNormalize/", "NotDiv/", "Div/Test/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
+	std::vector<int> result6 = aMatchingHeadPose_NotDiv_Div("NotDiv/NotPose/NotNormalize/", "Div/Test/NotPose/NotNormalize/", "NotDiv/", "Div/Test/", 3);//\\ Khong co Pose + csdl khong chuan hoa.
 	//std::vector<int> result7 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/Normalize/", "Div/Test/Pose/Normalize/", "NotDiv/", "Div/Test/", 3);//\\ Co Pose + co chuan hoa.
-	std::vector<int> result8 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Test/Pose/NotNormalize/", "NotDiv/", "Div/Test/", 3);//\\ Co Pose + khong chuan hoa.
+	//std::vector<int> result8 = aMatchingHeadPose_NotDiv_Div("NotDiv/Pose/NotNormalize/", "Div/Test/Pose/NotNormalize/", "NotDiv/", "Div/Test/", 3);//\\ Co Pose + khong chuan hoa.
 }
 
 
