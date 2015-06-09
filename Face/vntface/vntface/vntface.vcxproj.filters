@@ -45,6 +45,9 @@
     <ClCompile Include="Source\FaceTrackDB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Matching.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Header\FeatureLBP.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Header\FaceTrackDB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Header\Matching.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
