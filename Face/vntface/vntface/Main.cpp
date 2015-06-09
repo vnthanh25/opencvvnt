@@ -541,7 +541,7 @@ std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQue
 			//\\ Lay filename cua query.
 			std::vector<std::string> vPoseName = vPoseNamesQuery[indexQuery];
 			//\\ So khop.
-			std::vector<int> vMatchingIndex = pFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames);
+			std::vector<int> vMatchingIndex = pFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, 0);
 
 			of << "MatchingIndex " << std::to_string(indexQuery) << " - " << std::to_string(i) << " : ";
 			for (size_t k = 0; k < vMatchingIndex.size(); k++)
@@ -758,6 +758,191 @@ void aMatchingHeadPoseCheck()
 }
 
 
+
+double aMatchingHeadPoseMAP1(std::string pDatabasePath)
+{
+	ofstream of("Doc/Matching.txt", std::ofstream::app);
+	double result;
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+
+	FaceTrackDB vFaceTrackDB;
+
+	size_t n = 30;
+	//\\ Doc csdl: Facetrack 0->15 la csdl (serie1) va 16->29 la test (serie2).
+	vFaceTrackDB.aDatabaseRead3(0, n - 1, vDataSetPath + pDatabasePath);
+
+	std::vector<std::vector<std::vector<std::vector<double>>>> vDatabase = vFaceTrackDB.aGetFaceTrackDatabase();
+	
+	double vMAP = 0;
+	//\\ Lap n mat nguoi.
+	for (size_t i = 0; i < n; i++)
+	{
+		std::vector<std::vector<std::vector<double>>> vQuery = vDatabase[i];
+		//\\ So khop.
+		std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex1(vQuery, vDatabase);
+		//\\ Tinh do chinh xa.
+		double Nr = 1;
+		int vCountTrue = 0;
+		size_t vMatchingIndexSize = vMatchingIndex.size();
+		//\\ Tim gia tri index dung trong ket qua MatchingIndex tra ve.
+		for (size_t k = 0; k < vMatchingIndexSize; k++)
+		{
+			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
+			if (i == vMatchingIndex[k] || vMatchingIndex[k] == i + n / 2)
+			{
+				//\\ Tinh AP.
+				vMAP += Nr / (k + 1);
+				Nr++;
+				vCountTrue++;
+			}
+		}
+		vMAP /= vCountTrue;
+	}
+	//\\ Tinh AP trung binh. AP chia m mat nguoi dung. (m = 6).
+	vMAP /= n;
+
+	//\\ Hien thi thoi gian va ket qua.
+	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	std::cout << "MeanCos: " << vMAP << std::endl;
+	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << " ";
+	of << "MeanCos: " << vMAP << std::endl;
+	of << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << std::endl;
+	of.close();
+
+	result = vMAP;
+	return result;
+}
+
+double aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pDatabaseFeaturePath, int pCountMax)
+{
+	ofstream of("Doc/Matching.txt", std::ofstream::app);
+	double result;
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	//\\ Duong dan den nguon du lieu.
+	std::string exePath = util.GetExePath();
+	exePath = util.replaceAll(exePath, "\\", "/");
+	std::string vDataSetPath = exePath + "/VNTDataSet/";
+
+	FaceTrackDB vFaceTrackDB;
+
+	size_t n = 30;
+	//\\ Doc csdl: Facetrack 0->15 la csdl (serie1) va 16->29 la test (serie2).
+	vFaceTrackDB.aDatabaseAndFeatureRead(0, n - 1, vDataSetPath + pDatabasePath, vDataSetPath + pDatabaseFeaturePath);
+
+	std::vector<std::vector<std::vector<std::vector<double>>>> vDatabase = vFaceTrackDB.aGetFaceTrackDatabase();
+	std::vector<std::vector<std::vector<std::vector<int>>>> vFeatrues = vFaceTrackDB.aGetFacetrackFeatures();
+	std::vector<std::vector<std::string>> vPoseNames = vFaceTrackDB.aGetPoseNames();
+
+	double vMAPAll = 0;
+	int vCountTrue = 0;
+	//\\ Lap n mat nguoi.
+	for (size_t i = 0; i < n; i++)
+	{
+		std::vector<std::vector<std::vector<double>>> vQuery = vDatabase[i];
+		//\\ Lay feature cua query.
+		std::vector<std::vector<std::vector<int>>> vFeatureQuery = vFeatrues[i];
+		//\\ Lay filename cua query.
+		std::vector<std::string> vPoseName = vPoseNames[i];
+		//\\ So khop.
+		std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax);
+		//\\ Tinh do chinh xa.
+		double vMAP = 0;
+		double Nr = 0;
+		size_t vMatchingIndexSize = vMatchingIndex.size();
+		std::cout << "vMatchingIndex: query:" + std::to_string(i);
+		of << "vMatchingIndex: query:" + std::to_string(i);
+		std::string vMatch = "01";
+		std::string vMatchResult = "";
+		//\\ Tim gia tri index dung trong ket qua MatchingIndex tra ve.
+		for (size_t k = 0; k < vMatchingIndexSize; k++)
+		{
+			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
+			//if (i == vMatchingIndex[k] || vMatchingIndex[k] == i + n / 2)
+			if (i % 15 == vMatchingIndex[k] % 15)
+			{
+				//\\ Tinh AP.
+				Nr++;
+				vMAP += Nr / (k + 1);
+				std::cout << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				of << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				vMatchResult += std::to_string(k);
+			}
+		}
+		//vMAPAll += vMAP / Nr;
+		vMAP /= Nr;
+		vMAPAll += vMAP;
+		std::cout << " AP=(1 + 2/(index+1))/2:" + std::to_string(vMAP);
+		of << " AP=(1 + 2/(index+1))/2:" + std::to_string(vMAP);
+		if (vMatch == vMatchResult)
+		{
+			vCountTrue++;
+			std::cout << " (=)";
+			of << " (=)";
+		}
+		else
+		{
+			std::cout << " (*)";
+			of << " (*)";
+		}
+		std::cout << std::endl;
+		of << std::endl;
+		of << std::endl;
+	}
+	//\\ Tinh AP trung binh. AP chia m mat nguoi dung. (m = 6).
+	vMAPAll /= n;
+
+	//\\ Hien thi thoi gian va ket qua.
+	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	std::cout << "CountTrue: " << vCountTrue << " Size: " << n << " MeanCos: " << vMAPAll << std::endl;
+	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << " ";
+	of << "CountTrue: " << vCountTrue << " Size: " << n << " MeanCos: " << vMAPAll << std::endl;
+	of << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	of << std::endl;
+	of.close();
+
+	result = vMAPAll;
+	return result;
+}
+//\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
+void aMatchingHeadPoseMAP()
+{
+	//ofstream of("Doc/Matching.txt");
+	//of.clear();
+	//of.close();
+
+	//double vMAP1 = aMatchingHeadPoseMAP1("NotDiv/NotPose/NotNormalize/");
+	//double vMAP2 = aMatchingHeadPoseMAP1("NotDiv/Pose/NotNormalize/");
+	//double vMAP3 = aMatchingHeadPoseMAP1("NotDiv/NotPose/Normalize/");
+	//double vMAP4 = aMatchingHeadPoseMAP1("NotDiv/Pose/Normalize/");
+
+	int vCountMax = 0;
+	double vMAP1 = aMatchingHeadPoseMAP2("NotDiv/NotPose/NotNormalize/", "NotDiv/", vCountMax);
+	double vMAP2 = aMatchingHeadPoseMAP2("NotDiv/Pose/NotNormalize/", "NotDiv/", vCountMax);
+	double vMAP3 = aMatchingHeadPoseMAP2("NotDiv/NotPose/Normalize/", "NotDiv/", vCountMax);
+	double vMAP4 = aMatchingHeadPoseMAP2("NotDiv/Pose/Normalize/", "NotDiv/", vCountMax);
+}
+
 // Function main
 int main(void)
 {
@@ -774,7 +959,7 @@ int main(void)
 	//aDatabaseInit();
 
 	//\\ So khop
-	aMatchingHeadPose();
+	//aMatchingHeadPose();
 
 	//\\ Kiem tra so khop.
 	//aMatchingHeadPoseCheck();
@@ -782,7 +967,12 @@ int main(void)
 	//////\\ 
 	////Utilites util;
 	////util.FileCopy("D:/Temp/person04100-90+0.jpg", "D:/Temp/1person04100-90+0.jpg");
-	//cv::Mat vMat = imread("D:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/vntface/vntface/Debug/VNTDataSet/Div/DataSet/FaceTrack9/person04100-90+0.jpg", CV_8UC1);
+	//cv::Mat vMat = imread("images/lena.png", CV_8UC1);
+	//imshow("lena", vMat);
+	//cv::waitKey();
+
+	//\\ So khop dung MAP
+	aMatchingHeadPoseMAP();
 
 	cout << "Done.";
 	_getwch();

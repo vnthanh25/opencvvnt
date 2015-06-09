@@ -1483,7 +1483,7 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex1(std::vector<std::vector<std
 
 			meancos = aCosine1(pFaceTrack[j], pFaceTracks[i][j]);
 
-			of << std::to_string(i) + "(" << std::to_string(meancos) << ") ";
+			//of << std::to_string(i) + "(" << std::to_string(meancos) << ") ";
 
 			std::vector<double> resultmeancostemp;
 			std::vector<int> resulttemp;
@@ -1515,30 +1515,39 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex1(std::vector<std::vector<std
 			resulttemp.clear();
 		}
 
+		//\\ Cach kiem tra: Giu lai thu tu so khop cua facetrack.
+		for (size_t k = 0; k < result.size(); k++)
+		{
+			int vFaceTrackIndex = result[k];
+			of << std::to_string(vFaceTrackIndex) + "(" + std::to_string(resultmeancos[k]) + ") ";
+		}
+		//\\ End. Cach kiem tra.
+
+		of << std::endl;
 	}
 	of << endl;
 	of.close();
 
 	return result;
 }
-//\\ Sap xep danh sach facetrack theo facetrack truy van. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
-std::vector<int> FaceTrackDB::aMeanCosMatchingIndex2(std::vector<std::vector<double>> pFaceTrack, std::vector<std::vector<std::vector<double>>> pFaceTracks)
+//\\ Sap xep danh sach vector dac trung trung binh.
+std::vector<int> FaceTrackDB::aMeanCosMatchingIndex2(std::vector<std::vector<double>> pFeature, std::vector<std::vector<std::vector<double>>> pFeatures)
 {
 	std::vector<int> result;
-	if (pFaceTracks.size() == 0)
+	if (pFeatures.size() == 0)
 		return result;
 	std::vector<double> resultmeancos;
 	//\\ Tinh khoang cach mean-cos giua 2 vector dac trung trung binh.
 	double meancos;
 	//\\ Lap qua trung facetrack de tinh khoang cach.
-	size_t facetracksize = pFaceTracks.size();
+	size_t vFeatureSize = pFeatures.size();
 
 	ofstream of("Doc/Matching.txt", std::ofstream::app);
 	of << "aCosine: ";
 
-	for (size_t i = 0; i < facetracksize; i++)
+	for (size_t i = 0; i < vFeatureSize; i++)
 	{
-		meancos = aCosine1(pFaceTrack, pFaceTracks[i]);
+		meancos = aCosine1(pFeature, pFeatures[i]);
 
 		of << std::to_string(i) + "(" << std::to_string(meancos) << ") ";
 
@@ -1578,7 +1587,7 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex2(std::vector<std::vector<dou
 	return result;
 }
 //\\ (Use) Sap xep danh sach facetrack theo facetrack truy van.
-std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames)
+std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames, int pCountMax)
 {
 	std::vector<int> result;
 	if (pFaceTracks.size() == 0)
@@ -1673,7 +1682,9 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 	int vTopFaceTracksize = facetracksize;// / 2; //\\ chi so sanh 1/2 facetrack dau.
 	int vCount = 0;
 	//\\ So lan dac trung toi da.
-	int vCountMax = 0; //pFeatureFaceTrack.size();
+	int vCountMax = pFeatureFaceTrack.size();
+	if (vCountMax > pCountMax)
+		vCountMax = pCountMax;
 	//\\ Lap qua tung vector dac trung trung binh.
 	for (size_t f = 0; f < pFeatureFaceTrack.size(); f++)
 	{
@@ -1761,8 +1772,6 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 		of << std::endl;
 	}// for f (feature).
 
-
-
 	//\\ Sap xep thu tu facetrack giam dan.
 	for (size_t i = 0; i < facetracksize - 1; i++)
 	{
@@ -1771,7 +1780,7 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 			//if (vFaceTrackMatch[i] > vFaceTrackMatch[j])//\\ Theo thu tu.
 			if (vFaceTrackMatch[i] < vFaceTrackMatch[j])//\\ Theo meancos.
 			{
-				int vTemp = vFaceTrackMatch[i];
+				double vTemp = vFaceTrackMatch[i];
 				vFaceTrackMatch[i] = vFaceTrackMatch[j];
 				vFaceTrackMatch[j] = vTemp;
 
@@ -1781,7 +1790,6 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 			}
 		}// for j.
 	}// for i.
-	of << endl;
 	of.close();
 
 	return vFaceTrack;
