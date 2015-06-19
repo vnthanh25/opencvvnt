@@ -1084,7 +1084,7 @@ double Matching::aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pD
 	std::string vFacetrackPath = vDataSetPath + pDatabaseFeaturePath;
 	ofstream of(vFacetrackPath + "Matching.txt", std::ofstream::app);
 	ofstream ofIdx(vFacetrackPath + "MatchingIndex.txt", std::ofstream::app);
-	ofstream ofDb(vFacetrackPath + "MatchingDB.txt", std::ofstream::app);
+	ofstream ofDb(vDataSetPath + pDatabasePath + "Matching.txt", std::ofstream::app);
 	std::string vStartTime = util.currentDateTime();
 	vStartTime = util.subStringFirstAfter(vStartTime, ".");
 	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
