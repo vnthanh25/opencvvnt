@@ -49,6 +49,8 @@ namespace vnt
 		std::string replace(const std::string str, const std::string from, const std::string to);
 		//\\ Thay the tat ca trong chuoi.
 		std::string replaceAll(const std::string str, const std::string from, const std::string to);
+		//\\ Tru thoi gian. Format: HH:mm:ss
+		std::string subTime(std::string pStartTime, std::string pEndTime);
 
 		std::string GetExeFileName();
 		std::string GetExePath();
@@ -56,9 +58,15 @@ namespace vnt
 		//\\ Copy file
 		bool FileCopy(std::string pSource, std::string pDest);
 
-		//\\ std::string methods:
-		std::string subStringAfter(std::string pStr, std::string pFind);
-		//\\ std::string methods:
-		std::string subStringBefor(std::string pStr, std::string pFind);
+		//\\ Chi tim 1 ky tu. Tim tu phia sau. Lay chuoi phia sau ky tu.
+		std::string subStringLastAfter(std::string pStr, std::string pFindOf);
+		//\\ Chi tim 1 ky tu. Tim tu phia sau. Lay chuoi phia truoc ky tu.
+		std::string subStringLastBefor(std::string pStr, std::string pFindOf);
+		//\\ Chi tim 1 ky tu. Tim tu phia truoc. Lay chuoi phia sau ky tu.
+		std::string subStringFirstAfter(std::string pStr, std::string pFindOf);
+		//\\ Chi tim 1 ky tu. Tim tu phia truoc. Lay chuoi phia truoc ky tu.
+		std::string subStringFirstBefor(std::string pStr, std::string pFindOf);
+		//\\ Chi tim 1 ky tu. Tim tu phia truoc. Tach ra thanh nhieu chuoi.
+		std::vector<std::string> splitString(std::string pStr, std::string pFindOf);
 	};
 }

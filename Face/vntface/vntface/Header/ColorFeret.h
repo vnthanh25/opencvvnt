@@ -123,7 +123,9 @@ namespace vnt
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm"
 		std::vector<std::string> aGetsAllFileName(const std::string pId);
 		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
-		std::vector<int> aGetsAllPose(const std::string pId);
+		std::vector<int> aGetsAllPose1(const std::string pId);
+		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+		std::vector<std::string> aGetsAllPose2(const std::string pId);
 		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
 		std::vector<std::string> aGetsAllPoseName(const std::string pId);
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.

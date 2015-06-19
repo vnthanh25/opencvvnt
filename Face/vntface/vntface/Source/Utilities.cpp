@@ -291,6 +291,28 @@ std::string Utilites::replaceAll(const std::string str, const std::string from, 
 	}
 	return result;
 }
+//\\ Tru thoi gian. End > Start. Format: HH:mm:ss
+std::string Utilites::subTime(std::string pStartTime, std::string pEndTime)
+{
+	std::string result;
+	std::vector<std::string> vStartTime = splitString(pStartTime, ":");
+	std::vector<std::string> vEndTime = splitString(pEndTime, ":");
+	bool bSmall = false;
+	for (int i = vStartTime.size() - 1; i > -1; i--)
+	{
+		int iStart = std::atoi(vStartTime[i].c_str());
+		int iEnd = std::atoi(vEndTime[i].c_str());
+		if (bSmall)
+			iStart++;
+		bSmall = iEnd < iStart;
+		if (bSmall)
+			iEnd += 60;
+		result = leftPad(std::to_string(iEnd - iStart), 2, '0') + result;
+		if (i > 0)
+			result = ":" + result;
+	}
+	return result;
+}
 
 std::string Utilites::GetExeFileName()
 {
@@ -339,19 +361,54 @@ bool Utilites::FileCopy(std::string pSource, std::string pDest)
 }
 
 
-//\\ std::string methods:
-std::string Utilites::subStringAfter(std::string pStr, std::string pFind)
+//\\ Chi tim 1 ky tu. Tim tu phia sau. Lay chuoi phia sau ky tu.
+std::string Utilites::subStringLastAfter(std::string pStr, std::string pFindOf)
 {
 	std::string result;
-	int iIndex = pStr.find_last_of(pFind) + 1;
+	int iIndex = pStr.find_last_of(pFindOf) + 1;
 	result = pStr.substr(iIndex, pStr.length() - iIndex);
 	return result;
 }
-//\\ std::string methods:
-std::string Utilites::subStringBefor(std::string pStr, std::string pFind)
+//\\ Chi tim 1 ky tu. Tim tu phia sau. Lay chuoi phia truoc ky tu.
+std::string Utilites::subStringLastBefor(std::string pStr, std::string pFindOf)
 {
 	std::string result;
-	int iIndex = pStr.find_last_of(pFind);
+	int iIndex = pStr.find_last_of(pFindOf);
 	result = pStr.substr(0, iIndex);
+	return result;
+}
+//\\ Chi tim 1 ky tu. Tim tu phia truoc. Lay chuoi phia sau ky tu.
+std::string Utilites::subStringFirstAfter(std::string pStr, std::string pFindOf)
+{
+	std::string result;
+	int iIndex = pStr.find_first_of(pFindOf) + 1;
+	result = pStr.substr(iIndex, pStr.length() - iIndex);
+	return result;
+}
+//\\ Chi tim 1 ky tu. Tim tu phia truoc. Lay chuoi phia truoc ky tu.
+std::string Utilites::subStringFirstBefor(std::string pStr, std::string pFindOf)
+{
+	std::string result;
+	int iIndex = pStr.find_first_of(pFindOf);
+	result = pStr.substr(0, iIndex);
+	return result;
+}
+//\\ Chi tim 1 ky tu. Tim tu phia truoc. Tach ra thanh nhieu chuoi.
+std::vector<std::string> Utilites::splitString(std::string pStr, std::string pFindOf)
+{
+	std::vector<std::string> result;
+	std::string vStr = pStr;
+	while (1)
+	{
+		int iIndex = vStr.find_first_of(pFindOf);
+		if (iIndex == -1)
+		{
+			result.push_back(vStr);
+			break;
+		}
+		result.push_back(vStr.substr(0, iIndex));
+		iIndex++;
+		vStr = vStr.substr(iIndex, vStr.length() - iIndex);
+	}
 	return result;
 }

@@ -26,6 +26,8 @@ namespace vnt
 		void aHeadPoseDataSetInitSerie2NotDiv();
 		//\\ Khoi tao DataSet: Serie 2 + Div (3).
 		void aHeadPoseDataSetInitSerie2Div();
+		//\\ Khoi tao DataSet: facetrack 15-30 ung voi serie2.
+		void Matching::aHeadPoseDataSetInitNotDiv();
 		//\\ Khoi tao DataSet
 		void aHeadPoseDataSetInit();
 
@@ -38,6 +40,8 @@ namespace vnt
 		void aFeaturesInitSerie2NotDiv();
 		//\\ Khoi tao features: Serie2 + chia + co Pose.
 		void aFeaturesInitSerie2Div();
+		//\\ Khoi tao features: Serie1 + Serie2.
+		void aFeaturesInitNotDiv();
 		//\\ Khoi tao feature
 		void aFeaturesInit();
 
@@ -60,8 +64,20 @@ namespace vnt
 		//\\ Khoi tao csdl: Div (csdl chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
 		void aDatabaseInit_Serie12_Div_PoseNotNormalize(std::string pTestPath);
 
+		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + Normalize (csdl co chuan hoa).
+		void aDatabaseInit_HeadPose_NotPoseNormalize();
+		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
+		void aDatabaseInit_HeadPose_NotPoseNotNormalize();
+		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
+		void aDatabaseInit_HeadPose_PoseNormalize(int pNumVector);
+		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
+		void aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector);
+
 		//\\ Khoi tao csdl.
 		void aDatabaseInit();
+
+		//\\ Khoi tao csdl: tao dataset -> tao facetrack -> tao database.
+		void aDatabaseInitFull(std::string pSourcePath);
 
 
 		std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQuery, int pNum);

@@ -2,16 +2,44 @@
 
 using namespace vnt;
 
-// Function main
-int main(void)
+void Test()
 {
-	Matching vMatching;
-	//////\\ 
-	////Utilites util;
+	Utilites util;
+	//std::string vTime = util.subTime("11:04:54", "11:05 : 11");
+	//std::string vPose = "";
+	//std::vector<std::string> aPose = util.splitString(vPose, ";");
 	////util.FileCopy("D:/Temp/person04100-90+0.jpg", "D:/Temp/1person04100-90+0.jpg");
 	//cv::Mat vMat = imread("images/lena.png", CV_8UC1);
 	//imshow("lena", vMat);
 	//cv::waitKey();
+
+	double num = 16.0;
+	double div = 1.0 / 4;
+	double numpow = pow(num, div);
+}
+
+// Function main
+int main(void)
+{
+	Matching vMatching;
+	Utilites util;
+
+	//std::string Path = "E:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/vntface/vntface/Debug/VNTDataSet/HeadPose/NotPose/NotNormalize/";
+	//int vIdx = Path.rfind("/Pose/");
+	//if (vIdx == -1)
+	//	vIdx = Path.rfind("/NotPose/");
+	//Path = Path.substr(0, vIdx + 1);
+	//std::string Path1 = "E:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/vntface/vntface/Debug/VNTDataSet/HeadPose/Pose/NotNormalize/";
+	//int vIdx1 = Path1.rfind("/Pose/");
+	//if (vIdx1 == -1)
+	//	vIdx1 = Path1.rfind("/NotPose/");
+	//Path1 = Path1.substr(0, vIdx + 1);
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	//std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDetectedFace/";
+	std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
 
 	//\\ Phat hien mat nguoi trong anh.
 	//vMatching.aHeadPoseFaceDetect();
@@ -24,6 +52,7 @@ int main(void)
 
 	//\\ Khoi tao Database
 	//vMatching.aDatabaseInit();
+	//vMatching.aDatabaseInitFull(vSourePath);
 
 	//\\ So khop
 	//vMatching.aMatchingHeadPose();

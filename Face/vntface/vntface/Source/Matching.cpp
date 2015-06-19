@@ -98,7 +98,7 @@ void Matching::aHeadPoseDataSetInitSerie1NotDiv()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("1");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 1, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 1, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie1NotDiv: " << util.currentDateTime() << std::endl;
@@ -123,7 +123,7 @@ void Matching::aHeadPoseDataSetInitSerie1Div()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("1");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie1Div: " << util.currentDateTime() << std::endl;
@@ -148,7 +148,7 @@ void Matching::aHeadPoseDataSetInitSerie2NotDiv()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("2");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 1, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 1, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie2NotDiv: " << util.currentDateTime() << std::endl;
@@ -173,18 +173,48 @@ void Matching::aHeadPoseDataSetInitSerie2Div()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("2");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie2Div: " << util.currentDateTime() << std::endl;
 }
+
+//\\ Khoi tao DataSet: facetrack 15-30 ung voi serie2.
+void Matching::aHeadPoseDataSetInitNotDiv()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aHeadPoseDataSetInitSerie2NotDiv: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDetectedFace/Serie12/";
+	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/";
+	util.makeDir(vExePath + "\\VNTDataSet\\NotDiv");
+
+	FaceDataSet vFaceDataSet;
+	//\\ Khoi tao dataset.
+	FaceDataSetBase* vFaceDataSetBase;
+	HeadPose vHeadPose;
+	vHeadPose.aSetIds("01,30");
+	vFaceDataSetBase = &vHeadPose;
+	vFaceDataSet.aDataSetInitDiv2(vFaceDataSetBase, vSourePath, vSavePath, 1, true);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aHeadPoseDataSetInitSerie2NotDiv: " << util.currentDateTime() << std::endl;
+}
+
 //\\ Khoi tao DataSet
 void Matching::aHeadPoseDataSetInit()
 {
-	aHeadPoseDataSetInitSerie1NotDiv();
-	aHeadPoseDataSetInitSerie1Div();
-	aHeadPoseDataSetInitSerie2NotDiv();
-	aHeadPoseDataSetInitSerie2Div();
+	////\\ Co chia lam 2 thu muc.
+	//aHeadPoseDataSetInitSerie1NotDiv();
+	//aHeadPoseDataSetInitSerie1Div();
+	//aHeadPoseDataSetInitSerie2NotDiv();
+	//aHeadPoseDataSetInitSerie2Div();
+
+	aHeadPoseDataSetInitNotDiv();
 }
 
 
@@ -284,13 +314,40 @@ void Matching::aFeaturesInitSerie2Div()
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aFeaturesInitSerie2Div: " << util.currentDateTime() << std::endl;
 }
+//\\ Khoi tao features: Serie1 + Serie2.
+void Matching::aFeaturesInitNotDiv()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aFeaturesInitSerie1NotDiv: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourePath = vPath + "/VNTDataSet/NotDiv/";
+	std::string vSavePath = vPath + "/VNTDataSet/NotDiv/";
+
+	FaceDataSet vFaceDataSet;
+	//\\ Doc facetrack vao DataSet.
+	vFaceDataSet.aDataSetRead4(0, 29, vSourePath);
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Khoi tao features.
+	vFaceTrackDB.aFeatureInit4(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetTiltPanPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aFeaturesInitSerie1NotDiv: " << util.currentDateTime() << std::endl;
+}
+
 //\\ Khoi tao feature
 void Matching::aFeaturesInit()
 {
 	//aFeaturesInitSerie1NotDiv();
-	aFeaturesInitSerie1Div();
+	//aFeaturesInitSerie1Div();
 	//aFeaturesInitSerie2NotDiv();
 	//aFeaturesInitSerie2Div();
+
+	aFeaturesInitNotDiv();
 }
 
 
@@ -312,7 +369,7 @@ void Matching::aDatabaseInit_Serie12_NotDiv_NotPoseNormalize(std::string pTestPa
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPose1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -335,7 +392,7 @@ void Matching::aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize(std::string pTes
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -358,7 +415,7 @@ void Matching::aDatabaseInit_Serie12_NotDiv_PoseNormalize(std::string pTestPath)
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitPoseNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -381,7 +438,7 @@ void Matching::aDatabaseInit_Serie12_NotDiv_PoseNotNormalize(std::string pTestPa
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 14, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_NotDiv_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -405,7 +462,7 @@ void Matching::aDatabaseInit_Serie12_Div_NotPoseNormalize(std::string pTestPath)
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPose(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPose1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_NotPoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -428,7 +485,7 @@ void Matching::aDatabaseInit_Serie12_Div_NotPoseNotNormalize(std::string pTestPa
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_NotPoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -451,7 +508,7 @@ void Matching::aDatabaseInit_Serie12_Div_PoseNormalize(std::string pTestPath)
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInit(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitPoseNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_PoseNormalize: " + pTestPath << util.currentDateTime() << std::endl;
@@ -474,32 +531,224 @@ void Matching::aDatabaseInit_Serie12_Div_PoseNotNormalize(std::string pTestPath)
 	//\\ Doc features.
 	vFaceTrackDB.aFeatureRead3(0, 44, vSourcePath);
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotNormalize(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_Div_PoseNotNormalize: " + pTestPath << util.currentDateTime() << std::endl;
 }
 
+//\\ (2) Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + Normalize (csdl co chuan hoa).
+void Matching::aDatabaseInit_HeadPose_NotPoseNormalize()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aDatabaseInit_HeadPose_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourcePath = vPath + "/VNTDataSet/HeadPose/";
+	std::string vSavePath = vPath + "/VNTDataSet/HeadPose/NotPose/Normalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\NotPose\\Normalize");
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead4(0, 29, vSourcePath);
+	//\\ Khoi tao csdl.
+	vFaceTrackDB.aDatabaseInitNotPose2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aDatabaseInit_HeadPose_NotPoseNormalize: " << util.currentDateTime() << std::endl;
+}
+//\\ (2) Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
+void Matching::aDatabaseInit_HeadPose_NotPoseNotNormalize()
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aDatabaseInit_Serie12_HeadPose_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourcePath = vPath + "/VNTDataSet/HeadPose/";
+	std::string vSavePath = vPath + "/VNTDataSet/HeadPose/NotPose/NotNormalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\NotPose\\NotNormalize");
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead4(0, 29, vSourcePath);
+	//\\ Khoi tao csdl.
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aDatabaseInit_Serie12_HeadPose_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
+}
+//\\ (2) Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
+void Matching::aDatabaseInit_HeadPose_PoseNormalize(int pNumVector)
+{
+	Utilites util;
+	std::string vVectorPath = std::to_string(pNumVector) + "Pose/";
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aDatabaseInit_Serie1_HeadPose_PoseNormalize: " + vVectorPath << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourcePath = vPath + "/VNTDataSet/HeadPose/";
+	std::string vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/" + vVectorPath + "Normalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\" + util.replaceAll(vVectorPath, "/", "\\") + "Normalize");
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead4(0, 29, vSourcePath);
+	if (pNumVector == 1)
+	{
+		//\\ Tong 2 pose thanh 1 pose
+		vFaceTrackDB.aSumTiltPanPose();
+	}
+	//\\ Khoi tao csdl.
+	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aDatabaseInit_Serie12_HeadPose_PoseNormalize: " + vVectorPath << util.currentDateTime() << std::endl;
+}
+//\\ (2) Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
+void Matching::aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector)
+{
+	Utilites util;
+	std::string vVectorPath = std::to_string(pNumVector) + "Pose/";
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aDatabaseInit_Serie12_HeadPose_PoseNotNormalize: " + vVectorPath << util.currentDateTime() << std::endl;
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourcePath = vPath + "/VNTDataSet/HeadPose/";
+	std::string vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/" + vVectorPath + "NotNormalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\" + util.replaceAll(vVectorPath, "/", "\\") + "NotNormalize");
+
+	FaceTrackDB vFaceTrackDB;
+	//\\ Doc features.
+	vFaceTrackDB.aFeatureRead4(0, 29, vSourcePath);
+	if (pNumVector == 1)
+	{
+		//\\ Tong 2 pose thanh 1 pose
+		vFaceTrackDB.aSumTiltPanPose();
+	}
+	//\\ Khoi tao csdl.
+	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	cout << "aDatabaseInit_Serie12_HeadPose_PoseNotNormalize: " + vVectorPath << util.currentDateTime() << std::endl;
+}
+
+
 //\\ Khoi tao csdl.
 void Matching::aDatabaseInit()
 {
-	aDatabaseInit_Serie12_NotDiv_NotPoseNormalize("");
-	aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize("");
-	aDatabaseInit_Serie12_NotDiv_PoseNormalize("");
-	aDatabaseInit_Serie12_NotDiv_PoseNotNormalize("");
-	aDatabaseInit_Serie12_Div_NotPoseNormalize("");
-	aDatabaseInit_Serie12_Div_NotPoseNotNormalize("");
-	aDatabaseInit_Serie12_Div_PoseNormalize("");
-	aDatabaseInit_Serie12_Div_PoseNotNormalize("");
+	//aDatabaseInit_Serie12_HeadPose_NotPoseNormalize("");
+	//aDatabaseInit_Serie12_HeadPose_NotPoseNotNormalize("");
+	//aDatabaseInit_Serie12_HeadPose_PoseNormalize("");
+	//aDatabaseInit_Serie12_HeadPose_PoseNotNormalize("");
+	//aDatabaseInit_Serie12_Div_NotPoseNormalize("");
+	//aDatabaseInit_Serie12_Div_NotPoseNotNormalize("");
+	//aDatabaseInit_Serie12_Div_PoseNormalize("");
+	//aDatabaseInit_Serie12_Div_PoseNotNormalize("");
 
-	aDatabaseInit_Serie12_NotDiv_NotPoseNormalize("Test/");
-	aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize("Test/");
-	aDatabaseInit_Serie12_NotDiv_PoseNormalize("Test/");
-	aDatabaseInit_Serie12_NotDiv_PoseNotNormalize("Test/");
-	aDatabaseInit_Serie12_Div_NotPoseNormalize("Test/");
-	aDatabaseInit_Serie12_Div_NotPoseNotNormalize("Test/");
-	aDatabaseInit_Serie12_Div_PoseNormalize("Test/");
-	aDatabaseInit_Serie12_Div_PoseNotNormalize("Test/");
+	//aDatabaseInit_Serie12_NotDiv_NotPoseNormalize("Test/");
+	//aDatabaseInit_Serie12_NotDiv_NotPoseNotNormalize("Test/");
+	//aDatabaseInit_Serie12_NotDiv_PoseNormalize("Test/");
+	//aDatabaseInit_Serie12_NotDiv_PoseNotNormalize("Test/");
+	//aDatabaseInit_Serie12_Div_NotPoseNormalize("Test/");
+	//aDatabaseInit_Serie12_Div_NotPoseNotNormalize("Test/");
+	//aDatabaseInit_Serie12_Div_PoseNormalize("Test/");
+	//aDatabaseInit_Serie12_Div_PoseNotNormalize("Test/");
+
+	aDatabaseInit_HeadPose_NotPoseNormalize();
+	aDatabaseInit_HeadPose_NotPoseNotNormalize();
+	aDatabaseInit_HeadPose_PoseNormalize(1);
+	aDatabaseInit_HeadPose_PoseNotNormalize(1);
+	aDatabaseInit_HeadPose_PoseNormalize(2);
+	aDatabaseInit_HeadPose_PoseNotNormalize(2);
+}
+
+//\\ Khoi tao csdl: tao dataset -> tao facetrack -> tao database.
+void Matching::aDatabaseInitFull(std::string pSourcePath)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	std::string vStartTime = util.currentDateTime();
+	cout << "aDatabaseInitFull: " << vStartTime << std::endl;
+	vStartTime = util.subStringFirstAfter(vStartTime, ".");
+
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourcePath = pSourcePath;
+	std::string vSavePath = vPath + "/VNTDataSet/HeadPose/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose");
+
+	////\\ Cah 1:
+	////\\ Khoi tao DataSet.
+	//FaceDataSet vFaceDataSet;
+	//FaceDataSetBase* vFaceDataSetBase;
+	//HeadPose vHeadPose;
+	//vFaceDataSetBase = &vHeadPose;
+	//vHeadPose.aSetSerie("1");
+	//vFaceDataSet.aDataSetInitDiv2(vFaceDataSetBase, vSourcePath, vSavePath, 1, 0, true);
+	//vHeadPose.aSetSerie("2");
+	//vFaceDataSet.aDataSetInitDiv2(vFaceDataSetBase, vSourcePath, vSavePath, 1, 15, true);
+
+	//////\\ Cach 1.1:
+	////FaceDataSet vFaceDataSet;
+	//////\\ Doc facetrack vao DataSet.
+	////vFaceDataSet.aDataSetRead4(0, 29, vSavePath);
+	//////\\ End Cach 1.1.
+
+	//FaceTrackDB vFaceTrackDB;
+	////\\ Khoi tao Feature (vector dac trung cua tung anh).
+	//vFaceTrackDB.aFeatureInit4(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetTiltPanPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
+	////\\ End Cach 1.
+
+	//\\ Cach 2:
+	//\\ Doc Feature.
+	FaceTrackDB vFaceTrackDB;
+	vFaceTrackDB.aFeatureRead4(0, 29, vSavePath);
+	//\\ End Cach 2.
+
+	//\\ Khoi tao Database.
+	vSavePath = vPath + "/VNTDataSet/HeadPose/NotPose/Normalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\NotPose\\Normalize");
+	vFaceTrackDB.aDatabaseInitNotPose2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	vSavePath = vPath + "/VNTDataSet/HeadPose/NotPose/NotNormalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\NotPose\\NotNormalize");
+	vFaceTrackDB.aDatabaseInitNotPoseNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/2Pose/Normalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\2Pose\\Normalize");
+	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/2Pose/NotNormalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\2Pose\\NotNormalize");
+	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	//\\ Tong 2 pose thanh 1 pose
+	vFaceTrackDB.aSumTiltPanPose();
+
+	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/1Pose/Normalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\1Pose\\Normalize");
+	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/1Pose/NotNormalize/";
+	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\1Pose\\NotNormalize");
+	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+
+	//\\ Hien thi thoi gian ket thuc.
+	std::string vEndTime = util.currentDateTime();
+	cout << "aDatabaseInitFull: " << vEndTime << std::endl;
+	vEndTime = util.subStringFirstAfter(vEndTime, ".");
+	cout << "Execute Time: " << util.subTime(vStartTime, vEndTime) << std::endl;
 }
 
 
@@ -648,7 +897,7 @@ std::vector<std::vector<double>> Matching::aFeatureAvg(std::string pSourcePath, 
 	{
 		std::string vId = vAllIds[i];
 		std::vector<std::string> vFileNames = vHeadPose.aGetsAllFileName(vId);
-		std::vector<int> vPoses = vHeadPose.aGetsAllPose(vId);
+		std::vector<int> vPoses = vHeadPose.aGetsAllPose1(vId);
 		vAllFileNames.push_back(vFileNames);
 		vAllPoses.push_back(vPoses);
 	}
@@ -824,18 +1073,25 @@ double Matching::aMatchingHeadPoseMAP1(std::string pDatabasePath)
 
 double Matching::aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pDatabaseFeaturePath, int pCountMax)
 {
-	ofstream of("Doc/Matching.txt", std::ofstream::app);
 	double result;
 	Utilites util;
-	//\\ Hien thi thoi gian bat dau.
-	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
-	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
-	//\\ Duong dan den nguon du lieu.
+	FaceTrackDB vFaceTrackDB;
+	//\\ Duong dan den nguon du lieu. 19 21 23 26 - 29
 	std::string exePath = util.GetExePath();
 	exePath = util.replaceAll(exePath, "\\", "/");
 	std::string vDataSetPath = exePath + "/VNTDataSet/";
+	//\\ Hien thi thoi gian bat dau.
+	std::string vFacetrackPath = vDataSetPath + pDatabaseFeaturePath;
+	ofstream of(vFacetrackPath + "Matching.txt", std::ofstream::app);
+	ofstream ofIdx(vFacetrackPath + "MatchingIndex.txt", std::ofstream::app);
+	ofstream ofDb(vFacetrackPath + "MatchingDB.txt", std::ofstream::app);
+	std::string vStartTime = util.currentDateTime();
+	vStartTime = util.subStringFirstAfter(vStartTime, ".");
+	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	ofIdx << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	ofDb << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
 
-	FaceTrackDB vFaceTrackDB;
 
 	size_t n = 30;
 	//\\ Doc csdl: Facetrack 0->15 la csdl (serie1) va 16->29 la test (serie2).
@@ -857,12 +1113,16 @@ double Matching::aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pD
 		std::vector<std::string> vPoseName = vPoseNames[i];
 		//\\ So khop.
 		std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax);
+		//std::vector<int> vMatchingIndex = vFaceTrackDB.aEuclidMatchingIndex1(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax);
+		
 		//\\ Tinh do chinh xa.
 		double vMAP = 0;
 		double Nr = 0;
 		size_t vMatchingIndexSize = vMatchingIndex.size();
 		std::cout << "vMatchingIndex: query:" + std::to_string(i);
 		of << "vMatchingIndex: query:" + std::to_string(i);
+		ofIdx << "vMatchingIndex: query:" + std::to_string(i);
+		ofDb << "vMatchingIndex: query:" + std::to_string(i);
 		std::string vMatch = "01";
 		std::string vMatchResult = "";
 		//\\ Tim gia tri index dung trong ket qua MatchingIndex tra ve.
@@ -877,37 +1137,51 @@ double Matching::aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pD
 				vMAP += Nr / (k + 1);
 				std::cout << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
 				of << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				ofIdx << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				ofDb << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
 				vMatchResult += std::to_string(k);
 			}
 		}
 		//vMAPAll += vMAP / Nr;
 		vMAP /= Nr;
 		vMAPAll += vMAP;
-		std::cout << " AP=(1 + 2/(index+1))/2:" + std::to_string(vMAP);
-		of << " AP=(1 + 2/(index+1))/2:" + std::to_string(vMAP);
+		std::cout << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
+		of << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
+		ofIdx << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
+		ofDb << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
 		if (vMatch == vMatchResult)
 		{
 			vCountTrue++;
 			std::cout << " (=)";
 			of << " (=)";
+			ofIdx << " (=)";
+			ofDb << " (=)";
 		}
 		else
 		{
 			std::cout << " (*)";
 			of << " (*)";
+			ofIdx << " (*)";
+			ofDb << " (*)";
 		}
 		std::cout << std::endl;
 		of << std::endl;
 		of << std::endl;
+		ofIdx << std::endl;
+		ofIdx << std::endl;
+		ofDb << std::endl;
+		ofDb << std::endl;
 	}
 	//\\ Tinh AP trung binh. AP chia m mat nguoi dung. (m = 6).
 	vMAPAll /= n;
 
-	//\\ Hien thi thoi gian va ket qua.
-	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
-	std::cout << "CountTrue: " << vCountTrue << " Size: " << n << " MeanCos: " << vMAPAll << std::endl;
-	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << " ";
-	of << "CountTrue: " << vCountTrue << " Size: " << n << " MeanCos: " << vMAPAll << std::endl;
+	//\\ Hien thi thoi gian ket thuc.
+	std::string vEndTime = util.currentDateTime();
+	vEndTime = util.subStringFirstAfter(vEndTime, ".");
+	std::cout << "CountTrue: " << vCountTrue << " Size: " << n << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	std::cout << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	of << "CountTrue:" << vCountTrue << " Size:" << n << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
 	of << std::endl;
 	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
 	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
@@ -916,6 +1190,33 @@ double Matching::aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pD
 	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
 	of << std::endl;
 	of.close();
+
+	ofIdx << "CountTrue:" << vCountTrue << " Size:" << n << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	ofIdx << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	ofIdx << std::endl;
+	ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofIdx << std::endl;
+	ofIdx.close();
+
+	ofDb << "CountTrue:" << vCountTrue << " Size:" << n << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	ofDb << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	ofDb << std::endl;
+	ofDb << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofDb << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofDb << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofDb << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofDb << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofDb << std::endl;
+	ofDb.close();
+
+	ofstream ofSum(vFacetrackPath + "MatchingSum.txt", std::ofstream::app);
+	ofSum << "MatchingHeadPoseMAP: " << pDatabasePath << std::endl;;
+	ofSum << "CountTrue:" << vCountTrue << " Size:" << n << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	ofSum.close();
 
 	result = vMAPAll;
 	return result;
@@ -933,8 +1234,18 @@ void Matching::aMatchingHeadPoseMAP()
 	//double vMAP4 = aMatchingHeadPoseMAP1("NotDiv/Pose/Normalize/");
 
 	int vCountMax = 0;
-	double vMAP1 = aMatchingHeadPoseMAP2("NotDiv/NotPose/NotNormalize/", "NotDiv/", vCountMax);
-	double vMAP2 = aMatchingHeadPoseMAP2("NotDiv/Pose/NotNormalize/", "NotDiv/", vCountMax);
-	double vMAP3 = aMatchingHeadPoseMAP2("NotDiv/NotPose/Normalize/", "NotDiv/", vCountMax);
-	double vMAP4 = aMatchingHeadPoseMAP2("NotDiv/Pose/Normalize/", "NotDiv/", vCountMax);
+	//double vMAPNotPoseNotNorm = aMatchingHeadPoseMAP2("Detected/HeadPose/NotPose/NotNormalize/", "Detected/HeadPose/", vCountMax);
+	//double vMAPPoseNotNorm1 = aMatchingHeadPoseMAP2("Detected/HeadPose/Pose/1Pose/NotNormalize/", "Detected/HeadPose/", vCountMax);
+	//double vMAPPoseNotNorm2 = aMatchingHeadPoseMAP2("Detected/HeadPose/Pose/2Pose/NotNormalize/", "Detected/HeadPose/", vCountMax);
+	//double vMAPNotPoseNorm = aMatchingHeadPoseMAP2("Detected/HeadPose/NotPose/Normalize/", "Detected/HeadPose/", vCountMax);
+	//double vMAPPoseNorm1 = aMatchingHeadPoseMAP2("Detected/HeadPose/Pose/1Pose/Normalize/", "Detected/HeadPose/", vCountMax);
+	//double vMAPPoseNorm2 = aMatchingHeadPoseMAP2("Detected/HeadPose/Pose/2Pose/Normalize/", "Detected/HeadPose/", vCountMax);
+
+
+	double vMAPNotPoseNotNorm = aMatchingHeadPoseMAP2("HeadPose/NotPose/NotNormalize/", "HeadPose/", vCountMax);
+	double vMAPPoseNotNorm1 = aMatchingHeadPoseMAP2("HeadPose/Pose/1Pose/NotNormalize/", "HeadPose/", vCountMax);
+	double vMAPPoseNotNorm2 = aMatchingHeadPoseMAP2("HeadPose/Pose/2Pose/NotNormalize/", "HeadPose/", vCountMax);
+	double vMAPNotPoseNorm = aMatchingHeadPoseMAP2("HeadPose/NotPose/Normalize/", "HeadPose/", vCountMax);
+	double vMAPPoseNorm1 = aMatchingHeadPoseMAP2("HeadPose/Pose/1Pose/Normalize/", "HeadPose/", vCountMax);
+	double vMAPPoseNorm2 = aMatchingHeadPoseMAP2("HeadPose/Pose/2Pose/Normalize/", "HeadPose/", vCountMax);
 }

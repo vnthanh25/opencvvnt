@@ -130,9 +130,9 @@ std::vector<cv::Mat> FaceDetect::aGetsMat(const std::vector<std::string> pFileNa
 		size_t vFacesSize = vFaces.size();
 		if (vFacesSize > 1)
 		{
-			int idx = pFileNames[i].find_last_of(".");
+			int idx = pFileNames[i].rfind(".");
 			std::string fName = pFileNames[i].substr(0, idx);
-			std::string tName = util.subStringAfter(pFileNames[i], ".");
+			std::string tName = util.subStringLastAfter(pFileNames[i], ".");
 			for (size_t j = 0; j < vFacesSize; j++)
 			{
 				cv::imwrite(pSavePath + fName + "_" + std::to_string(j) + "." + tName, vFaces[j]);

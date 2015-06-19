@@ -21,6 +21,8 @@ namespace vnt
 		std::vector<std::vector<std::vector<std::vector<double>>>> mFaceTrackDatabase;
 		std::vector<std::vector<std::vector<std::vector<int>>>> mFacetrackFeatures;
 		std::vector<std::vector<int>> mPoses;
+		//\\ Danh sach pose cua tung anh trong moi facetrack. format: "tilt;pan".
+		std::vector<std::vector<std::string>> mTiltPanPoses;
 		//\\ Danh sach pose cua tung anh trong moi facetrack.
 		std::vector<std::vector<std::string>> mPoseNames;
 		std::string mFolderPath = "";
@@ -33,7 +35,8 @@ namespace vnt
 		std::string mDBFeatureType = ".dbf";
 		std::string mImageName = "Image";
 		std::string mPoseName = "Pose";
-		std::string mPoseNameName = "PoseName";
+		std::string mTiltPanPoseName = "TiltPanPoses";
+		std::string mPoseNameName = "PoseNames";
 		std::string mFileType = ".txt";
 	public:
 		/********** Constructor **********/
@@ -61,10 +64,21 @@ namespace vnt
 		//\\ Gan Poses.
 		void aSetPoses(std::vector<std::vector<int>> pPoses);
 
+		//\\ Lay TiltPanPoses.
+		std::vector<std::vector<std::string>> aGetTiltPanPoses();
+		//\\ Gan TiltPanPoses.
+		void aSetTiltPanPoses(std::vector<std::vector<std::string>> pTiltPanPoses);
+
 		//\\ Lay danh sach pose name.
 		std::vector<std::vector<std::string>> aGetPoseNames();
 		//\\ Gan danh sach pose name.
 		void aSetPoseNames(std::vector<std::vector<std::string>> pPoseNames);
+
+		//\\ Lay danh sach FolderPath.
+		std::string aGetFolderPath();
+		//\\ Gan danh sach FolderPath.
+		void aSetFolderPath(std::string pFolderPath);
+
 
 
 		//\\ Doc tat ca file anh vao trong facetrack.
@@ -79,15 +93,21 @@ namespace vnt
 		std::vector<std::vector<double>> aAvgFeature2(const std::vector<cv::Mat> pFaceTrack, const std::vector<int> pFTPoses);
 		std::vector<std::vector<double>> aAvgFeatureNotPose2(const std::vector<cv::Mat> pFaceTrack);
 		//\\ Tinh vector trung binh cho tung facetrack. Moi facetrack co danh sach vector dac trung.
-		std::vector<std::vector<std::vector<double>>> aAvgFeatures(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures, const std::vector<std::vector<int>> pFTPoses);
+		std::vector<std::vector<std::vector<double>>> aAvgFeaturesPose1(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures, const std::vector<std::vector<int>> pFTPoses);
 		//\\ Tinh vector trung binh cho tung facetrack. Moi facetrack co danh sach vector dac trung.
-		std::vector<std::vector<std::vector<double>>> aAvgFeaturesNotPose(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures);
+		std::vector<std::vector<std::vector<double>>> aAvgFeaturesNotPose1(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures);
+		//\\ Tinh vector trung binh cho tung facetrack. Moi facetrack co danh sach vector dac trung.
+		std::vector<std::vector<std::vector<double>>> aAvgFeaturesPose2(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures, const std::vector<std::vector<std::string>> pTiltPanPoses);
 		//\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co danh sach vector dac trung.
 		std::vector<std::vector<double>> aAvgFeature3(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures, const std::vector<std::vector<int>> pFTPoses);
 		//\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co danh sach vector dac trung.
 		std::vector<std::vector<double>> aAvgFeatureNotPose3(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures);
 		//\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co 1 vector dac trung trung binh.
 		std::vector<std::vector<double>> aAvgFeature4(const std::vector<std::vector<std::vector<double>>> pFTFeatures);
+		//\\ Tinh vector trung binh cho tat ca facetrack. Moi facetrack co danh sach vector dac trung.
+		std::vector<std::vector<double>> aAvgFeature5(const std::vector<std::vector<std::vector<std::vector<int>>>> pFTFeatures, const std::vector<std::vector<std::string>> pTiltPanPoses);
+		//\\ Tinh vector trung binh cho facetrack.
+		std::vector<std::vector<double>> aAvgFeature6(const std::vector<std::vector<std::vector<int>>> pFeatures, const std::vector<std::string> pTiltPanPoses);
 
 		//\\ Tinh tong cua tich cac phan tu tuong ung trong 2 vector. Co so chieu bang nhau.
 		double aSumMul1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
@@ -97,9 +117,11 @@ namespace vnt
 		double aCosine2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2);
 
 		//\\ Tinh tong cua hieu cua binh phuong cac phan tu tuong ung trong 2 vector. Co so chieu bang nhau.
-		double aSumSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
+		double aSumSub1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
+		double aSumSub2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2);
 		//\\ Tinh khoang cach hinh hoc cua 2 vector.
-		double aEuclid(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
+		double aEuclid1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
+		double aEuclid2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2);
 
 		//\\ Tinh hieu cua 2 vector dac trung.
 		std::vector<std::vector<double>> aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
@@ -112,6 +134,8 @@ namespace vnt
 		int aFeatureInit2(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ (Use) Khoi tao vector dac trung.
 		int aFeatureInit3(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::vector<std::vector<std::string>> pPoseNames, std::string pSavePath, bool pIsSaveToFile = true);
+		//\\ (Use) Khoi tao vector dac trung.
+		int aFeatureInit4(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<std::string>> pTiltPanPoses, std::vector<std::vector<std::string>> pPoseNames, std::string pSavePath, bool pIsSaveToFile = true);
 
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aFeatureRead1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
@@ -121,23 +145,36 @@ namespace vnt
 		int aFeatureRead2(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath);
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aFeatureReadNotPose2(int pNumFaceTrackStart, int pNumFaceTrackEnd, int pNumFeatureStart, int pNumFeatureEnd, std::string pFolderPath);
-		//\\ (Use) Doc cac anh  va thong tin tu file.
+		//\\ (Use) (1) Doc cac anh  va thong tin tu file.
 		int aFeatureRead3(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath);
+		//\\ (Use) (2) Doc cac anh  va thong tin tu file.
+		int aFeatureRead4(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath);
 
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
 		int aDatabaseInit(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack).
 		int aDatabaseInitNotPose(std::vector<std::vector<cv::Mat>> pFaceTracks);
 
+		//\\ TiltPanPose = Tilt + Pan.
+		int aSumTiltPanPose();
+
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDatabaseInit(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+		int aDatabaseInitPoseNormalize1(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDatabaseInitNotPose(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+		int aDatabaseInitNotPose1(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDatabaseInitNotNormalize(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+		int aDatabaseInitNotNormalize1(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
 		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
-		int aDatabaseInitNotPoseNotNormalize(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
-		
+		int aDatabaseInitNotPoseNotNormalize1(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<int>> pPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
+		int aDatabaseInitPoseNormalize2(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<std::string>> pTiltPanPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+		//\\ (Use) (2) Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
+		int aDatabaseInitNotPose2(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<std::string>> pTiltPanPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
+		int aDatabaseInitNotNormalize2(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<std::string>> pTiltPanPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+		//\\ Khoi tao csdl (danh sach vector dac trung trung binh cho cac facetrack). Co ghi csdl ra file.
+		int aDatabaseInitNotPoseNotNormalize2(std::vector<std::vector<std::vector<std::vector<int>>>> pFacetrackFeatures, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<std::string>> pTiltPanPoses, std::string pFolderPath, bool pIsSaveToFile = true);
+
 		//\\ Doc cac vector dac trung trung binh tu file va dua vao csdl.
 		int aDatabaseRead1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
 		//\\ Doc cac vector dac trung trung binh tu file va dua vao csdl.
@@ -158,6 +195,7 @@ namespace vnt
 		//\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
 		std::vector<std::vector<cv::Mat>> aMeanCosNotPose(std::vector<cv::Mat> pFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks);
 
+		std::vector<int> aEuclidMatchingIndex1(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames, int pCountMax);
 
 		/******************** Gia lap ********************/
 		//\\ Gia lap danh sach vector dac trung cua facetrack. 1 facetrack co nhieu vector dac trung.
@@ -172,11 +210,13 @@ namespace vnt
 		std::vector<cv::Mat> aFaceTrackFake(size_t numList, int pNumRows, int pNumCols, uchar pValue = -1);
 
 		//\\ (Use) Luu ra file: vector dac trung
-		void aSaveToFile(cv::Mat pFace, int pPose, std::string pFileName, std::string pSavePath);
+		void aSaveToFile(cv::Mat pFace, std::string pFileName, std::string pSavePath);
 		//\\ Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
 		void aSaveToFile1(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath);
 		//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
 		void aSaveToFile2(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::vector<std::string> pPoseNames, std::string pSavePath);
+		//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
+		void aSaveToFile3(std::vector<std::string> pFileNames, std::vector<std::string > pPoses, std::vector<std::string> pPoseNames, bool pSortPose, std::string pSavePath);
 	};
 
 }

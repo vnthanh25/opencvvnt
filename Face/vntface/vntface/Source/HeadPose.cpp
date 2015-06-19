@@ -17,6 +17,16 @@ HeadPose::~HeadPose()
 }
 
 /********** public Methods **********/
+//\\ Lay Ids.
+std::string HeadPose::aGetIds()
+{
+	return mIds;
+}
+//\\ Gan Ids.
+void HeadPose::aSetIds(std::string pIds)
+{
+	mIds = pIds;
+}
 //\\ Lay Serie.
 std::string HeadPose::aGetSerie()
 {
@@ -385,7 +395,7 @@ std::vector<std::string> HeadPose::aGetsAllFileName(const std::string pId)
 	return result;
 }
 //\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
-std::vector<int> HeadPose::aGetsAllPose(const std::string pId)
+std::vector<int> HeadPose::aGetsAllPose1(const std::string pId)
 {
 	std::vector<int> result;
 	std::string fName = mImageName;
@@ -422,8 +432,52 @@ std::vector<int> HeadPose::aGetsAllPose(const std::string pId)
 				result.push_back(pose);
 			}// pan
 		}// tilt
-		//\\ File anh "...-90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
+		//\\ File anh "...+90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
 		pose = 110;
+		result.push_back(pose);
+	}// serie
+	return result;
+}
+//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+std::vector<std::string> HeadPose::aGetsAllPose2(const std::string pId)
+{
+	std::vector<std::string> result;
+	std::string fName = mImageName;
+	//\\ Lay tat ca Serie.
+	std::vector<std::string> serie = aGetsAllSerie();
+	//\\ Lay tat ca Number theo thu tu tang dan.
+	std::vector<std::string> number = aGetsAllNumbers();
+	//\\ Lay tat ca Tilt.
+	std::vector<std::string> tilt = aGetsAllTilt();
+	//\\ Lay tat ca Pan.
+	std::vector<std::string> pan = aGetsAllPan();
+
+	Utilites util;
+	//\\ Ghep chuoi de tao ten file.
+	std::string pose;
+	int len = 0;
+	size_t serie_size = serie.size();
+	size_t tilt_size = tilt.size();
+	size_t pan_size = pan.size();
+	//\\ Co 2 serie.
+	for (size_t i = 0; i < serie_size; i++)
+	{
+		//\\ File anh "...-90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
+		pose = "010100";
+		result.push_back(pose);
+		for (size_t j = 1; j < tilt_size - 1; j++) //\\ Bo gia tri dau (-90) va gia tri cuoi (+90).
+		{
+			for (size_t k = 0; k < pan_size; k++)
+			{
+				int itilt = std::atoi(tilt[j].c_str());//\\ Vertical.
+				int ipan = std::atoi(pan[k].c_str());//\\ Horizontal.
+				pose = util.leftPad(std::to_string((mMaxPose - abs(itilt))), 3, '0') + util.leftPad(std::to_string((mMaxPose - abs(ipan))), 3, '0');
+
+				result.push_back(pose);
+			}// pan
+		}// tilt
+		//\\ File anh "...+90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
+		pose = "010100";
 		result.push_back(pose);
 	}// serie
 	return result;

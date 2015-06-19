@@ -27,7 +27,7 @@ namespace vnt
 		//\\ Image format: "person[Id][Serie][Number][Tilt][Pan].jpg".
 		const std::string mImageName = "person[Id][Serie][Number][Tilt][Pan].jpg";
 		//\\ Id dau tien va Id cuoi cung.
-		const std::string mIds = "01,15";
+		std::string mIds = "01,15";
 		//\\ Chuoi anh: Seri 1 tranning, seri 2 test.
 		std::string mSerie = "1,2";//\\= "1,2";
 		//\\ So thu tu cua file trong thu muc.
@@ -57,6 +57,10 @@ namespace vnt
 		~HeadPose();
 
 		/********** public Methods **********/
+		//\\ Lay Ids.
+		std::string aGetIds();
+		//\\ Gan Ids.
+		void aSetIds(std::string pIds);
 		//\\ Lay Serie.
 		std::string aGetSerie();
 		//\\ Gan Serie.
@@ -94,7 +98,9 @@ namespace vnt
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm"
 		std::vector<std::string> aGetsAllFileName(const std::string pId);
 		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
-		std::vector<int> aGetsAllPose(const std::string pId);
+		std::vector<int> aGetsAllPose1(const std::string pId);
+		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
+		std::vector<std::string> aGetsAllPose2(const std::string pId);
 		//\\ Lay to hop cac pose tuong ung voi goc nhin trong ten file.
 		std::vector<std::string> aGetsAllPoseName(const std::string pId);
 		//\\ Lay to hop tat ca cac ten anh mat nguoi co trong thu muc. Format: "id_date_pose_meta.ppm". Co duong dan tuong doi.
