@@ -1112,8 +1112,8 @@ double Matching::aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pD
 		//\\ Lay filename cua query.
 		std::vector<std::string> vPoseName = vPoseNames[i];
 		//\\ So khop.
-		std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax);
-		//std::vector<int> vMatchingIndex = vFaceTrackDB.aEuclidMatchingIndex1(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax);
+		//std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax);
+		std::vector<int> vMatchingIndex = vFaceTrackDB.aLpMatchingIndex1(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax, 1);
 		
 		//\\ Tinh do chinh xa.
 		double vMAP = 0;
@@ -1233,7 +1233,7 @@ void Matching::aMatchingHeadPoseMAP()
 	//double vMAP3 = aMatchingHeadPoseMAP1("NotDiv/NotPose/Normalize/");
 	//double vMAP4 = aMatchingHeadPoseMAP1("NotDiv/Pose/Normalize/");
 
-	int vCountMax = 0;
+	int vCountMax = 5;
 	//double vMAPNotPoseNotNorm = aMatchingHeadPoseMAP2("Detected/HeadPose/NotPose/NotNormalize/", "Detected/HeadPose/", vCountMax);
 	//double vMAPPoseNotNorm1 = aMatchingHeadPoseMAP2("Detected/HeadPose/Pose/1Pose/NotNormalize/", "Detected/HeadPose/", vCountMax);
 	//double vMAPPoseNotNorm2 = aMatchingHeadPoseMAP2("Detected/HeadPose/Pose/2Pose/NotNormalize/", "Detected/HeadPose/", vCountMax);
@@ -1242,9 +1242,9 @@ void Matching::aMatchingHeadPoseMAP()
 	//double vMAPPoseNorm2 = aMatchingHeadPoseMAP2("Detected/HeadPose/Pose/2Pose/Normalize/", "Detected/HeadPose/", vCountMax);
 
 
-	double vMAPNotPoseNotNorm = aMatchingHeadPoseMAP2("HeadPose/NotPose/NotNormalize/", "HeadPose/", vCountMax);
-	double vMAPPoseNotNorm1 = aMatchingHeadPoseMAP2("HeadPose/Pose/1Pose/NotNormalize/", "HeadPose/", vCountMax);
-	double vMAPPoseNotNorm2 = aMatchingHeadPoseMAP2("HeadPose/Pose/2Pose/NotNormalize/", "HeadPose/", vCountMax);
+	//double vMAPNotPoseNotNorm = aMatchingHeadPoseMAP2("HeadPose/NotPose/NotNormalize/", "HeadPose/", vCountMax);
+	//double vMAPPoseNotNorm1 = aMatchingHeadPoseMAP2("HeadPose/Pose/1Pose/NotNormalize/", "HeadPose/", vCountMax);
+	//double vMAPPoseNotNorm2 = aMatchingHeadPoseMAP2("HeadPose/Pose/2Pose/NotNormalize/", "HeadPose/", vCountMax);
 	double vMAPNotPoseNorm = aMatchingHeadPoseMAP2("HeadPose/NotPose/Normalize/", "HeadPose/", vCountMax);
 	double vMAPPoseNorm1 = aMatchingHeadPoseMAP2("HeadPose/Pose/1Pose/Normalize/", "HeadPose/", vCountMax);
 	double vMAPPoseNorm2 = aMatchingHeadPoseMAP2("HeadPose/Pose/2Pose/Normalize/", "HeadPose/", vCountMax);

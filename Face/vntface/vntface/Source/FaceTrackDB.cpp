@@ -549,7 +549,7 @@ double FaceTrackDB::aSumSub2(std::vector<std::vector<int>> pVector1, std::vector
 	return result;
 }
 //\\ Tinh khoang cach hinh hoc cua 2 vector.
-double FaceTrackDB::aEuclid1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
+double FaceTrackDB::aEuclid11(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2)
 {
 	double result = 0;
 
@@ -559,7 +559,7 @@ double FaceTrackDB::aEuclid1(std::vector<std::vector<double>> pVector1, std::vec
 	result = sqrt(sum);
 	return result;
 }
-double FaceTrackDB::aEuclid2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2)
+double FaceTrackDB::aEuclid21(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2)
 {
 	double result = 0;
 
@@ -567,6 +567,58 @@ double FaceTrackDB::aEuclid2(std::vector<std::vector<int>> pVector1, std::vector
 	double sum = aSumSub2(pVector1, pVector2);
 	//\\ Tinh khoang cach hinh hoc.
 	result = sqrt(sum);
+	return result;
+}
+
+//\\ Tinh khoang cach hinh hoc cua 2 vector.
+double FaceTrackDB::aLp1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2, int pLevel)
+{
+	double result = 0;
+	//\\ Lap qua 9 vung. (truc y)
+	for (size_t i = 0; i < pVector1.size(); i++)
+	{
+		//\\ Lap qua 59 dac trung LBP. (truc x)
+		for (size_t j = 0; j < pVector1[0].size(); j++)
+		{
+			//\\ Cong don cua binh phuong cua hieu cua cac phan tu.
+			double sub = pVector1[i][j] - pVector2[i][j];
+			sub = abs(sub);
+			//\\ Tinh mu cua hieu.
+			for (int p = 1; p < pLevel; p++)
+			{
+				sub *= sub;
+			}
+			result += sub;
+		}
+	}
+	//\\ Tinh can.
+	double vPow = 1.0 / pLevel;
+	result = pow(result, vPow);
+	return result;
+}
+double FaceTrackDB::aLp2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2, int pLevel)
+{
+	double result = 0;
+	//\\ Lap qua 9 vung. (truc y)
+	for (size_t i = 0; i < pVector1.size(); i++)
+	{
+		//\\ Lap qua 59 dac trung LBP. (truc x)
+		for (size_t j = 0; j < pVector1[0].size(); j++)
+		{
+			//\\ Cong don cua binh phuong cua hieu cua cac phan tu.
+			double sub = pVector1[i][j] - pVector2[i][j];
+			sub = abs(sub);
+			//\\ Tinh mu cua hieu.
+			for (int p = 1; p < pLevel; p++)
+			{
+				sub *= sub;
+			}
+			result += sub;
+		}
+	}
+	//\\ Tinh can.
+	double vPow = 1.0 / pLevel;
+	result = pow(result, vPow);
 	return result;
 }
 
@@ -2498,8 +2550,8 @@ std::vector<std::vector<cv::Mat>> FaceTrackDB::aMeanCosNotPose(std::vector<cv::M
 	}
 	return result;
 }
-
-std::vector<int> FaceTrackDB::aEuclidMatchingIndex1(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames, int pCountMax)
+//\\ Sap xep danh sach vector dac trung trung binh. Theo Level (level = 2 la Euclidian).
+std::vector<int> FaceTrackDB::aLpMatchingIndex1(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames, int pCountMax, int pLevel)
 {
 	std::vector<int> result;
 	if (pFaceTracks.size() == 0)
@@ -2544,7 +2596,8 @@ std::vector<int> FaceTrackDB::aEuclidMatchingIndex1(std::vector<std::vector<std:
 				continue;
 
 			//meancos = aCosine1(pFaceTrack[f], pFaceTracks[i][f]);
-			meancos = aEuclid1(pFaceTrack[f], pFaceTracks[i][f]);
+			//meancos = aEuclid1(pFaceTrack[f], pFaceTracks[i][f]);
+			meancos = aLp1(pFaceTrack[f], pFaceTracks[i][f], pLevel);
 			//\\ Khoi tao thu tu facetrack.aEuclid
 			vFaceTrack[i] = i;
 
@@ -2642,7 +2695,8 @@ std::vector<int> FaceTrackDB::aEuclidMatchingIndex1(std::vector<std::vector<std:
 				break;
 
 			//meancos = aCosine2(pFeatureFaceTrack[f], pFeatureFaceTracks[i][k]);
-			meancos = aEuclid2(pFeatureFaceTrack[f], pFeatureFaceTracks[i][k]);
+			//meancos = aEuclid2(pFeatureFaceTrack[f], pFeatureFaceTracks[i][k]);
+			meancos = aLp2(pFeatureFaceTrack[f], pFeatureFaceTracks[i][k], pLevel);
 
 			////\\ Cach chinh:
 			//result.push_back(i);

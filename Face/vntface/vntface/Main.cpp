@@ -52,7 +52,7 @@ int main(void)
 
 	//\\ Khoi tao Database
 	//vMatching.aDatabaseInit();
-	//vMatching.aDatabaseInitFull(vSourePath);
+	vMatching.aDatabaseInitFull(vSourePath);
 
 	//\\ So khop
 	//vMatching.aMatchingHeadPose();
@@ -61,7 +61,7 @@ int main(void)
 	//vMatching.aMatchingHeadPoseCheck();
 
 	//\\ So khop dung MAP
-	vMatching.aMatchingHeadPoseMAP();
+	//vMatching.aMatchingHeadPoseMAP();
 
 	cout << "Done.";
 	_getwch();

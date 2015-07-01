@@ -120,8 +120,11 @@ namespace vnt
 		double aSumSub1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
 		double aSumSub2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2);
 		//\\ Tinh khoang cach hinh hoc cua 2 vector.
-		double aEuclid1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
-		double aEuclid2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2);
+		double aEuclid11(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
+		double aEuclid21(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2);
+		//\\ Tinh khoang cach hinh hoc cua 2 vector.
+		double aLp1(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2, int pLevel);
+		double aLp2(std::vector<std::vector<int>> pVector1, std::vector<std::vector<int>> pVector2, int pLevel);
 
 		//\\ Tinh hieu cua 2 vector dac trung.
 		std::vector<std::vector<double>> aSub(std::vector<std::vector<double>> pVector1, std::vector<std::vector<double>> pVector2);
@@ -194,8 +197,8 @@ namespace vnt
 		std::vector<std::vector<cv::Mat>> aMeanCos(std::vector<cv::Mat> pFaceTrack, std::vector<int> pPose, std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses);
 		//\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
 		std::vector<std::vector<cv::Mat>> aMeanCosNotPose(std::vector<cv::Mat> pFaceTrack, std::vector<std::vector<cv::Mat>> pFaceTracks);
-
-		std::vector<int> aEuclidMatchingIndex1(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames, int pCountMax);
+		//\\ Sap xep danh sach vector dac trung trung binh. Theo Level (level = 2 la Euclidian).
+		std::vector<int> aLpMatchingIndex1(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames, int pCountMax, int pLevel);
 
 		/******************** Gia lap ********************/
 		//\\ Gia lap danh sach vector dac trung cua facetrack. 1 facetrack co nhieu vector dac trung.
