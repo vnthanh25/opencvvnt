@@ -32,12 +32,15 @@ namespace vnt
 		//\\
 						//\\ Do kich thuoc lon nen chia ra lam nhieu thu muc.
 		const std::string mDVDs = "dvd1,dvd2";
+		//const std::string mDVDs = "dvd1";
 		//\\ Co nhieu loai kich thuoc khac nhau.
-		const std::string mTypes = "images,smaller,thumbnails";
+		//const std::string mTypes = "images,smaller,thumbnails";
+		const std::string mTypes = "images";
 		//\\ Image format: "subjectid_date_pose_meta.ppm".
 		const std::string mImageName = "id_date_pose_meta.ppm";
 		//\\ Id dau tien va Id cuoi cung cua moi dvd.
 		const std::string mIds = "00001,00739,00740,01208";
+		//const std::string mIds = "00001,00002";
 		//\\ 14 capture dates .
 		const std::string mDate = "930831,931230,940128,940307,940422,940519,940928,941031,941121,941201,941205,960530,960620,960627";
 		//\\ Goc nghien cua mat nguoi.
@@ -74,6 +77,9 @@ namespace vnt
 		re     -75      290      236
 		*/
 		const std::string mPose = "fa,fb,pl,hl,ql,pr,hr,qr,ra,rb,rc,rd,re";
+		const std::string mAngle = "0,0,67,-67,90,-90,22,-22,45,15,-15,-45,-75";
+		//\\ Goc nghien lon nhat.
+		const int mMaxPose = 100;
 		//\\ Thong tin them
 		/*
 		a	subject is wearing glasses
@@ -99,6 +105,8 @@ namespace vnt
 		std::string aGetDate(const int pIndex);
 		//\\ Get Pose.
 		std::string aGetPose(const int pIndex);
+		//\\ Get Angle.
+		std::string aGetAngle(const int pIndex);
 		//\\ Get Meta.
 		std::string aGetMeta(const int pIndex);
 
@@ -112,6 +120,8 @@ namespace vnt
 		std::vector<std::string> aGetsAllDate();
 		//\\ Lay tat ca Pose.
 		std::vector<std::string> aGetsAllPose();
+		//\\ Lay tat ca Angle.
+		std::vector<std::string> aGetsAllAngle();
 		//\\ Lay tat ca Meta.
 		std::vector<std::string> aGetsAllMeta();
 

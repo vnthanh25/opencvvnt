@@ -183,6 +183,7 @@ void FaceDataSet::aReadsImage2(std::vector<std::string> pAllFileName, std::vecto
 	mFileNames.push_back(vFileNames);
 	mFaceTracks.push_back(vFaceTrack);
 	mPoses.push_back(vPoses);
+	mPoseNames.push_back(vPoseNames);
 }
 //\\ (Use) Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
 void FaceDataSet::aReadsImage3(std::vector<std::string> pAllFileName, std::vector<std::string> pPoses, std::vector<std::string> pPoseNames, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile)
@@ -372,6 +373,8 @@ int FaceDataSet::aDataSetInitDiv1(FaceDataSetBase* pFaceDataSetBase, const std::
 			vAllPoseName = vAllPoseName1;
 		}
 		size_t vAllFileNameSize = vAllFileName.size() / pNum;
+		if (vAllFileNameSize == 0)
+			continue;
 		int numFilesLength = std::to_string(vAllFileNameSize).length();
 		//\\ Chia lam n thu muc facetrack con.
 		for (size_t j = 0; j < pNum; j++)
@@ -779,6 +782,46 @@ void FaceDataSet::aSaveToFile1(std::vector<std::string> pFileNames, std::vector<
 //\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
 void FaceDataSet::aSaveToFile2(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::vector<std::string> pPoseNames, std::string pSavePath)
 {
+	//if (pSortPose)
+	{
+		Utilites util;
+		//\\ Ghi anh Mat.
+		std::vector<int> vTiltPans;
+		//\\ Khoi tao index.
+		for (size_t i = 0; i < pPoses.size(); i++)
+		{
+			//int vTiltPose = std::atoi(util.subStringLastBefor(pPoses[i], ";").c_str());
+			//int vPanPose = std::atoi(util.subStringLastAfter(pPoses[i], ";").c_str());
+			int vPose = pPoses[i];
+			vTiltPans.push_back(vPose);
+		}
+		//\\ Sap xep thu tu pose giam dan.
+		for (size_t i = 0; i < vTiltPans.size() - 1; i++)
+		{
+			for (size_t j = i + 1; j < vTiltPans.size(); j++)
+			{
+				if (vTiltPans[i] < vTiltPans[j])//\\ Theo pose.
+				{
+					int vTemp = vTiltPans[i];
+					vTiltPans[i] = vTiltPans[j];
+					vTiltPans[j] = vTemp;
+					//\\ pPoses.
+					int vSTemp = pPoses[i];
+					pPoses[i] = pPoses[j];
+					pPoses[j] = vSTemp;
+					//\\ pPoseNames.
+					std::string vSTempName = pPoseNames[i];
+					pPoseNames[i] = pPoseNames[j];
+					pPoseNames[j] = vSTempName;
+					//\\ pFileNames.
+					vSTempName = pFileNames[i];
+					pFileNames[i] = pFileNames[j];
+					pFileNames[j] = vSTempName;
+				}
+			}// for j.
+		}// for i.
+	}
+
 	std::ofstream ofImage(pSavePath + mImageName + mFileType);
 	std::ofstream ofPose(pSavePath + mPoseName + mFileType);
 	std::ofstream ofPoseName(pSavePath + mPoseNameName + mFileType);

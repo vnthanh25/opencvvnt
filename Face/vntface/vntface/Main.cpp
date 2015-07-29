@@ -16,6 +16,8 @@ void Test()
 	double num = 16.0;
 	double div = 1.0 / 4;
 	double numpow = pow(num, div);
+	std::vector<std::string> vAllFileName1;
+	cv::Mat face = cv::imread("E:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/vntface/vntface/Debug/VNTDataSet/colorferetDownload/dvd1/data/images/00011/00010_930831_fa.ppm", CV_8UC1);
 }
 
 // Function main
@@ -39,7 +41,8 @@ int main(void)
 	std::string vExePath = util.GetExePath();
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
 	//std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDetectedFace/";
-	std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
+	//std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
+	std::string vSourePath = vPath + "/VNTDataSet/colorferetDownload/";
 
 	//\\ Phat hien mat nguoi trong anh.
 	//vMatching.aHeadPoseFaceDetect();
@@ -52,7 +55,7 @@ int main(void)
 
 	//\\ Khoi tao Database
 	//vMatching.aDatabaseInit();
-	vMatching.aDatabaseInitFull(vSourePath);
+	//vMatching.aDatabaseInitFull(vSourePath);
 
 	//\\ So khop
 	//vMatching.aMatchingHeadPose();
@@ -62,6 +65,7 @@ int main(void)
 
 	//\\ So khop dung MAP
 	//vMatching.aMatchingHeadPoseMAP();
+	vMatching.aMatchingColorFeretMAP();
 
 	cout << "Done.";
 	_getwch();

@@ -182,6 +182,39 @@ std::string ColorFeret::aGetPose(const int pIndex)
 		return "";
 	return mPose.substr(start, end - start);
 }
+//\\ Get Angle.
+std::string ColorFeret::aGetAngle(const int pIndex)
+{
+	//\\ pIndex phai tu 0.
+	if (pIndex < 0)
+		return "";
+	std::string::size_type start = 0;
+	std::string::size_type end = 0;
+	int count = -1;
+	while (1)
+	{
+		count++;
+		//\\ Tim dau ',' phan cach cac phan tu.
+		end = mAngle.find(',', start);
+		//\\ Khong tim thay hoac phan tu cuoi.
+		if (end == std::string::npos)
+		{
+			end = mAngle.length();
+			break;
+		}
+		//\\ Kiem tra thu tu index.
+		if (count < pIndex)
+		{
+			start = end + 1;
+		}
+		else
+			break;
+	}
+	//\\ pIndex vuot ra khoi danh sach.
+	if (count < pIndex)
+		return "";
+	return mAngle.substr(start, end - start);
+}
 //\\ Get Meta.
 std::string ColorFeret::aGetMeta(const int pIndex)
 {
@@ -289,6 +322,22 @@ std::vector<std::string> ColorFeret::aGetsAllPose()
 	while (1)
 	{
 		item = aGetPose(index);
+		if (item == "")
+			break;
+		result.push_back(item);
+		index++;
+	}
+	return result;
+}
+//\\ Lay tat ca Angle.
+std::vector<std::string> ColorFeret::aGetsAllAngle()
+{
+	std::vector<std::string> result;
+	std::string item;
+	int index = 0;
+	while (1)
+	{
+		item = aGetAngle(index);
 		if (item == "")
 			break;
 		result.push_back(item);
@@ -410,6 +459,8 @@ std::vector<int> ColorFeret::aGetsAllPose1(const std::string pId)
 	std::vector<std::string> dates = aGetsAllDate();
 	//\\ Lay tat ca Pose.
 	std::vector<std::string> poses = aGetsAllPose();
+	//\\ Lay tat ca Angle.
+	std::vector<std::string> angles = aGetsAllAngle();
 	//\\ Lay tat ca Meta. Them phan tu rong.
 	std::vector<std::string> metas = aGetsAllMeta();
 	metas.push_back("");
@@ -422,7 +473,9 @@ std::vector<int> ColorFeret::aGetsAllPose1(const std::string pId)
 		{
 			for (size_t k = 0; k < metas.size(); k++)
 			{
-				result.push_back(0);//\\ Hien tai chua tinh.
+				int angle = std::atoi(angles[j].c_str());
+				angle = 100 - abs(angle);
+				result.push_back(angle);
 			}
 		}
 	}
@@ -437,6 +490,8 @@ std::vector<std::string> ColorFeret::aGetsAllPose2(const std::string pId)
 	std::vector<std::string> dates = aGetsAllDate();
 	//\\ Lay tat ca Pose.
 	std::vector<std::string> poses = aGetsAllPose();
+	//\\ Lay tat ca Angle.
+	std::vector<std::string> angles = aGetsAllAngle();
 	//\\ Lay tat ca Meta. Them phan tu rong.
 	std::vector<std::string> metas = aGetsAllMeta();
 	metas.push_back("");
@@ -449,7 +504,9 @@ std::vector<std::string> ColorFeret::aGetsAllPose2(const std::string pId)
 		{
 			for (size_t k = 0; k < metas.size(); k++)
 			{
-				result.push_back("");//\\ Hien tai chua tinh.
+				int angle = std::atoi(angles[j].c_str());
+				angle = 100 - abs(angle);
+				result.push_back(std::to_string(angle));
 			}
 		}
 	}
@@ -464,6 +521,8 @@ std::vector<std::string> ColorFeret::aGetsAllPoseName(const std::string pId)
 	std::vector<std::string> dates = aGetsAllDate();
 	//\\ Lay tat ca Pose.
 	std::vector<std::string> poses = aGetsAllPose();
+	//\\ Lay tat ca Angle.
+	std::vector<std::string> angles = aGetsAllAngle();
 	//\\ Lay tat ca Meta. Them phan tu rong.
 	std::vector<std::string> metas = aGetsAllMeta();
 	metas.push_back("");
@@ -476,7 +535,7 @@ std::vector<std::string> ColorFeret::aGetsAllPoseName(const std::string pId)
 		{
 			for (size_t k = 0; k < metas.size(); k++)
 			{
-				result.push_back("");//\\ Hien tai chua tinh.
+				result.push_back(angles[j]);
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 #include "Utilities.h"
 #include "FaceDetect.h"
 #include "HeadPose.h"
+#include "ColorFeret.h"
 #include "FaceDataSet.h"
 #include "FaceTrackDB.h"
 
@@ -78,6 +79,7 @@ namespace vnt
 
 		//\\ Khoi tao csdl: tao dataset -> tao facetrack -> tao database.
 		void aDatabaseInitFull(std::string pSourcePath);
+		void aDatabaseInitFull1(std::string pSourcePath);
 
 
 		std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQuery, int pNum);
@@ -96,8 +98,9 @@ namespace vnt
 
 		double aMatchingHeadPoseMAP1(std::string pDatabasePath);
 
-		double aMatchingHeadPoseMAP2(std::string pDatabasePath, std::string pDatabaseFeaturePath, int pCountMax);
+		double aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseFeaturePath, int pCountMax, int pNumPerson, int pDiv);
 		//\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
 		void aMatchingHeadPoseMAP();
+		void aMatchingColorFeretMAP();
 	};
 }
