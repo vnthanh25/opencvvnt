@@ -163,8 +163,8 @@ std::string Utilites::convertUnsignedIntToBinary(int pValue)
 	return result;
 }
 
-//\\ Chuyen vector<vector<in>> thanh Mat.
-cv::Mat Utilites::convertV2ToMat(std::vector<std::vector<int>> lbpFeature, int width, int height)
+//\\ Chuyen vector<vector<int>> thanh Mat.
+cv::Mat Utilites::convertV2IToMat(std::vector<std::vector<int>> lbpFeature, int width, int height)
 {
 	cv::Mat result = cv::Mat::zeros(height, width, CV_32FC1);
 	for (size_t y = 0; y < lbpFeature.size(); y++)
@@ -173,6 +173,53 @@ cv::Mat Utilites::convertV2ToMat(std::vector<std::vector<int>> lbpFeature, int w
 		{
 			result.at<int>(y, x) = lbpFeature[y][x];
 		}
+	}
+	return result;
+}
+//\\ Chuyen Mat thanh vector<vector<int>>.
+std::vector<std::vector<int>> Utilites::convertMatToV2I(cv::Mat image)
+{
+	std::vector<std::vector<int>> result;
+	size_t rows = image.rows;
+	size_t cols = image.cols;
+	for (size_t y = 0; y < rows; y++)
+	{
+		std::vector<int> col;
+		for (size_t x = 0; x < cols; x++)
+		{
+			col.push_back(image.at<int>(y, x));
+		}
+		result.push_back(col);
+	}
+	return result;
+}
+//\\ Chuyen vector<vector<double>> thanh Mat.
+cv::Mat Utilites::convertV2DToMat(std::vector<std::vector<double>> lbpFeature, int width, int height)
+{
+	cv::Mat result = cv::Mat::zeros(height, width, CV_64FC1);
+	for (size_t y = 0; y < lbpFeature.size(); y++)
+	{
+		for (size_t x = 0; x < lbpFeature[y].size(); x++)
+		{
+			result.at<double>(y, x) = lbpFeature[y][x];
+		}
+	}
+	return result;
+}
+//\\ Chuyen Mat thanh vector<vector<double>>.
+std::vector<std::vector<double>> Utilites::convertMatToV2D(cv::Mat image)
+{
+	std::vector<std::vector<double>> result;
+	size_t rows = image.rows;
+	size_t cols = image.cols;
+	for (size_t y = 0; y < rows; y++)
+	{
+		std::vector<double> col;
+		for (size_t x = 0; x < cols; x++)
+		{
+			col.push_back(image.at<double>(y, x));
+		}
+		result.push_back(col);
 	}
 	return result;
 }
@@ -200,6 +247,13 @@ std::string Utilites::currentDateTime()
 	return buf;
 }
 
+//\\ Tao thu muc.
+int Utilites::makeDir(std::string folderName)
+{
+	std::string folderCreateCommand = "mkdir " + folderName;
+	system(folderCreateCommand.c_str());
+	return 1;
+}
 
 
 Mat DataMat::src, DataMat::gray, DataMat::filter, DataMat::edge, DataMat::dst;
