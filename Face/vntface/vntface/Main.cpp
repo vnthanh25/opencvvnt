@@ -44,6 +44,16 @@ int main(void)
 	//std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
 	std::string vSourePath = vPath + "/VNTDataSet/colorferetDownload/";
 
+	//std::ifstream ifSetting("Setting.txt");
+	//std::string vValue;
+	//std::vector<std::string> vSettings;
+	//while (!ifSetting.eof())
+	//{
+	//	std::getline(ifSetting, vValue);
+	//	vSettings.push_back(vValue);
+	//}
+	//ifSetting.close();
+
 	//\\ Phat hien mat nguoi trong anh.
 	//vMatching.aHeadPoseFaceDetect();
 
@@ -64,8 +74,9 @@ int main(void)
 	//vMatching.aMatchingHeadPoseCheck();
 
 	//\\ So khop dung MAP
-	//vMatching.aMatchingHeadPoseMAP();
-	vMatching.aMatchingColorFeretMAP();
+	vMatching.aMatchingHeadPoseMAP();
+	//vMatching.aMatchingColorFeretMAP();
+
 
 	cout << "Done.";
 	_getwch();

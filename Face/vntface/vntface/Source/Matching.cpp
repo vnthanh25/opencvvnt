@@ -584,7 +584,7 @@ void Matching::aDatabaseInit_HeadPose_NotPoseNotNormalize()
 	cout << "aDatabaseInit_Serie12_HeadPose_NotPoseNotNormalize: " << util.currentDateTime() << std::endl;
 }
 //\\ (2) Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
-void Matching::aDatabaseInit_HeadPose_PoseNormalize(int pNumVector)
+void Matching::aDatabaseInit_HeadPose_PoseNormalize(int pNumVector, int pMinPose, int pMaxPose)
 {
 	Utilites util;
 	std::string vVectorPath = std::to_string(pNumVector) + "Pose/";
@@ -607,13 +607,13 @@ void Matching::aDatabaseInit_HeadPose_PoseNormalize(int pNumVector)
 		vFaceTrackDB.aSumTiltPanPose();
 	}
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), pMinPose, pMaxPose, vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_HeadPose_PoseNormalize: " + vVectorPath << util.currentDateTime() << std::endl;
 }
 //\\ (2) Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
-void Matching::aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector)
+void Matching::aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector, int pMinPose, int pMaxPose)
 {
 	Utilites util;
 	std::string vVectorPath = std::to_string(pNumVector) + "Pose/";
@@ -636,7 +636,7 @@ void Matching::aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector)
 		vFaceTrackDB.aSumTiltPanPose();
 	}
 	//\\ Khoi tao csdl.
-	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), pMinPose, pMaxPose, vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aDatabaseInit_Serie12_HeadPose_PoseNotNormalize: " + vVectorPath << util.currentDateTime() << std::endl;
@@ -664,12 +664,14 @@ void Matching::aDatabaseInit()
 	//aDatabaseInit_Serie12_Div_PoseNormalize("Test/");
 	//aDatabaseInit_Serie12_Div_PoseNotNormalize("Test/");
 
-	aDatabaseInit_HeadPose_NotPoseNormalize();
-	aDatabaseInit_HeadPose_NotPoseNotNormalize();
-	aDatabaseInit_HeadPose_PoseNormalize(1);
-	aDatabaseInit_HeadPose_PoseNotNormalize(1);
-	aDatabaseInit_HeadPose_PoseNormalize(2);
-	aDatabaseInit_HeadPose_PoseNotNormalize(2);
+	int pMinPose = 45;
+	int pMaxPose = 100;
+	//aDatabaseInit_HeadPose_NotPoseNormalize();
+	//aDatabaseInit_HeadPose_NotPoseNotNormalize();
+	//aDatabaseInit_HeadPose_PoseNormalize(1, pMinPose, pMaxPose);
+	//aDatabaseInit_HeadPose_PoseNotNormalize(1);
+	aDatabaseInit_HeadPose_PoseNormalize(2, pMinPose, pMaxPose);
+	//aDatabaseInit_HeadPose_PoseNotNormalize(2);
 }
 
 //\\ Khoi tao csdl: tao dataset -> tao facetrack -> tao database.
@@ -773,6 +775,8 @@ void Matching::aDatabaseInitFull1(std::string pSourcePath)
 	vFaceTrackDB.aFeatureRead4(0, 29, vSavePath);
 	//\\ End Cach 2.
 
+	int pMinPose = 45;
+	int pMaxPose = 100;
 	//\\ Khoi tao Database.
 	vSavePath = vPath + "/VNTDataSet/HeadPose/NotPose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\NotPose\\Normalize");
@@ -784,22 +788,22 @@ void Matching::aDatabaseInitFull1(std::string pSourcePath)
 
 	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/2Pose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\2Pose\\Normalize");
-	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), pMinPose, pMaxPose, vSavePath);
 
 	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/2Pose/NotNormalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\2Pose\\NotNormalize");
-	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), pMinPose, pMaxPose, vSavePath);
 
 	//\\ Tong 2 pose thanh 1 pose
 	vFaceTrackDB.aSumTiltPanPose();
 
 	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/1Pose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\1Pose\\Normalize");
-	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitPoseNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), pMinPose, pMaxPose, vSavePath);
 
 	vSavePath = vPath + "/VNTDataSet/HeadPose/Pose/1Pose/NotNormalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\HeadPose\\Pose\\1Pose\\NotNormalize");
-	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), vSavePath);
+	vFaceTrackDB.aDatabaseInitNotNormalize2(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetTiltPanPoses(), pMinPose, pMaxPose, vSavePath);
 
 	//\\ Hien thi thoi gian ket thuc.
 	std::string vEndTime = util.currentDateTime();
@@ -1302,8 +1306,8 @@ void Matching::aMatchingHeadPoseMAP()
 	//double vMAPNotPoseNotNorm = aMatchingMAP2("HeadPose/NotPose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm1 = aMatchingMAP2("HeadPose/Pose/1Pose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm2 = aMatchingMAP2("HeadPose/Pose/2Pose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
-	double vMAPNotPoseNorm = aMatchingMAP2("HeadPose/NotPose/Normalize/", "HeadPose/", vCountMax, 15, 2);
-	double vMAPPoseNorm1 = aMatchingMAP2("HeadPose/Pose/1Pose/Normalize/", "HeadPose/", vCountMax, 15, 2);
+	//double vMAPNotPoseNorm = aMatchingMAP2("HeadPose/NotPose/Normalize/", "HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNorm1 = aMatchingMAP2("HeadPose/Pose/1Pose/Normalize/", "HeadPose/", vCountMax, 15, 2);
 	double vMAPPoseNorm2 = aMatchingMAP2("HeadPose/Pose/2Pose/Normalize/", "HeadPose/", vCountMax, 15, 2);
 }
 

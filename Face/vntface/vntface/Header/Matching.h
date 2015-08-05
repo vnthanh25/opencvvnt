@@ -70,9 +70,9 @@ namespace vnt
 		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + NotPose (khong co Pose) + NotNormalize (csdl khong chuan hoa).
 		void aDatabaseInit_HeadPose_NotPoseNotNormalize();
 		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + Normalize (csdl co chuan hoa).
-		void aDatabaseInit_HeadPose_PoseNormalize(int pNumVector);
+		void aDatabaseInit_HeadPose_PoseNormalize(int pNumVector, int pMinPose, int pMaxPose);
 		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
-		void aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector);
+		void aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector, int pMinPose, int pMaxPose);
 
 		//\\ Khoi tao csdl.
 		void aDatabaseInit();
