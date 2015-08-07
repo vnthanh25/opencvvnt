@@ -89,8 +89,8 @@ namespace vnt
 		int aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath);
 		//\\ (Use) Khoi tao DataSet (chuyen doi anh thanh doi tuong Mat). Co ghi csdl ra file.
 		int aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDataSourcePath, std::string pSavePath, const bool pCheckFile = false);
-		//\\ Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong?
-		int aDataSetInitDiv1(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pNum, const bool pCheckFile = false);
+		//\\ Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong? pIdIndexStart: vi tri index trong mang AllIds. pIdSizeEnd: So id cuoi cung + 1.
+		int aDataSetInitDiv1(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pIdIndexStart, const int pIdSizeEnd, const int pNum, const int pStart, const bool pCheckFile);
 		//\\ (Use) Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong?
 		int aDataSetInitDiv2(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pNum, const int pStart = 0, const bool pCheckFile = false);
 

@@ -56,6 +56,13 @@ int main(void)
 
 	//\\ Phat hien mat nguoi trong anh.
 	//vMatching.aHeadPoseFaceDetect();
+	//\\ Colorferet.
+	//std::string vCascadeName = "haarcascade_frontalface_default";
+	//vSourePath = vPath + "/VNTDataSet/colorferetDownload/";
+	//std::string vSavePath = vPath + "/VNTDataSet/ColorFeretDetectedFace/" + vCascadeName + "/";
+	//ColorFeret vColorFeret;
+	//FaceDataSetBase* vFaceDataSetBase = &vColorFeret;
+	//vMatching.aDetectFace(vCascadeName, vSourePath, vSavePath, "", "", "00001", "00159", vFaceDataSetBase);
 
 	//\\ Khoi tao DataSet
 	//vMatching.aHeadPoseDataSetInit();
@@ -65,7 +72,9 @@ int main(void)
 
 	//\\ Khoi tao Database
 	//vMatching.aDatabaseInit();
-	//vMatching.aDatabaseInitFull(vSourePath);
+	vSourePath = vPath + "/VNTDataSet/colorferetDownload/";
+	//vSourePath = vPath + "/VNTDataSet/Detected/ColorFeret/";
+	vMatching.aDatabaseInitFull(vSourePath);
 
 	//\\ So khop
 	//vMatching.aMatchingHeadPose();
@@ -74,7 +83,7 @@ int main(void)
 	//vMatching.aMatchingHeadPoseCheck();
 
 	//\\ So khop dung MAP
-	vMatching.aMatchingHeadPoseMAP();
+	//vMatching.aMatchingHeadPoseMAP();
 	//vMatching.aMatchingColorFeretMAP();
 
 

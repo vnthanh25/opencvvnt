@@ -76,8 +76,11 @@ namespace vnt
 		rd     -45      290      236
 		re     -75      290      236
 		*/
-		const std::string mPose = "fa,fb,pl,hl,ql,pr,hr,qr,ra,rb,rc,rd,re";
+		const std::string mPose = "fa,fb,hl,hr,pl,pr,ql,qr,ra,rb,rc,rd,re";
 		const std::string mAngle = "0,0,67,-67,90,-90,22,-22,45,15,-15,-45,-75";
+
+		//const std::string mPose = "fa,fb,ba,bj,bk,bb,bc,bd,be,bf,bg,bh,bi,ql,qr,hl,hr,pl,pr,ra,rb,rc,rd,re";
+		//const std::string mAngle = "0,0,0,0,0,60,40,25,15,-15,-25,-40,-60,-22,22,-67,67,-90,90,45,10,-10,-45,-80";
 		//\\ Goc nghien lon nhat.
 		const int mMaxPose = 100;
 		//\\ Thong tin them

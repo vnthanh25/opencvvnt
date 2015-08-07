@@ -102,6 +102,8 @@ std::vector<cv::Mat> FaceDetect::aGetsMat(const std::vector<std::string> pFileNa
 	{
 		//\\ Doc anh.
 		cv::Mat vFace = cv::imread(pSourcePath + pFileNames[i], CV_8UC1);
+		if (vFace.empty())
+			continue;
 		//\\ Detect face.
 
 		//std::vector<cv::Mat> faces = detFace.aGetsMat(cv::imread("images/lena.png", CV_8UC1));
@@ -149,6 +151,8 @@ std::vector<cv::Mat> FaceDetect::aGetsMat(const std::vector<std::string> pFileNa
 	{
 		//\\ Doc anh.
 		cv::Mat vFace = cv::imread(pSourcePath + pFileNames[i], CV_8UC1);
+		if (vFace.empty())
+			continue;
 		//\\ Detect face.
 
 		//std::vector<cv::Mat> faces = detFace.aGetsMat(cv::imread("images/lena.png", CV_8UC1));

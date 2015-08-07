@@ -11,6 +11,8 @@ namespace vnt
 	class Matching
 	{
 	public:
+		int mNumPerson = 0;
+		int mDiv = 0;
 		//\\ Detect HeadPose with serie 1.
 		void aHeadPoseFaceDetectSerie1(std::string pCascadeName);
 		//\\ Detect HeadPose with serie 2.
@@ -74,6 +76,8 @@ namespace vnt
 		//\\ Khoi tao csdl: HeadPose (csdl khong chia) + InDiv (query trong csdl co chia) + Pose (co Pose) + NotNormalize (csdl khong chuan hoa).
 		void aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector, int pMinPose, int pMaxPose);
 
+		//\\ Detect face.
+		void aDetectFace(std::string pCascadeName, std::string pSourcePath, std::string pSavePath, std::string pPrefixFaceTrackName, std::string pSuffixFaceTrackName, std::string pStartIndex, std::string pEndIndex, FaceDataSetBase* pFaceDataSetBase);
 		//\\ Khoi tao csdl.
 		void aDatabaseInit();
 

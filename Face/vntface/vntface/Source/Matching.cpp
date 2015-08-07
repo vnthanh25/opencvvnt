@@ -98,7 +98,7 @@ void Matching::aHeadPoseDataSetInitSerie1NotDiv()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("1");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 1, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 0, 0, 1, 0, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie1NotDiv: " << util.currentDateTime() << std::endl;
@@ -123,7 +123,7 @@ void Matching::aHeadPoseDataSetInitSerie1Div()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("1");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 0, 0, 3, 0, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie1Div: " << util.currentDateTime() << std::endl;
@@ -148,7 +148,7 @@ void Matching::aHeadPoseDataSetInitSerie2NotDiv()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("2");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 1, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 0, 0, 1, 0, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie2NotDiv: " << util.currentDateTime() << std::endl;
@@ -173,7 +173,7 @@ void Matching::aHeadPoseDataSetInitSerie2Div()
 	HeadPose vHeadPose;
 	vHeadPose.aSetSerie("2");
 	vFaceDataSetBase = &vHeadPose;
-	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 3, true);
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourePath, vSavePath, 0, 0, 3, 0, true);
 
 	//\\ Hien thi thoi gian ket thuc.
 	cout << "aHeadPoseDataSetInitSerie2Div: " << util.currentDateTime() << std::endl;
@@ -642,6 +642,40 @@ void Matching::aDatabaseInit_HeadPose_PoseNotNormalize(int pNumVector, int pMinP
 	cout << "aDatabaseInit_Serie12_HeadPose_PoseNotNormalize: " + vVectorPath << util.currentDateTime() << std::endl;
 }
 
+//\\ Detect face.
+void Matching::aDetectFace(std::string pCascadeName, std::string pSourcePath, std::string pSavePath, std::string pPrefixFaceTrackName, std::string pSuffixFaceTrackName, std::string pStartIndex, std::string pEndIndex, FaceDataSetBase* pFaceDataSetBase)
+{
+	Utilites util;
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aDetectFace: " << util.currentDateTime() << std::endl;
+
+	//std::string vPath = util.GetExePath();
+	//std::string vImagePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
+	//std::string vSavePath = vPath + "/VNTDataSet/DetectedFace/" + pCascadeName + "/";
+	std::string vFolderPath = util.replaceAll(pSavePath, "/", "\\");
+	util.makeDir(vFolderPath);
+	//vSavePath += "Test/";
+	//vFolderPath += "Test\\";
+	//util.makeDir(vFolderPath);
+
+	vnt::FaceDetect vFaceDetect;
+	vFaceDetect.aLoadFaceCascade("cascades/" + pCascadeName + ".xml");
+	std::string vFaceTrackIndex = pStartIndex;
+	std::string vSourcePath;
+	std::string vFaceTrackName;
+	while (vFaceTrackIndex != pEndIndex)
+	{
+		vSourcePath = pSourcePath + pFaceDataSetBase->aGetPath(vFaceTrackIndex);
+		vFaceTrackName = pPrefixFaceTrackName + vFaceTrackIndex + pSuffixFaceTrackName;
+		//\\ Tao thu muc.
+		util.makeDir(vFolderPath + vFaceTrackName);
+		std::vector<std::string> vImageNames = pFaceDataSetBase->aGetsAllFileName(vFaceTrackIndex);
+		vFaceDetect.aGetsMat(vImageNames, vSourcePath, pSavePath + vFaceTrackName + "/");
+		vFaceTrackIndex = util.increaseNumber(vFaceTrackIndex, 1);
+	}
+	//\\ Hien thi thoi gian bat dau.
+	cout << "aDetectFace: " << util.currentDateTime() << std::endl;
+}
 
 //\\ Khoi tao csdl.
 void Matching::aDatabaseInit()
@@ -690,19 +724,25 @@ void Matching::aDatabaseInitFull(std::string pSourcePath)
 	std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
 	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret");
 
-	////\\ Cah 1:
-	////\\ Khoi tao DataSet.
-	//FaceDataSet vFaceDataSet;
-	//FaceDataSetBase* vFaceDataSetBase;
-	//ColorFeret vColorFeret;
-	//vFaceDataSetBase = &vColorFeret;
-	//vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourcePath, vSavePath, 2, true);
-	
-	//\\ Cach 1.1:
+	//\\ Cah 1:
+	//\\ Khoi tao DataSet.
 	FaceDataSet vFaceDataSet;
-	//\\ Doc facetrack vao DataSet.
-	vFaceDataSet.aDataSetRead3(0, 157, vSavePath);
-	//\\ End Cach 1.1.
+	FaceDataSetBase* vFaceDataSetBase;
+	ColorFeret vColorFeret;
+	vFaceDataSetBase = &vColorFeret;
+	mDiv = 2;
+	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourcePath, vSavePath, 0, 1, mDiv, 0, true);
+	mNumPerson = vFaceDataSet.aGetFaceTraks().size();
+	cout << "aDataSetInitDiv1: Done." << mNumPerson << std::endl;
+
+	/* 
+
+
+	////\\ Cach 1.1:
+	//FaceDataSet vFaceDataSet;
+	////\\ Doc facetrack vao DataSet.
+	//vFaceDataSet.aDataSetRead3(0, 157, vSavePath);
+	////\\ End Cach 1.1.
 
 	FaceTrackDB vFaceTrackDB;
 	//\\ Khoi tao Feature (vector dac trung cua tung anh).
@@ -719,11 +759,16 @@ void Matching::aDatabaseInitFull(std::string pSourcePath)
 	vSavePath = vPath + "/VNTDataSet/ColorFeret/NotPose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret\\NotPose\\Normalize");
 	vFaceTrackDB.aDatabaseInitNotPose1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	cout << "aDatabaseInitNotPose1: Done." << std::endl;
 
 	vSavePath = vPath + "/VNTDataSet/ColorFeret/Pose/1Pose/Normalize/";
 	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret\\Pose\\1Pose\\Normalize");
 	vFaceTrackDB.aDatabaseInitPoseNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
-	
+	cout << "aDatabaseInitPoseNormalize1: Done." << std::endl;
+
+
+	*/
+
 	//\\ Hien thi thoi gian ket thuc.
 	std::string vEndTime = util.currentDateTime();
 	cout << "aDatabaseInitFull: " << vEndTime << std::endl;
@@ -1191,7 +1236,9 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 		{
 			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
 			//if (i % n == vMatchingIndex[k] % n)
-			if (((i / pDiv * pDiv) == vMatchingIndex[k]) || ((i / pDiv * pDiv + 1) == vMatchingIndex[k]))
+			//if (((i / pDiv * pDiv) == vMatchingIndex[k]) || ((i / pDiv * pDiv + 1) == vMatchingIndex[k]))
+			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thì iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
+			if ((iStartIndex <= vMatchingIndex[k]) && (vMatchingIndex[k] < iStartIndex + pDiv))
 			{
 				//\\ Tinh AP.
 				Nr++;
@@ -1322,6 +1369,6 @@ void Matching::aMatchingColorFeretMAP()
 	//double vMAPNotPoseNotNorm = aMatchingMAP2("ColorFeret/NotPose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm1 = aMatchingMAP2("ColorFeret/Pose/1Pose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm2 = aMatchingMAP2("ColorFeret/Pose/2Pose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
-	double vMAPNotPoseNorm = aMatchingMAP2("ColorFeret/NotPose/Normalize/", "ColorFeret/", vCountMax, 79, 2);
-	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/1Pose/Normalize/", "ColorFeret/", vCountMax, 79, 2);
+	double vMAPNotPoseNorm = aMatchingMAP2("ColorFeret/NotPose/Normalize/", "ColorFeret/", vCountMax, mNumPerson / mDiv, mDiv);
+	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/1Pose/Normalize/", "ColorFeret/", vCountMax, mNumPerson / mDiv, mDiv);
 }

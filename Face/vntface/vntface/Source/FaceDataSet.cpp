@@ -327,8 +327,8 @@ int FaceDataSet::aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pDa
 	result = mFaceTracks.size();
 	return result;
 }
-//\\ (Use) Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong?
-int FaceDataSet::aDataSetInitDiv1(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pNum, const bool pCheckFile)
+//\\ Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong? pIdIndexStart: vi tri index trong mang AllIds. pIdSizeEnd: So id cuoi cung + 1.
+int FaceDataSet::aDataSetInitDiv1(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pIdIndexStart, const int pIdSizeEnd, const int pNum, const int pStart, const bool pCheckFile)
 {
 	int result = -1;
 	//mFaceTracks.clear();
@@ -338,9 +338,11 @@ int FaceDataSet::aDataSetInitDiv1(FaceDataSetBase* pFaceDataSetBase, const std::
 	//\\ Lay tat ca Ids co trong nguon anh.
 	std::vector<std::string> vAllIds = mDataSetBase->aGetsAllIds();
 	size_t vAllIdsSize = vAllIds.size();
+	if (pIdSizeEnd > 0 && vAllIdsSize > pIdSizeEnd)
+		vAllIdsSize = pIdSizeEnd;
 	int numlengthFaceTrack = std::to_string(vAllIdsSize * pNum).length();
-	int vFaceTrackIndex = 0;
-	for (size_t i = 0; i < vAllIdsSize; i++)
+	int vFaceTrackIndex = pStart;
+	for (size_t i = pIdIndexStart; i < vAllIdsSize; i++)
 	{
 		std::string vId = vAllIds[i];
 		std::string vSourcePath = pDataSourcePath + mDataSetBase->aGetPath(vId);
@@ -450,7 +452,8 @@ int FaceDataSet::aDataSetInitDiv2(FaceDataSetBase* pFaceDataSetBase, const std::
 			vAllPoseName = vAllPoseName1;
 		}
 		size_t vAllFileNameSize = vAllFileName.size() / pNum;
-		int numFilesLength = std::to_string(vAllFileNameSize).length();
+		if (vAllFileNameSize == 0)
+			continue;	int numFilesLength = std::to_string(vAllFileNameSize).length();
 		//\\ Chia lam n thu muc facetrack con.
 		for (size_t j = 0; j < pNum; j++)
 		{
