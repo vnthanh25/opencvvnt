@@ -180,10 +180,10 @@ void FaceDataSet::aReadsImage2(std::vector<std::string> pAllFileName, std::vecto
 		aSaveToFile2(vFileNames, vPoses, vPoseNames, pSavePath);
 	}
 	//\\ Giu lai danh sach dac trung va pose tuong ung.
-	mFileNames.push_back(vFileNames);
-	mFaceTracks.push_back(vFaceTrack);
-	mPoses.push_back(vPoses);
-	mPoseNames.push_back(vPoseNames);
+	//mFileNames.push_back(vFileNames);
+	//mFaceTracks.push_back(vFaceTrack);
+	//mPoses.push_back(vPoses);
+	//mPoseNames.push_back(vPoseNames);
 }
 //\\ (Use) Doc tat ca cac anh trong mot thu muc. Giu lai danh sach dac trung va pose tuong ung. Tuy co luu ra file.
 void FaceDataSet::aReadsImage3(std::vector<std::string> pAllFileName, std::vector<std::string> pPoses, std::vector<std::string> pPoseNames, const std::string pDataSourcePath, std::string pSavePath, bool pIsSaveToFile)

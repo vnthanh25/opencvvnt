@@ -84,10 +84,10 @@ int main(void)
 
 	//\\ So khop dung MAP
 	//vMatching.aMatchingHeadPoseMAP();
-	//vMatching.aMatchingColorFeretMAP();
+	vMatching.aMatchingColorFeretMAP();
 
 
-	cout << "Done.";
-	_getwch();
+	//cout << "Done.";
+	//_getwch();
 	return 0;
 }

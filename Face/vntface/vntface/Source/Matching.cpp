@@ -724,18 +724,18 @@ void Matching::aDatabaseInitFull(std::string pSourcePath)
 	std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
 	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret");
 
-	//\\ Cah 1:
-	//\\ Khoi tao DataSet.
-	FaceDataSet vFaceDataSet;
-	FaceDataSetBase* vFaceDataSetBase;
-	ColorFeret vColorFeret;
-	vFaceDataSetBase = &vColorFeret;
-	mDiv = 2;
-	vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourcePath, vSavePath, 0, 1, mDiv, 0, true);
-	mNumPerson = vFaceDataSet.aGetFaceTraks().size();
-	cout << "aDataSetInitDiv1: Done." << mNumPerson << std::endl;
+	////\\ Cah 1:
+	////\\ Khoi tao DataSet.
+	//FaceDataSet vFaceDataSet;
+	//FaceDataSetBase* vFaceDataSetBase;
+	//ColorFeret vColorFeret;
+	//vFaceDataSetBase = &vColorFeret;
+	//mDiv = 2;
+	//vFaceDataSet.aDataSetInitDiv1(vFaceDataSetBase, vSourcePath, vSavePath, 739, 1208, mDiv, 1448, true);
+	//mNumPerson = vFaceDataSet.aGetFaceTraks().size();
+	//cout << "aDataSetInitDiv1: Done." << mNumPerson << std::endl;
 
-	/* 
+
 
 
 	////\\ Cach 1.1:
@@ -744,30 +744,46 @@ void Matching::aDatabaseInitFull(std::string pSourcePath)
 	//vFaceDataSet.aDataSetRead3(0, 157, vSavePath);
 	////\\ End Cach 1.1.
 
-	FaceTrackDB vFaceTrackDB;
-	//\\ Khoi tao Feature (vector dac trung cua tung anh).
-	vFaceTrackDB.aFeatureInit3(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
-	//\\ End Cach 1.
-	
-	////\\ Cach 2:
-	////\\ Doc Feature.
 	//FaceTrackDB vFaceTrackDB;
-	//vFaceTrackDB.aFeatureRead3(0, 3, vSavePath);
-	////\\ End Cach 2.
+	////\\ Khoi tao Feature (vector dac trung cua tung anh).
+	//vFaceTrackDB.aFeatureInit3(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
+	////\\ End Cach 1.
+	
+	//////\\ Cach 2:
+	//////\\ Doc Feature.
+	////FaceTrackDB vFaceTrackDB;
+	////vFaceTrackDB.aFeatureRead3(0, 3, vSavePath);
+	//////\\ End Cach 2.
 
-	//\\ Khoi tao Database.
-	vSavePath = vPath + "/VNTDataSet/ColorFeret/NotPose/Normalize/";
-	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret\\NotPose\\Normalize");
-	vFaceTrackDB.aDatabaseInitNotPose1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
-	cout << "aDatabaseInitNotPose1: Done." << std::endl;
+	////\\ Cach 3: Khoi tao feature.
+	//FaceTrackDB vFaceTrackDB;
+	//vFaceTrackDB.aFeatureInit5(0, 1983, vSavePath);
 
-	vSavePath = vPath + "/VNTDataSet/ColorFeret/Pose/1Pose/Normalize/";
-	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret\\Pose\\1Pose\\Normalize");
-	vFaceTrackDB.aDatabaseInitPoseNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
-	cout << "aDatabaseInitPoseNormalize1: Done." << std::endl;
+	////\\ Khoi tao Database.
+	//vSavePath = vPath + "/VNTDataSet/ColorFeret/NotPose/Normalize/";
+	//util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret\\NotPose\\Normalize");
+	//vFaceTrackDB.aDatabaseInitNotPose1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	//cout << "aDatabaseInitNotPose1: Done." << std::endl;
 
+	//vSavePath = vPath + "/VNTDataSet/ColorFeret/Pose/1Pose/Normalize/";
+	//util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret\\Pose\\1Pose\\Normalize");
+	//vFaceTrackDB.aDatabaseInitPoseNormalize1(vFaceTrackDB.aGetFacetrackFeatures(), vFaceTrackDB.aGetFileNames(), vFaceTrackDB.aGetPoses(), vSavePath);
+	//cout << "aDatabaseInitPoseNormalize1: Done." << std::endl;
 
-	*/
+	//\\ Khoi tao Database:
+	vSavePath = vPath + "/VNTDataSet/ColorFeret/";
+	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret");
+	FaceTrackDB vFaceTrackDB;
+	vFaceTrackDB.aDatabaseInitNotPose5(0, 1983, vSavePath);
+	cout << "aDatabaseInitNotPose5: Done." << std::endl;
+
+	//\\ Khoi tao Database:
+	//vSavePath = vPath + "/VNTDataSet/ColorFeret/";
+	//util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret");
+	//FaceTrackDB vFaceTrackDB;
+	vFaceTrackDB.aDatabaseInitPose5(0, 1983, vSavePath);
+	cout << "aDatabaseInitPose5: Done." << std::endl;
+
 
 	//\\ Hien thi thoi gian ket thuc.
 	std::string vEndTime = util.currentDateTime();
@@ -1176,6 +1192,35 @@ double Matching::aMatchingHeadPoseMAP1(std::string pDatabasePath)
 	result = vMAP;
 	return result;
 }
+//\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
+
+void Matching::aMatchingHeadPoseMAP()
+{
+	//ofstream of("Doc/Matching.txt");
+	//of.clear();
+	//of.close();
+
+	//double vMAP1 = aMatchingHeadPoseMAP1("NotDiv/NotPose/NotNormalize/");
+	//double vMAP2 = aMatchingHeadPoseMAP1("NotDiv/Pose/NotNormalize/");
+	//double vMAP3 = aMatchingHeadPoseMAP1("NotDiv/NotPose/Normalize/");
+	//double vMAP4 = aMatchingHeadPoseMAP1("NotDiv/Pose/Normalize/");
+
+	int vCountMax = 5;
+	//double vMAPNotPoseNotNorm = aMatchingMAP2("Detected/HeadPose/NotPose/NotNormalize/", "Detected/HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNotNorm1 = aMatchingMAP2("Detected/HeadPose/Pose/1Pose/NotNormalize/", "Detected/HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNotNorm2 = aMatchingMAP2("Detected/HeadPose/Pose/2Pose/NotNormalize/", "Detected/HeadPose/", vCountMax, 15, 2);
+	//double vMAPNotPoseNorm = aMatchingMAP2("Detected/HeadPose/NotPose/Normalize/", "Detected/HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNorm1 = aMatchingMAP2("Detected/HeadPose/Pose/1Pose/Normalize/", "Detected/HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNorm2 = aMatchingMAP2("Detected/HeadPose/Pose/2Pose/Normalize/", "Detected/HeadPose/", vCountMax, 15, 2);
+
+
+	//double vMAPNotPoseNotNorm = aMatchingMAP2("HeadPose/NotPose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNotNorm1 = aMatchingMAP2("HeadPose/Pose/1Pose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNotNorm2 = aMatchingMAP2("HeadPose/Pose/2Pose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
+	//double vMAPNotPoseNorm = aMatchingMAP2("HeadPose/NotPose/Normalize/", "HeadPose/", vCountMax, 15, 2);
+	//double vMAPPoseNorm1 = aMatchingMAP2("HeadPose/Pose/1Pose/Normalize/", "HeadPose/", vCountMax, 15, 2);
+	double vMAPPoseNorm2 = aMatchingMAP2("HeadPose/Pose/2Pose/Normalize/", "HeadPose/", vCountMax, 15, 2);
+}
 
 double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseFeaturePath, int pCountMax, int pNumPerson, int pDiv)
 {
@@ -1201,7 +1246,8 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 
 	size_t n = pNumPerson;
 	//\\ Doc csdl: Facetrack 0->15 la csdl (serie1) va 16->29 la test (serie2).
-	vFaceTrackDB.aDatabaseAndFeatureRead(0, n * pDiv - 1, vDataSetPath + pDatabasePath, vDataSetPath + pDatabaseFeaturePath);
+	//vFaceTrackDB.aDatabaseAndFeatureRead(0, n * pDiv - 1, vDataSetPath + pDatabasePath, vDataSetPath + pDatabaseFeaturePath);
+	vFaceTrackDB.aDatabaseAndFeatureRead5(0, n * pDiv - 1, vDataSetPath + pDatabasePath, vDataSetPath + pDatabaseFeaturePath);
 
 	std::vector<std::vector<std::vector<std::vector<double>>>> vDatabase = vFaceTrackDB.aGetFaceTrackDatabase();
 	std::vector<std::vector<std::vector<std::vector<int>>>> vFeatrues = vFaceTrackDB.aGetFacetrackFeatures();
@@ -1220,7 +1266,7 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 		//\\ So khop.
 		std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex3(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax);
 		//std::vector<int> vMatchingIndex = vFaceTrackDB.aLpMatchingIndex1(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax, 1);
-		
+
 		//\\ Tinh do chinh xa.
 		double vMAP = 0;
 		double Nr = 0;
@@ -1287,9 +1333,9 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 	std::string vEndTime = util.currentDateTime();
 	vEndTime = util.subStringFirstAfter(vEndTime, ".");
 	std::cout << "CountTrue: " << vCountTrue << " Size: " << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
-	std::cout << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	std::cout << "aMatchingMAP2: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
 	of << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
-	of << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	of << "aMatchingMAP2: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
 	of << std::endl;
 	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
 	of << "---------------------------------------------------------------------------------------------------------" << std::endl;
@@ -1300,7 +1346,7 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 	of.close();
 
 	ofIdx << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
-	ofIdx << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	ofIdx << "aMatchingMAP2: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
 	ofIdx << std::endl;
 	ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
 	ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
@@ -1311,7 +1357,7 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 	ofIdx.close();
 
 	ofDb << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
-	ofDb << "MatchingHeadPoseMAP: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	ofDb << "aMatchingMAP2: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
 	ofDb << std::endl;
 	ofDb << "---------------------------------------------------------------------------------------------------------" << std::endl;
 	ofDb << "---------------------------------------------------------------------------------------------------------" << std::endl;
@@ -1322,40 +1368,12 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 	ofDb.close();
 
 	ofstream ofSum(vFacetrackPath + "MatchingSum.txt", std::ofstream::app);
-	ofSum << "MatchingHeadPoseMAP: " << pDatabasePath << std::endl;;
+	ofSum << "aMatchingMAP2: " << pDatabasePath << std::endl;;
 	ofSum << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
 	ofSum.close();
 
 	result = vMAPAll;
 	return result;
-}
-//\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
-void Matching::aMatchingHeadPoseMAP()
-{
-	//ofstream of("Doc/Matching.txt");
-	//of.clear();
-	//of.close();
-
-	//double vMAP1 = aMatchingHeadPoseMAP1("NotDiv/NotPose/NotNormalize/");
-	//double vMAP2 = aMatchingHeadPoseMAP1("NotDiv/Pose/NotNormalize/");
-	//double vMAP3 = aMatchingHeadPoseMAP1("NotDiv/NotPose/Normalize/");
-	//double vMAP4 = aMatchingHeadPoseMAP1("NotDiv/Pose/Normalize/");
-
-	int vCountMax = 5;
-	//double vMAPNotPoseNotNorm = aMatchingMAP2("Detected/HeadPose/NotPose/NotNormalize/", "Detected/HeadPose/", vCountMax, 15, 2);
-	//double vMAPPoseNotNorm1 = aMatchingMAP2("Detected/HeadPose/Pose/1Pose/NotNormalize/", "Detected/HeadPose/", vCountMax, 15, 2);
-	//double vMAPPoseNotNorm2 = aMatchingMAP2("Detected/HeadPose/Pose/2Pose/NotNormalize/", "Detected/HeadPose/", vCountMax, 15, 2);
-	//double vMAPNotPoseNorm = aMatchingMAP2("Detected/HeadPose/NotPose/Normalize/", "Detected/HeadPose/", vCountMax, 15, 2);
-	//double vMAPPoseNorm1 = aMatchingMAP2("Detected/HeadPose/Pose/1Pose/Normalize/", "Detected/HeadPose/", vCountMax, 15, 2);
-	//double vMAPPoseNorm2 = aMatchingMAP2("Detected/HeadPose/Pose/2Pose/Normalize/", "Detected/HeadPose/", vCountMax, 15, 2);
-
-
-	//double vMAPNotPoseNotNorm = aMatchingMAP2("HeadPose/NotPose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
-	//double vMAPPoseNotNorm1 = aMatchingMAP2("HeadPose/Pose/1Pose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
-	//double vMAPPoseNotNorm2 = aMatchingMAP2("HeadPose/Pose/2Pose/NotNormalize/", "HeadPose/", vCountMax, 15, 2);
-	//double vMAPNotPoseNorm = aMatchingMAP2("HeadPose/NotPose/Normalize/", "HeadPose/", vCountMax, 15, 2);
-	//double vMAPPoseNorm1 = aMatchingMAP2("HeadPose/Pose/1Pose/Normalize/", "HeadPose/", vCountMax, 15, 2);
-	double vMAPPoseNorm2 = aMatchingMAP2("HeadPose/Pose/2Pose/Normalize/", "HeadPose/", vCountMax, 15, 2);
 }
 
 //\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
@@ -1369,6 +1387,6 @@ void Matching::aMatchingColorFeretMAP()
 	//double vMAPNotPoseNotNorm = aMatchingMAP2("ColorFeret/NotPose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm1 = aMatchingMAP2("ColorFeret/Pose/1Pose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm2 = aMatchingMAP2("ColorFeret/Pose/2Pose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
-	double vMAPNotPoseNorm = aMatchingMAP2("ColorFeret/NotPose/Normalize/", "ColorFeret/", vCountMax, mNumPerson / mDiv, mDiv);
-	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/1Pose/Normalize/", "ColorFeret/", vCountMax, mNumPerson / mDiv, mDiv);
+	double vMAPNotPoseNorm = aMatchingMAP2("ColorFeret/NotPose/", "ColorFeret/", vCountMax, 992, 2);
+	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/", "ColorFeret/", vCountMax, 992, 2);
 }

@@ -390,11 +390,29 @@ std::vector<std::string> ColorFeret::aGetsAllIds()
 //\\ Lay duong dan thu muc.
 std::string ColorFeret::aGetPath(const std::string pId)
 {
+	//\\ Lay DVD path (dvd1 or dvd2).
+	int iDVDIdx = 0;
+	std::string vStr = mIds;
+	while (1)
+	{
+		int iIndex = vStr.find_first_of(',');
+		if (iIndex == -1)
+		{
+			break;
+		}
+		iDVDIdx++;
+		std::string sIDTemp = vStr.substr(0, iIndex);
+		if (sIDTemp >= pId)
+			break;
+		iIndex++;
+		vStr = vStr.substr(iIndex, vStr.length() - iIndex);
+	}
+	iDVDIdx = (iDVDIdx - 1) / 2;
 	std::string result = mPath;
 	std::string s;
 	int len = 0;
 	//\\ Thay doi dvd.
-	s = aGetDVD(0);
+	s = aGetDVD(iDVDIdx);
 	result = result.replace(0, 3, s);
 	len = s.length() - 3;
 	//\\ Thay doi type.
