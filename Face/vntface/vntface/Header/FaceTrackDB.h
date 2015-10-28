@@ -194,7 +194,7 @@ namespace vnt
 		//\\ (Use) Khoi tao database.
 		int aDatabaseInitNotPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ (Use) Khoi tao database.
-		int aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, bool pIsSaveToFile = true);
+		int aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, int pMinPose, int pMaxPose, bool pIsSaveToFile = true);
 
 
 		//\\ Doc cac vector dac trung trung binh tu file va dua vao csdl.

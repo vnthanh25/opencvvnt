@@ -781,7 +781,9 @@ void Matching::aDatabaseInitFull(std::string pSourcePath)
 	//vSavePath = vPath + "/VNTDataSet/ColorFeret/";
 	//util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret");
 	//FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aDatabaseInitPose5(0, 1983, vSavePath);
+	int iMinPose = 55;
+	int iMaxPose = 500;
+	vFaceTrackDB.aDatabaseInitPose5(0, 1983, vSavePath, iMinPose, iMaxPose);
 	cout << "aDatabaseInitPose5: Done." << std::endl;
 
 
@@ -1387,6 +1389,6 @@ void Matching::aMatchingColorFeretMAP()
 	//double vMAPNotPoseNotNorm = aMatchingMAP2("ColorFeret/NotPose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm1 = aMatchingMAP2("ColorFeret/Pose/1Pose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
 	//double vMAPPoseNotNorm2 = aMatchingMAP2("ColorFeret/Pose/2Pose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
-	double vMAPNotPoseNorm = aMatchingMAP2("ColorFeret/NotPose/", "ColorFeret/", vCountMax, 992, 2);
+	//double vMAPNotPoseNorm = aMatchingMAP2("ColorFeret/NotPose/", "ColorFeret/", vCountMax, 992, 2);
 	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/", "ColorFeret/", vCountMax, 992, 2);
 }

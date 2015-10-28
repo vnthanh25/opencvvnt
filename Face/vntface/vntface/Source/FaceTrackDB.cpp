@@ -2145,7 +2145,7 @@ int FaceTrackDB::aDatabaseInitNotPose5(int pNumFaceTrackStart, int pNumFaceTrack
 	return pNumFaceTrackEnd + 1 - pNumFaceTrackStart;
 }
 //\\ (Use) Khoi tao database.
-int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, bool pIsSaveToFile)
+int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, int pMinPose, int pMaxPose, bool pIsSaveToFile)
 {
 	Utilites util;
 	FeatureLBP featureLBP;
@@ -2182,10 +2182,14 @@ int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd
 		std::vector<std::vector<double>> vAVGFeature = aInitFeature(0.0);
 		std::vector<std::vector<int>> vFeature;
 		int iFaceCount = 0;
+		int iPose = 0;
+		int iTotalPose = 0;
 		while (!ifImage.eof())
 		{
 			std::getline(ifImage, vFileName);
 			std::getline(ifPose, vPose);
+			iPose = std::atoi(vPose.c_str());
+			iTotalPose += iPose;
 			//std::getline(ifPoseName, vPoseName);
 			vImageMat = util.readMatBasic(vFacetrackPath + vFaceTrackName + "/" + vFileName + mFeatureType);
 			iFaceCount++;
@@ -2197,7 +2201,11 @@ int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd
 			//vImageMats.push_back(vImageMat);
 
 			vFeature = util.convertMatToV2I(vImageMat);
-			vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, std::atoi(vPose.c_str()));
+
+			// Optional
+			if (iPose < pMinPose || pMaxPose < iPose)
+				iPose = 1;
+			vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
 			//vAVGFeatureAll = aSumAfterMul(vAVGFeature, vFeature, std::atoi(vPose.c_str()));
 
 		}
@@ -2206,7 +2214,7 @@ int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd
 		//ifPoseName.close();
 
 		//\\ Tinh vector trung binh cho mot facetrack.
-		vAVGFeature = aDiv(vAVGFeature, iFaceCount);
+		vAVGFeature = aDiv(vAVGFeature, iFaceCount * iTotalPose);
 		if (pIsSaveToFile)
 		{
 			//\\ Chuyen doi vector 2 chieu thanh doi tuong Mat.
