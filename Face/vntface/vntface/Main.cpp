@@ -23,71 +23,12 @@ void Test()
 // Function main
 int main(void)
 {
-	Matching vMatching;
-	Utilites util;
+	//Test();
 
-	//std::string Path = "E:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/vntface/vntface/Debug/VNTDataSet/HeadPose/NotPose/NotNormalize/";
-	//int vIdx = Path.rfind("/Pose/");
-	//if (vIdx == -1)
-	//	vIdx = Path.rfind("/NotPose/");
-	//Path = Path.substr(0, vIdx + 1);
-	//std::string Path1 = "E:/VNThanh/Dev/OpenCV/WorkSpace/opencvvnt/Face/vntface/vntface/Debug/VNTDataSet/HeadPose/Pose/NotNormalize/";
-	//int vIdx1 = Path1.rfind("/Pose/");
-	//if (vIdx1 == -1)
-	//	vIdx1 = Path1.rfind("/NotPose/");
-	//Path1 = Path1.substr(0, vIdx + 1);
+	//Matching vMatching;
+	//vMatching.Feret();
 
-	//\\ Duong dan den nguon du lieu.
-	std::string vExePath = util.GetExePath();
-	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	//std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDetectedFace/";
-	//std::string vSourePath = vPath + "/VNTDataSet/DataSetHeadPoseDownload/";
-	std::string vSourePath = vPath + "/VNTDataSet/colorferetDownload/";
-
-	//std::ifstream ifSetting("Setting.txt");
-	//std::string vValue;
-	//std::vector<std::string> vSettings;
-	//while (!ifSetting.eof())
-	//{
-	//	std::getline(ifSetting, vValue);
-	//	vSettings.push_back(vValue);
-	//}
-	//ifSetting.close();
-
-	//\\ Phat hien mat nguoi trong anh.
-	//vMatching.aHeadPoseFaceDetect();
-	//\\ Colorferet.
-	//std::string vCascadeName = "haarcascade_frontalface_default";
-	//vSourePath = vPath + "/VNTDataSet/colorferetDownload/";
-	//std::string vSavePath = vPath + "/VNTDataSet/ColorFeretDetectedFace/" + vCascadeName + "/";
-	//ColorFeret vColorFeret;
-	//FaceDataSetBase* vFaceDataSetBase = &vColorFeret;
-	//vMatching.aDetectFace(vCascadeName, vSourePath, vSavePath, "", "", "00001", "00159", vFaceDataSetBase);
-
-	//\\ Khoi tao DataSet
-	//vMatching.aHeadPoseDataSetInit();
-
-	//\\ Khoi tao Feature
-	//vMatching.aFeaturesInit();
-
-	//\\ Khoi tao Database
-	//vMatching.aDatabaseInit();
-	vSourePath = vPath + "/VNTDataSet/colorferetDownload/";
-	//vSourePath = vPath + "/VNTDataSet/Detected/ColorFeret/";
-	vMatching.aDatabaseInitFull(vSourePath);
-
-	//\\ So khop
-	//vMatching.aMatchingHeadPose();
-
-	//\\ Kiem tra so khop.
-	//vMatching.aMatchingHeadPoseCheck();
-
-	//\\ So khop dung MAP
-	//vMatching.aMatchingHeadPoseMAP();
-	vMatching.aMatchingColorFeretMAP();
-
-
-	//cout << "Done.";
-	//_getwch();
+	cout << "Done.";
+	_getwch();
 	return 0;
 }

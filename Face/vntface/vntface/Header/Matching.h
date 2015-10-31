@@ -79,12 +79,12 @@ namespace vnt
 		//\\ Detect face.
 		void aDetectFace(std::string pCascadeName, std::string pSourcePath, std::string pSavePath, std::string pPrefixFaceTrackName, std::string pSuffixFaceTrackName, std::string pStartIndex, std::string pEndIndex, FaceDataSetBase* pFaceDataSetBase);
 		//\\ Khoi tao csdl.
-		void aDatabaseInit();
+		void aDatabaseInitHeadPose();
+		void aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, std::string pSavePath, TypeFunction pTypeFunction);
 
 		//\\ Khoi tao csdl: tao dataset -> tao facetrack -> tao database.
 		void aDatabaseInitFull(std::string pSourcePath);
 		void aDatabaseInitFull1(std::string pSourcePath);
-
 
 		std::vector<int> aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQuery, int pNum);
 		//\\ So khop: NotDiv (csdl khong chia) + InDiv (query trong csdl co chia).

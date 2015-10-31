@@ -21,7 +21,6 @@ namespace vnt
 	class ColorFeret : public FaceDataSetBase
 	{
 	private:
-
 		/********** private Methods **********/
 
 	public:

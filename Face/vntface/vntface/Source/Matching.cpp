@@ -678,7 +678,7 @@ void Matching::aDetectFace(std::string pCascadeName, std::string pSourcePath, st
 }
 
 //\\ Khoi tao csdl.
-void Matching::aDatabaseInit()
+void Matching::aDatabaseInitHeadPose()
 {
 	//aDatabaseInit_Serie12_HeadPose_NotPoseNormalize("");
 	//aDatabaseInit_Serie12_HeadPose_NotPoseNotNormalize("");
@@ -706,6 +706,55 @@ void Matching::aDatabaseInit()
 	//aDatabaseInit_HeadPose_PoseNotNormalize(1);
 	aDatabaseInit_HeadPose_PoseNormalize(2, pMinPose, pMaxPose);
 	//aDatabaseInit_HeadPose_PoseNotNormalize(2);
+}
+
+void Matching::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, std::string pSavePath, TypeFunction pTypeFunction)
+{
+	Utilites util;
+	// Tao thu muc.
+	util.makeDir(pSavePath);
+	//\\ Khoi tao Database:
+	FaceTrackDB vFaceTrackDB;
+	int iMinPose = 90;
+	int iMaxPose = 0;
+	// Set title.
+	std::string vTitle = "Not";
+	switch (pTypeFunction)
+	{
+	case vnt::Not:
+		vTitle = "Not";
+		break;
+	case vnt::Linear:
+		vTitle = "Linear";
+		break;
+	case vnt::Gaussian:
+		vTitle = "Gaussian";
+		break;
+	case vnt::Threshold:
+		vTitle = "Threshold";
+		iMinPose = 45;
+		break;
+	case vnt::Filter:
+		vTitle = "Filter";
+		iMinPose = 45;
+		break;
+	default:
+		vTitle = "default Not";
+		break;
+	}
+	//\\ Hien thi thoi gian bat dau.
+	std::string vStartTime = util.currentDateTime();
+	cout << "Linear: " << vStartTime << std::endl;
+	vStartTime = util.subStringFirstAfter(vStartTime, ".");
+
+	// ************* Execute.
+	vFaceTrackDB.aDatabaseInit(pNumFaceTrackStart, pNumFaceTrackEnd, pSourcePath, pSavePath, iMinPose, iMaxPose, pTypeFunction);
+
+	//\\ Hien thi thoi gian ket thuc.
+	std::string vEndTime = util.currentDateTime();
+	cout << "Not Pose: " << vEndTime << std::endl;
+	vEndTime = util.subStringFirstAfter(vEndTime, ".");
+	cout << "Execute Time: " << util.subTime(vStartTime, vEndTime) << std::endl;
 }
 
 //\\ Khoi tao csdl: tao dataset -> tao facetrack -> tao database.
@@ -774,14 +823,14 @@ void Matching::aDatabaseInitFull(std::string pSourcePath)
 	vSavePath = vPath + "/VNTDataSet/ColorFeret/";
 	util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret");
 	FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aDatabaseInitNotPose5(0, 1983, vSavePath);
-	cout << "aDatabaseInitNotPose5: Done." << std::endl;
+	//vFaceTrackDB.aDatabaseInitNotPose5(0, 1983, vSavePath);
+	//cout << "aDatabaseInitNotPose5: Done." << std::endl;
 
 	//\\ Khoi tao Database:
 	//vSavePath = vPath + "/VNTDataSet/ColorFeret/";
 	//util.makeDir(vExePath + "\\VNTDataSet\\ColorFeret");
 	//FaceTrackDB vFaceTrackDB;
-	int iMinPose = 55;
+	int iMinPose = -1;
 	int iMaxPose = 500;
 	vFaceTrackDB.aDatabaseInitPose5(0, 1983, vSavePath, iMinPose, iMaxPose);
 	cout << "aDatabaseInitPose5: Done." << std::endl;
@@ -874,7 +923,6 @@ void Matching::aDatabaseInitFull1(std::string pSourcePath)
 	vEndTime = util.subStringFirstAfter(vEndTime, ".");
 	cout << "Execute Time: " << util.subTime(vStartTime, vEndTime) << std::endl;
 }
-
 
 std::vector<int> Matching::aMatching(FaceTrackDB pFaceTrackDB, FaceTrackDB pFaceTrackDBQuery, int pNum)
 {
@@ -1391,4 +1439,38 @@ void Matching::aMatchingColorFeretMAP()
 	//double vMAPPoseNotNorm2 = aMatchingMAP2("ColorFeret/Pose/2Pose/NotNormalize/", "ColorFeret/", vCountMax, 15, 2);
 	//double vMAPNotPoseNorm = aMatchingMAP2("ColorFeret/NotPose/", "ColorFeret/", vCountMax, 992, 2);
 	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/", "ColorFeret/", vCountMax, 992, 2);
+}
+
+
+void Matching::Feret()
+{
+	Utilites util;
+	Matching vMatching;
+	//\\ Duong dan den nguon du lieu.
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	std::string vSourePath = vPath + "/VNTDataSet/ColorFeret/";
+	std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
+
+	//\\ Khoi tao Database
+	std::string vFolderName;
+	//// Not.
+	//vFolderName = "Not";
+	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Not);
+	//// Linear.
+	//vFolderName = "Linear";
+	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Linear);
+	//// Gaussian.
+	//vFolderName = "Gaussian";
+	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Gaussian);
+	//// Threshold.
+	//vFolderName = "Threshold";
+	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Threshold);
+	// Filter.
+	vFolderName = "Filter";
+	vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Filter);
+	//vMatching.aDatabaseInitFull(vSourePath);
+
+	//\\ So khop
+	//vMatching.aMatchingHeadPose();
 }

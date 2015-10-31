@@ -13,6 +13,8 @@ VNThanh
 
 namespace vnt
 {
+	enum TypeFunction { Not, Linear, Gaussian, Threshold, Filter };
+
 	class FaceTrackDB
 	{
 	private:
@@ -40,6 +42,7 @@ namespace vnt
 		std::string mTiltPanPoseName = "TiltPanPoses";
 		std::string mPoseNameName = "PoseNames";
 		std::string mFileType = ".txt";
+		const int mMaxPose = 100;
 	public:
 		/********** Constructor **********/
 		FaceTrackDB();
@@ -134,6 +137,8 @@ namespace vnt
 		std::vector<std::vector<double>> aSum(std::vector<std::vector<double>> pVector1, std::vector<std::vector<int>> pVector2);
 		//\\ (Use) (1,2) (double) Tinh tong sau khi nhan cua 2 vector dac trung.
 		std::vector<std::vector<double>> aSumAfterMul(std::vector<std::vector<double>> pVector1, std::vector<std::vector<int>> pVector2, int pPose);
+		//\\ (Use) (1,2) (double) Tinh tong sau khi nhan cua 2 vector dac trung.
+		std::vector<std::vector<double>> aSumAfterGaussian(std::vector<std::vector<double>> pVector1, std::vector<std::vector<int>> pVector2, int pPose);
 
 		//\\ Chia vector dac trung cho mot so
 		std::vector<std::vector<double>> aDiv(std::vector<std::vector<double>> pVector, int pDiv);
@@ -194,7 +199,9 @@ namespace vnt
 		//\\ (Use) Khoi tao database.
 		int aDatabaseInitNotPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ (Use) Khoi tao database.
-		int aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, int pMinPose, int pMaxPose, bool pIsSaveToFile = true);
+		int aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction = Not, bool pIsSaveToFile = true);
+		//\\ (Use) Khoi tao database.
+		int aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourceSavePath, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction = Not, bool pIsSaveToFile = true);
 
 
 		//\\ Doc cac vector dac trung trung binh tu file va dua vao csdl.

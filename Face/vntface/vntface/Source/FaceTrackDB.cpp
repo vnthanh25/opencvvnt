@@ -1,4 +1,4 @@
-/*
+﻿/*
 VNThanh
 - Face Track.
 */
@@ -675,6 +675,30 @@ std::vector<std::vector<double>> FaceTrackDB::aSumAfterMul(std::vector<std::vect
 		{
 			//\\ Tong sau khi nhan cua cac phan tu.
 			lbp.push_back(pVector1[i][j] + pVector2[i][j] * pPose);
+		}
+		result.push_back(lbp);
+	}
+	return result;
+}
+
+//\\ (Use) (1,2) (double) Tinh tong sau khi nhan cua 2 vector dac trung.
+std::vector<std::vector<double>> FaceTrackDB::aSumAfterGaussian(std::vector<std::vector<double>> pVector1, std::vector<std::vector<int>> pVector2, int pPose)
+{
+	std::vector<std::vector<double>> result;
+	double vGaussian = 0;
+	double vPose = 0;
+	//\\ Lap qua 9 vung. (truc y)
+	for (size_t i = 0; i < pVector1.size(); i++)
+	{
+		std::vector<double> lbp;
+		//\\ Lap qua 59 dac trung LBP. (truc x)
+		for (size_t j = 0; j < pVector1[0].size(); j++)
+		{
+			// Doi nguoc lai goc nhin that.
+			vPose = mMaxPose - pPose;
+			vGaussian = exp(-((vPose*vPose) / (2 * 180 * 180))); //g = ae( -( (x-b)(x-b)/(2*c*c) ) )
+			//\\ Tong sau khi nhan cua cac phan tu.
+			lbp.push_back(pVector1[i][j] + pVector2[i][j] * vGaussian);
 		}
 		result.push_back(lbp);
 	}
@@ -2144,8 +2168,8 @@ int FaceTrackDB::aDatabaseInitNotPose5(int pNumFaceTrackStart, int pNumFaceTrack
 
 	return pNumFaceTrackEnd + 1 - pNumFaceTrackStart;
 }
-//\\ (Use) Khoi tao database.
-int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, int pMinPose, int pMaxPose, bool pIsSaveToFile)
+//\\ (Use) Khoi tao database. pTypeFunction: enum TypeFunction { Not, Linear, Gaussian, Threshold };
+int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction, bool pIsSaveToFile)
 {
 	Utilites util;
 	FeatureLBP featureLBP;
@@ -2201,13 +2225,141 @@ int FaceTrackDB::aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd
 			//vImageMats.push_back(vImageMat);
 
 			vFeature = util.convertMatToV2I(vImageMat);
-
+			switch (pTypeFunction)
+			{
+			case vnt::Not:
+				vAVGFeature = aSum(vAVGFeature, vFeature);
+				break;
+			case vnt::Linear:
+				break;
+			case vnt::Gaussian:
+				break;
+			case vnt::Threshold:
+				if (iPose < pMinPose || pMaxPose < iPose)
+					iPose = 1;
+				vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
+				break;
+			case vnt::Filter:
+				break;
+			default:
+				vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
+				break;
+			}
 			// Optional
-			if (iPose < pMinPose || pMaxPose < iPose)
-				iPose = 1;
-			vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
 			//vAVGFeatureAll = aSumAfterMul(vAVGFeature, vFeature, std::atoi(vPose.c_str()));
 
+		}
+		ifImage.close();
+		//ifPose.close();
+		//ifPoseName.close();
+
+		//\\ Tinh vector trung binh cho mot facetrack.
+		vAVGFeature = aDiv(vAVGFeature, iFaceCount * iTotalPose);
+		if (pIsSaveToFile)
+		{
+			//\\ Chuyen doi vector 2 chieu thanh doi tuong Mat.
+			cv::Mat face = util.convertV2DToMat(vAVGFeature, (int)vAVGFeature[0].size(), (int)vAVGFeature.size());
+			std::string vDBname = mDBFeatureName + "0";
+			//\\ Ghi vector trung binh.
+			util.writeMatBasic(face, vDatabasePath + vFaceTrackName + "/" + vDBname + mDBFeatureType);
+			//\\ Ghi ten vector trung binh.
+			//ofImage << vDBname;
+			//ofPose << vSumPose;
+			//\\ Ghi file text.
+			util.writeMatDouble(face, vDatabasePath + vFaceTrackName + "/" + vDBname + ".txt");
+		}
+	}
+
+	////\\ Tinh vector trung binh cho toan bo anh trong tat ca facetrack.
+	//vAVGFeatureAll = aDiv(vAVGFeatureAll, iFaceCountAll);
+
+	return pNumFaceTrackEnd + 1 - pNumFaceTrackStart;
+}
+
+//\\ (Use) Khoi tao database. pTypeFunction: enum TypeFunction { Not, Linear, Gaussian, Threshold };
+int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction, bool pIsSaveToFile)
+{
+	Utilites util;
+	pMinPose = mMaxPose - pMinPose;
+	pMaxPose = mMaxPose - pMaxPose;
+	FeatureLBP featureLBP;
+	std::string vDataSetPath = pSourcePath + mDataSetFolder + "/"; 
+	std::string vFacetrackPath = pSourcePath + mFaceTracksFolder + "/";
+	std::string vDatabasePath = pSavePath + mDBFeatureFolder + "/";
+	//\\ Tao thu muc database.
+	std::string vFolderPath = util.replaceAll(vDatabasePath, "/", "\\");
+	util.makeDir(vFolderPath);
+	////\\ Khoi tao vector dac trung trung binh cho tat ca facetrack.
+	//std::vector<std::vector<double>> vAVGFeatureAll = aInitFeature(0.0);
+	//int iFaceCountAll = 0;
+	//\\ Doc tung facetrack.
+	for (size_t i = pNumFaceTrackStart; i <= pNumFaceTrackEnd; i++)
+	{
+		std::string vFaceTrackName = mFaceTrackName + std::to_string(i);
+		//std::vector<std::string> vFileNames;
+		std::vector<cv::Mat> vImageMats;
+
+		util.makeDir(vFolderPath + vFaceTrackName);
+
+		//std::vector<int> vPoses;
+		//std::vector<std::string> vPoseNames;
+
+		//\\ Doc ten file anh va pose tuong ung.
+		std::ifstream ifImage(vDataSetPath + vFaceTrackName + "/" + mImageName + mFileType);
+		std::ifstream ifPose(vDataSetPath + vFaceTrackName + "/" + mPoseName + mFileType);
+		//std::ifstream ifPoseName(vDataSetPath + vFaceTrackName + "/" + mPoseNameName + mFileType);
+		std::string vFileName;
+		std::string vPose;
+		//std::string vPoseName;
+		cv::Mat vImageMat;
+		//\\ Khoi tao vector dac trung trung binh cho mot facetrack.
+		std::vector<std::vector<double>> vAVGFeature = aInitFeature(0.0);
+		std::vector<std::vector<int>> vFeature;
+		int iFaceCount = 0;
+		int iPose = 0;
+		int iTotalPose = 0;
+		while (!ifImage.eof())
+		{
+			std::getline(ifImage, vFileName);
+			std::getline(ifPose, vPose);
+			iPose = std::atoi(vPose.c_str());
+			iTotalPose += iPose;
+			//std::getline(ifPoseName, vPoseName);
+			vImageMat = util.readMatBasic(vFacetrackPath + vFaceTrackName + "/" + vFileName + mFeatureType);
+			iFaceCount++;
+			//iFaceCountAll++;
+
+			//vFileNames.push_back(vFileName);
+			//vPoses.push_back(std::atoi(vPose.c_str()));
+			//vPoseNames.push_back(vPoseName);
+			//vImageMats.push_back(vImageMat);
+
+			vFeature = util.convertMatToV2I(vImageMat);
+			switch (pTypeFunction)
+			{
+			case vnt::Not:
+				vAVGFeature = aSum(vAVGFeature, vFeature);
+				break;
+			case vnt::Linear:
+				vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
+				break;
+			case vnt::Gaussian:
+				vAVGFeature = aSumAfterGaussian(vAVGFeature, vFeature, iPose);
+				break;
+			case vnt::Threshold:
+				if (iPose < pMinPose || pMaxPose < iPose)
+					iPose = 1;
+				vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
+				break;
+			case vnt::Filter:
+				if (pMinPose <= iPose && iPose <= pMaxPose)
+					vAVGFeature = aSum(vAVGFeature, vFeature);
+				break;
+			default:
+				vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
+				break;
+			}
+			
 		}
 		ifImage.close();
 		//ifPose.close();

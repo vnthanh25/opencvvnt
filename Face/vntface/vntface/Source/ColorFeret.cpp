@@ -492,7 +492,7 @@ std::vector<int> ColorFeret::aGetsAllPose1(const std::string pId)
 			for (size_t k = 0; k < metas.size(); k++)
 			{
 				int angle = std::atoi(angles[j].c_str());
-				angle = 100 - abs(angle);
+				angle = mMaxPose - abs(angle);
 				result.push_back(angle);
 			}
 		}
@@ -523,7 +523,7 @@ std::vector<std::string> ColorFeret::aGetsAllPose2(const std::string pId)
 			for (size_t k = 0; k < metas.size(); k++)
 			{
 				int angle = std::atoi(angles[j].c_str());
-				angle = 100 - abs(angle);
+				angle = mMaxPose - abs(angle);
 				result.push_back(std::to_string(angle));
 			}
 		}
