@@ -190,7 +190,7 @@ cv::Mat FeatureLBP::LBP(const cv::Mat image, int pad)
 			if (center <= (int)image.at<uchar>(row, col - pad))
 				center_lbp += 128;
 
-			lbp.at<uchar>(row - 1, col - 1) = center_lbp;
+			lbp.at<uchar>(row - pad, col - pad) = center_lbp;
 		}
 	}
 	return lbp;
