@@ -3,6 +3,7 @@ extern "C" {
 #include <vl/lbp.h>
 }
 
+#include "Header\Matching.h"
 #include "Header\FeatureLBP.h"
 #include <fstream>
 
@@ -79,34 +80,29 @@ std::vector<std::vector<float>> vlfeat(int convert)
 	return fVL;
 }
 
-void writeFile(std::string fileName)
-{
-}
 // Function main
 int main(void)
 {
-	VL_PRINT("Starting ...");
 	vnt::Utilites util;
+	vnt::Matching vMatching;
 	//\\ Duong dan den nguon du lieu.
 	std::string vExePath = util.GetExePath() + "\\";
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	VL_PRINT("Starting ...");
+	cout << endl;
+	cout << vExePath << endl;
+	cout << vPath << endl;
 
-	// VLFeat.
-	std::vector<std::vector<float>> lbpvl = vlfeat(1);
-	cv::Mat lbpvlM = util.convertV2FToMat(lbpvl, lbpvl[0].size(), lbpvl.size());
-	util.writeMatFloat(lbpvlM, vPath + "lbpvlM.txt");
+	//\\ Khoi tao Feature
+	//vMatching.aFeaturesInit();
 
-	std::vector<std::vector<float>> lbpvl2 = vlfeat(2);
-	cv::Mat lbpvlM2 = util.convertV2FToMat(lbpvl2, lbpvl2[0].size(), lbpvl2.size());
-	util.writeMatFloat(lbpvlM2, vPath + "lbpvlM2.txt");
-
-	std::vector<std::vector<int>> lbp = LBP();
-	cv::Mat lbpM = util.convertV2IToMat(lbp, lbp[0].size(), lbp.size());
-	util.writeMatFloat(lbpM, vPath + "lbpM.txt");
+	//\\ Khoi tao database.
+	vMatching.Feret();
 
 	cv::waitKey();
 	cout << vExePath << endl;
 	cout << vPath << endl;
+	cout << "End." << endl;
 	std::string end;
 	cin >> end;
 	return 0;

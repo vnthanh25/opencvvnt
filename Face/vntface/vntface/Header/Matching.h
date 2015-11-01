@@ -103,6 +103,7 @@ namespace vnt
 		double aMatchingHeadPoseMAP1(std::string pDatabasePath);
 
 		double aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseFeaturePath, int pCountMax, int pNumPerson, int pDiv);
+		double aMatchingMAP(std::string pDatabasePath, int pNumPerson, int pDiv, std::string pLogPath);
 		//\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
 		void aMatchingHeadPoseMAP();
 		void aMatchingColorFeretMAP();

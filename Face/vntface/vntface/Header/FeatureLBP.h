@@ -2,6 +2,11 @@
 VNThanh
 - Rut trich dac trung.
 */
+extern "C" {
+#include <vl/generic.h>
+#include <vl/lbp.h>
+}
+
 #include "opencv2\core\core.hpp"
 #include "opencv2\highgui\highgui.hpp"
 #include "opencv2\imgproc\imgproc.hpp"
@@ -48,6 +53,8 @@ namespace vnt
 		void showLBPUniValues();
 		//\\ Tinh dac trung LBP cho 1 anh xam, chia lam n x n vung va co ban kinh pad.
 		std::vector<std::vector<int>> LBP(const cv::Mat image, int n, int pad);
+		//\\ Tinh dac trung LBP cho 1 anh xam, chia lam n x n vung va co ban kinh pad.
+		std::vector<std::vector<float>> LBPVLFeat(const cv::Mat image);
 
 		//\\ Tao Mat voi gia tri.
 		cv::Mat createMat(int width, int height);

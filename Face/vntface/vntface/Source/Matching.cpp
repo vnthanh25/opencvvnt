@@ -712,7 +712,7 @@ void Matching::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::
 {
 	Utilites util;
 	// Tao thu muc.
-	util.makeDir(pSavePath);
+	util.makeDir(util.replaceAll(pSavePath, "/", "\\"));
 	//\\ Khoi tao Database:
 	FaceTrackDB vFaceTrackDB;
 	int iMinPose = 90;
@@ -1426,6 +1426,153 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 	return result;
 }
 
+double Matching::aMatchingMAP(std::string pDatabasePath, int pNumPerson, int pDiv, std::string pLogPath)
+{
+	double result;
+	Utilites util;
+	FaceTrackDB vFaceTrackDB;
+	ofstream ofLog(pLogPath + "Matching.txt", std::ofstream::app);
+	std::string vStartTime = util.currentDateTime();
+	vStartTime = util.subStringFirstAfter(vStartTime, ".");
+	std::cout << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	ofLog << "Matching: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+
+
+	size_t n = pNumPerson;
+	//\\ Doc csdl: Facetrack 0->15 la csdl (serie1) va 16->29 la test (serie2).
+	//vFaceTrackDB.aDatabaseAndFeatureRead(0, n * pDiv - 1, vDataSetPath + pDatabasePath, vDataSetPath + pDatabaseFeaturePath);
+	int vFeatureCount = 1;
+	vFaceTrackDB.aDatabaseRead(0, n * pDiv - 1, pDatabasePath, vFeatureCount);
+
+	std::vector<std::vector<std::vector<std::vector<double>>>> vDatabase = vFaceTrackDB.aGetFaceTrackDatabase();
+
+	double vMAPAll = 0;
+	int vCountTrue = 0;
+	//\\ Lap n mat nguoi.
+	for (size_t i = 0; i < n * pDiv; i++)
+	{
+		std::vector<std::vector<std::vector<double>>> vQuery = vDatabase[i];
+		////\\ Lay feature cua query.
+		//std::vector<std::vector<std::vector<int>>> vFeatureQuery;
+		//if (vFeatrues.size() > 0)
+		//{
+		//	vFeatureQuery = vFeatrues[i];
+		//}
+		////\\ Lay filename cua query.
+		//std::vector<std::string> vPoseName = vPoseNames[i];
+		//\\ So khop.
+		std::vector<int> vMatchingIndex = vFaceTrackDB.aMeanCosMatchingIndex(vQuery, vDatabase, pLogPath);
+		//std::vector<int> vMatchingIndex = vFaceTrackDB.aLpMatchingIndex1(vQuery, vDatabase, vFeatureQuery, vFeatrues, vPoseName, vPoseNames, pCountMax, 1);
+
+		//\\ Tinh do chinh xa.
+		double vMAP = 0;
+		double Nr = 0;
+		size_t vMatchingIndexSize = vMatchingIndex.size();
+		std::cout << "vMatchingIndex: query:" + std::to_string(i);
+		//of << "vMatchingIndex: query:" + std::to_string(i);
+		//ofIdx << "vMatchingIndex: query:" + std::to_string(i);
+		ofLog << "vMatchingIndex: query:" + std::to_string(i);
+		std::string vMatch = "01";
+		std::string vMatchResult = "";
+		//\\ Tim gia tri index dung trong ket qua MatchingIndex tra ve.
+		for (size_t k = 0; k < vMatchingIndexSize; k++)
+		{
+			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
+			//if (i % n == vMatchingIndex[k] % n)
+			//if (((i / pDiv * pDiv) == vMatchingIndex[k]) || ((i / pDiv * pDiv + 1) == vMatchingIndex[k]))
+			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thì iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
+			if ((iStartIndex <= vMatchingIndex[k]) && (vMatchingIndex[k] < iStartIndex + pDiv))
+			{
+				//\\ Tinh AP.
+				Nr++;
+				vMAP += Nr / (k + 1);
+				//std::cout << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				//of << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				//ofIdx << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				ofLog << " facetrack:" + std::to_string(vMatchingIndex[k]) + " index:" + std::to_string(k);
+				vMatchResult += std::to_string(k);
+			}
+		}
+		//vMAPAll += vMAP / Nr;
+		vMAP /= Nr;
+		vMAPAll += vMAP;
+		std::cout << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
+		//of << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
+		//ofIdx << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
+		ofLog << " AP=(1 + 2/(index+1))/2: [" + std::to_string(vMAP) + "]";
+		if (vMatch == vMatchResult)
+		{
+			vCountTrue++;
+			std::cout << " (=)";
+			//of << " (=)";
+			//ofIdx << " (=)";
+			ofLog << " (=)";
+		}
+		else
+		{
+			std::cout << " (*)";
+			//of << " (*)";
+			//ofIdx << " (*)";
+			ofLog << " (*)";
+		}
+		std::cout << std::endl;
+		//of << std::endl;
+		//of << std::endl;
+		//ofIdx << std::endl;
+		//ofIdx << std::endl;
+		ofLog << std::endl;
+		ofLog << std::endl;
+	}
+	//\\ Tinh AP trung binh. AP chia m mat nguoi dung. (m = 6).
+	vMAPAll /= (n * pDiv);
+
+	//\\ Hien thi thoi gian ket thuc.
+	std::string vEndTime = util.currentDateTime();
+	vEndTime = util.subStringFirstAfter(vEndTime, ".");
+	std::cout << "CountTrue: " << vCountTrue << " Size: " << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	std::cout << "Matching: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;
+	//of << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	//of << "Matching: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	//of << std::endl;
+	//of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//of << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//of << std::endl;
+	//of.close();
+
+	//ofIdx << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	//ofIdx << "Matching: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	//ofIdx << std::endl;
+	//ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//ofIdx << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	//ofIdx << std::endl;
+	//ofIdx.close();
+
+	ofLog << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	ofLog << "Matching: " << pDatabasePath + " : " << util.currentDateTime() << std::endl;;
+	ofLog << std::endl;
+	ofLog << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofLog << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofLog << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofLog << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofLog << "---------------------------------------------------------------------------------------------------------" << std::endl;
+	ofLog << std::endl;
+	ofLog.close();
+
+	//ofstream ofSum(vFacetrackPath + "MatchingSum.txt", std::ofstream::app);
+	//ofSum << "Matching: " << pDatabasePath << std::endl;;
+	//ofSum << "CountTrue:" << vCountTrue << " Size:" << n << "x" << pDiv << " Time:" << util.subTime(vStartTime, vEndTime) << " MeanCos: " << vMAPAll << std::endl;
+	//ofSum.close();
+
+	result = vMAPAll;
+	return result;
+}
+
 //\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
 void Matching::aMatchingColorFeretMAP()
 {
@@ -1452,25 +1599,50 @@ void Matching::Feret()
 	std::string vSourePath = vPath + "/VNTDataSet/ColorFeret/";
 	std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
 
+
+	//\\ Khoi tao feature.
+	FaceTrackDB vFaceTrackDB;
+	vFaceTrackDB.aFeatureInit(0, 1983, vSourePath + "DataSet/", vSavePath + "FaceTracks/");
+
 	//\\ Khoi tao Database
 	std::string vFolderName;
-	//// Not.
-	//vFolderName = "Not";
-	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Not);
-	//// Linear.
-	//vFolderName = "Linear";
-	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Linear);
-	//// Gaussian.
-	//vFolderName = "Gaussian";
-	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Gaussian);
-	//// Threshold.
-	//vFolderName = "Threshold";
-	//vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Threshold);
+	// Not.
+	vFolderName = "Not";
+	vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Not);
+	// Linear.
+	vFolderName = "Linear";
+	vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Linear);
+	// Gaussian.
+	vFolderName = "Gaussian";
+	vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Gaussian);
+	// Threshold.
+	vFolderName = "Threshold";
+	vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Threshold);
 	// Filter.
 	vFolderName = "Filter";
 	vMatching.aDatabaseInit(0, 1983, vSourePath, vSavePath + vFolderName + "/", Filter);
-	//vMatching.aDatabaseInitFull(vSourePath);
 
 	//\\ So khop
-	//vMatching.aMatchingHeadPose();
+	std::string vDatabasePath;
+	std::string vLogPath;
+	// Not.
+	vDatabasePath = vSourePath + "Not/Database/";
+	vLogPath = vSavePath + "Not/";
+	double vMAPNot = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	// Linear.
+	vDatabasePath = vSourePath + "Linear/Database/";
+	vLogPath = vSavePath + "Linear/";
+	double vMAPLinear = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	// Gaussian.
+	vDatabasePath = vSourePath + "Gaussian/Database/";
+	vLogPath = vSavePath + "Gaussian/";
+	double vMAPGaussian = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	// Threshold.
+	vDatabasePath = vSourePath + "Threshold/Database/";
+	vLogPath = vSavePath + "Threshold/";
+	double vMAPThreshold = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	// Filter.
+	vDatabasePath = vSourePath + "Filter/Database/";
+	vLogPath = vSavePath + "Filter/";
+	double vMAPFilter = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 }

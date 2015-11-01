@@ -242,6 +242,45 @@ std::vector<std::vector<int>> FeatureLBP::LBP(const cv::Mat image, int n, int pa
 	}
 	return result;
 }
+//\\ Tinh dac trung LBP cho 1 anh xam, chia lam n x n vung va co ban kinh pad.
+std::vector<std::vector<float>> FeatureLBP::LBPVLFeat(const cv::Mat pImage)
+{
+	std::vector<std::vector<float>> result;
+	// Convert value from uchar to float.
+	float* data = new float[pImage.rows * pImage.cols];
+	for (size_t i = 0; i < pImage.rows; i++)
+	{
+		for (size_t j = 0; j < pImage.cols; j++)
+		{
+			uchar c = pImage.at<uchar>(i, j);
+			float f = (float)c;
+			data[i*j + j] = f;
+		}
+	}
+
+	VlLbp* lbp = vl_lbp_new(VlLbpMappingType::VlLbpUniform, false);
+	vl_size cellSize = vl_lbp_get_dimension(lbp);
+	const int numColumns = floor(pImage.cols / cellSize);
+	const int numRows = floor(pImage.rows / cellSize);
+	const int featureSize = numColumns * numRows * cellSize;
+
+	float* features = new float[featureSize];
+	vl_lbp_process(lbp, features, data, pImage.cols, pImage.rows, cellSize);
+
+	for (size_t i = 0; i < numRows * numColumns; i++)
+	{
+		std::vector<float> vVLFeat;
+		for (size_t j = 0; j < cellSize; j++)
+		{
+			vVLFeat.push_back(features[i*j + j]);
+		}
+		result.push_back(vVLFeat);
+	}
+
+	delete[] features;
+	delete[] data;
+	return result;
+}
 
 
 //\\ Tao Mat voi gia tri.

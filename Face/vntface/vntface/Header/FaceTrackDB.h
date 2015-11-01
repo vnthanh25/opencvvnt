@@ -157,7 +157,9 @@ namespace vnt
 		int aFeatureInit4(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<std::string>> pFileNames, std::vector<std::vector<std::string>> pTiltPanPoses, std::vector<std::vector<std::string>> pPoseNames, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ (Use) Khoi tao vector dac trung.
 		int aFeatureInit5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, bool pIsSaveToFile = true);
-	
+		//\\ (Use) Khoi tao vector dac trung.
+		int aFeatureInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pSavePath, bool pIsSaveToFile = true);
+
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aFeatureRead1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
@@ -214,6 +216,8 @@ namespace vnt
 		int aDatabaseAndFeatureRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, std::string pFeaturePath);
 		//\\ (Use) Doc cac vector dac trung trung binh va doc tat ca feature tuong ung tu file va dua vao csdl.
 		int aDatabaseAndFeatureRead5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, std::string pFeaturePath);
+		//\\ (Use) Doc cac vector dac trung trung binh va doc tat ca feature tuong ung tu file va dua vao csdl.
+		int aDatabaseRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, int pFeatureCount);
 
 		//\\ Sap xep danh sach facetrack theo facetrack truy van. Moi facetrack duoc dai dien bang 1 vector dac trung trung binh.
 		std::vector<std::vector<std::vector<std::vector<double>>>> aMeanCosMatching(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks);
@@ -221,6 +225,7 @@ namespace vnt
 		//\\ Sap xep danh sach vector dac trung trung binh.
 		std::vector<int> FaceTrackDB::aMeanCosMatchingIndex2(std::vector<std::vector<double>> pFeature, std::vector<std::vector<std::vector<double>>> pFeatures);
 		std::vector<int> aMeanCosMatchingIndex3(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::vector<std::vector<std::vector<int>>> pFeatureFaceTrack, std::vector<std::vector<std::vector<std::vector<int>>>> pFeatureFaceTracks, std::vector<std::string> pPoseName, std::vector<std::vector<std::string>> pPoseNames, int pCountMax);
+		std::vector<int> aMeanCosMatchingIndex(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::string pLogPath);
 		//\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
 		std::vector<std::vector<cv::Mat>> aMeanCos(std::vector<cv::Mat> pFaceTrack, std::vector<int> pPose, std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses);
 		//\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
@@ -242,6 +247,8 @@ namespace vnt
 
 		//\\ (Use) Luu ra file: vector dac trung
 		void aSaveToFile(cv::Mat pFace, std::string pFileName, std::string pSavePath);
+		//\\ (Use) Luu ra file: vector dac trung
+		void aSaveToFile0(cv::Mat pFace, std::string pFileName, std::string pSavePath);
 		//\\ Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
 		void aSaveToFile1(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath);
 		//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.

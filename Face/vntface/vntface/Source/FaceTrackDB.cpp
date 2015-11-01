@@ -1074,6 +1074,98 @@ int FaceTrackDB::aFeatureInit5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 	}
 	return pNumFaceTrackEnd + 1 - pNumFaceTrackStart;
 }
+//\\ (Use) Khoi tao vector dac trung.
+int FaceTrackDB::aFeatureInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pSavePath, bool pIsSaveToFile)
+{
+	Utilites util;
+	FeatureLBP featureLBP;
+	//\\ Tao thu muc.
+	//std::string vSavePath = pSavePath + mFaceTracksFolder + "/";
+	std::string vFolderPath = util.replaceAll(pSavePath, "/", "\\");
+	util.makeDir(vFolderPath);
+	//std::string vDataSetPath = pSavePath + mDataSetFolder + "/";
+	//\\ Doc tung facetrack.
+	for (size_t i = pNumFaceTrackStart; i <= pNumFaceTrackEnd; i++)
+	{
+		std::string vFaceTrackName = mFaceTrackName + std::to_string(i);
+		std::string vFaceTrackPath = pSavePath + vFaceTrackName + "/";
+		//std::vector<std::string> vFileNames;
+		//std::vector<cv::Mat> vImageMats;
+
+		util.makeDir(vFolderPath + "\\" + vFaceTrackName);
+
+		//std::vector<int> vPoses;
+		//std::vector<std::string> vPoseNames;
+
+		//\\ Doc ten file anh va pose tuong ung.
+		std::ifstream ifImage(pDataSetPath + vFaceTrackName + "/" + mImageName + mFileType);
+		//std::ifstream ifPose(vFaceTrackPath + mPoseName + mFileType);
+		//std::ifstream ifPoseName(vFaceTrackPath + mPoseNameName + mFileType);
+		std::string vFileName;
+		//std::string vPose;
+		//std::string vPoseName;
+		while (!ifImage.eof())
+		{
+			std::getline(ifImage, vFileName);
+			//std::getline(ifPose, vPose);
+			//std::getline(ifPoseName, vPoseName);
+			cv::Mat vImageMat;
+			vImageMat = util.readMatBasic(pDataSetPath + vFaceTrackName + "/" + vFileName + mImageType);
+			//vFileNames.push_back(vFileName);
+			//vPoses.push_back(std::atoi(vPose.c_str()));
+			//vPoseNames.push_back(vPoseName);
+			//vImageMats.push_back(vImageMat);
+
+			//std::vector<std::vector<int>> vFeature = featureLBP.LBP(vImageMat, 3, 1);
+			std::vector<std::vector<float>> vFeature = featureLBP.LBPVLFeat(vImageMat);
+			if (pIsSaveToFile)
+			{
+				//\\ Chuyen doi vector 2 chieu thanh doi tuong Mat.
+				cv::Mat vFeatureFile = util.convertV2FToMat(vFeature, vFeature[0].size(), vFeature.size());
+				aSaveToFile0(vFeatureFile, vFileName, vFaceTrackPath);
+			}
+		}
+		ifImage.close();
+		//ifPose.close();
+		//ifPoseName.close();
+
+		//mFileNames.push_back(vFileNames);
+		//mFaceTracks.push_back(vImageMats);
+		//mPoses.push_back(vPoses);
+		//mPoseNames.push_back(vPoseNames);
+
+
+
+
+		////\\ Tao thu muc cho facetrack thu i.
+		////std::string faceTrackName = mFaceTrackName + std::to_string(i);
+		//util.makeDir(vFolderPath + "\\" + vFaceTrackName);
+		////faceTrackNames.push_back(faceTrackName);
+		////\\ Lay danh sach vector dac trung cua mot facetrack.
+		//std::vector<std::vector<std::vector<int>>> features = aGetsFeature(vImageMats);
+		////mFacetrackFeatures.push_back(features);
+		////\\ Ghi ra file: cac vector dac trung cua facetrack thu i.
+		//size_t featuressize = features.size();
+		//int sumPose = 0;
+		//for (size_t j = 0; j < featuressize; j++)
+		//{
+		//	if (pIsSaveToFile)
+		//	{
+		//		//\\ Chuyen doi vector 2 chieu thanh doi tuong Mat.
+		//		cv::Mat vFeatureFile = util.convertV2IToMat(features[j], features[j][0].size(), features[j].size());
+		//		aSaveToFile(vFeatureFile, vFileName, vSavePath + vFaceTrackName + "/");
+		//	}
+		//	//\\ Cong them gia tri pose tuong ung vao ten file.
+		//	//sumPose += pPoses[i][j];
+		//}
+		////if (pIsSaveToFile)
+		////{
+		////	//\\ Ghi thong tin ve ten file anh va pose.
+		////	aSaveToFile2(mFileNames[i], mPoses[i], mPoseNames[i], vSavePath + faceTrackName + "/");
+		////}
+	}
+	return pNumFaceTrackEnd + 1 - pNumFaceTrackStart;
+}
 
 //\\ Doc cac vector dac trung tu file va dua vao csdl.
 int FaceTrackDB::aFeatureRead1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath)
@@ -2295,11 +2387,16 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 	//\\ Doc tung facetrack.
 	for (size_t i = pNumFaceTrackStart; i <= pNumFaceTrackEnd; i++)
 	{
+		cout << std::to_string(i) << endl;
+
 		std::string vFaceTrackName = mFaceTrackName + std::to_string(i);
 		//std::vector<std::string> vFileNames;
 		std::vector<cv::Mat> vImageMats;
 
 		util.makeDir(vFolderPath + vFaceTrackName);
+
+
+		cout << std::to_string(i) + vFaceTrackName << endl;
 
 		//std::vector<int> vPoses;
 		//std::vector<std::string> vPoseNames;
@@ -2324,6 +2421,9 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 			std::getline(ifPose, vPose);
 			iPose = std::atoi(vPose.c_str());
 			iTotalPose += iPose;
+
+			cout << std::to_string(iPose) << endl;
+
 			//std::getline(ifPoseName, vPoseName);
 			vImageMat = util.readMatBasic(vFacetrackPath + vFaceTrackName + "/" + vFileName + mFeatureType);
 			iFaceCount++;
@@ -2352,6 +2452,7 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 				vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
 				break;
 			case vnt::Filter:
+				cout << "Filter" + std::to_string(iPose) << endl;
 				if (pMinPose <= iPose && iPose <= pMaxPose)
 					vAVGFeature = aSum(vAVGFeature, vFeature);
 				break;
@@ -2674,6 +2775,94 @@ int FaceTrackDB::aDatabaseAndFeatureRead5(int pNumFaceTrackStart, int pNumFaceTr
 		mPoseNames.push_back(vPoseNames);
 		mFaceTrackDatabase.push_back(vFaceTrackDatabases);
 		mFacetrackFeatures.push_back(vFacetrackFeatures);
+	}
+
+	result = mFaceTrackDatabase.size();
+	return result;
+}
+//\\ (Use) Doc cac vector dac trung trung binh va doc tat ca feature tuong ung tu file va dua vao csdl.
+int FaceTrackDB::aDatabaseRead(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, int pFeatureCount)
+{
+	int result = 0;
+	//mFileNames.clear();
+	//mFaceTrackDatabase.clear();
+	Utilites util;
+	mFolderPath = pSourcePath;
+	//std::string vDataSetPath = pFeaturePath + mDataSetFolder + "/";
+	//\\ Doc tung facetrack.
+	for (size_t i = pNumFaceTrackStart; i <= pNumFaceTrackEnd; i++)
+	{
+		std::string vFaceTrackName = mFaceTrackName + std::to_string(i);
+		//std::string vDBFeaturePath = mFolderPath + mDBFeatureFolder + "/" + vFaceTrackName + "/";
+		//std::vector<std::string> vFileNames;
+		std::vector<std::vector<std::vector<double>>> vFaceTrackDatabases;
+		//std::vector<int> vPoses;
+		//std::vector<std::string> vPoseNames;
+		//std::ifstream ifImage(vDataSetPath + vFaceTrackName + "/" + mImageName + mFileType);
+		//std::ifstream ifPose(vDBFeaturePath + mPoseName + mFileType);
+		//std::string vFileName;
+		//std::string vPose;
+		//std::string vPoseName;
+		cv::Mat vImageMat;
+
+		for (size_t n = 0; n < pFeatureCount; n++)
+		{
+			vImageMat = util.readMatBasic(pSourcePath + vFaceTrackName + "/" + mFeatureName + std::to_string(n) + mDBFeatureType);
+			vFaceTrackDatabases.push_back(util.convertMatToV2D(vImageMat));
+		}
+
+		//\\ Doc tat ca dac trung tuong ung vao database.
+		//std::vector<std::vector<std::vector<int>>> vFacetrackFeatures;
+		//std::string vFeaturePath = pFeaturePath + mFaceTracksFolder + "/" + vFaceTrackName + "/";
+		//std::ifstream ifImage = std::ifstream(pDataSetPath + vFaceTrackName + "/" + mImageName + mFileType);
+		//std::ifstream ifPose = std::ifstream(pDataSetPath + vFaceTrackName + "/" + mPoseName + mFileType);
+		//std::ifstream ifPoseName(pDataSetPath + vFaceTrackName + "/" + mPoseNameName + mFileType);
+		//while (!ifImage.eof())
+		//{
+		//	std::getline(ifImage, vFileName);
+		//	std::getline(ifPose, vPose);
+		//	std::getline(ifPoseName, vPoseName);
+		//	//\\ Doc ten file anh va pose tuong ung cua feature.
+		//	vFileNames.push_back(vFileName);
+		//	vPoses.push_back(std::atoi(vPose.c_str()));
+		//	vPoseNames.push_back(vPoseName);
+		//	vImageMat = util.readMatBasic(vFeaturePath + vFileName + mFeatureType);
+		//	vFacetrackFeatures.push_back(util.convertMatToV2I(vImageMat));
+		//}
+		//ifImage.close();
+		//ifPose.close();
+		//ifPoseName.close();
+		//\\ Sap xep cac vector dac trung theo pose giam dan.
+		//size_t vPosesSize = vPoses.size();
+		//for (size_t j = 0; j < vPosesSize - 1; j++)
+		//{
+		//	for (size_t k = j + 1; k < vPosesSize; k++)
+		//	{
+		//		if (vPoses[j] < vPoses[k])
+		//		{
+		//			int tempPose = vPoses[j];
+		//			vPoses[j] = vPoses[k];
+		//			vPoses[k] = tempPose;
+
+		//			std::string tempName = vFileNames[j];
+		//			vFileNames[j] = vFileNames[k];
+		//			vFileNames[k] = tempName;
+
+		//			std::string tempPoseName = vPoseNames[j];
+		//			vPoseNames[j] = vPoseNames[k];
+		//			vPoseNames[k] = tempPoseName;
+
+		//			std::vector<std::vector<int>> tempMat = vFacetrackFeatures[j];
+		//			vFacetrackFeatures[j] = vFacetrackFeatures[k];
+		//			vFacetrackFeatures[k] = tempMat;
+		//		}
+		//	}
+		//}
+		//mFileNames.push_back(vFileNames);
+		//mPoses.push_back(vPoses);
+		//mPoseNames.push_back(vPoseNames);
+		mFaceTrackDatabase.push_back(vFaceTrackDatabases);
+		//mFacetrackFeatures.push_back(vFacetrackFeatures);
 	}
 
 	result = mFaceTrackDatabase.size();
@@ -3086,6 +3275,137 @@ std::vector<int> FaceTrackDB::aMeanCosMatchingIndex3(std::vector<std::vector<std
 
 	return vFaceTrack;
 }
+
+//\\ (Use) (1,2) Sap xep danh sach facetrack theo facetrack truy van.
+std::vector<int> FaceTrackDB::aMeanCosMatchingIndex(std::vector<std::vector<std::vector<double>>> pFaceTrack, std::vector<std::vector<std::vector<std::vector<double>>>> pFaceTracks, std::string pLogPath)
+{
+	std::vector<int> result;
+	if (pFaceTracks.size() == 0)
+		return result;
+
+	Utilites util;
+	size_t facetracksize = pFaceTracks.size();
+	//std::vector<int> vFaceTrackMatch(facetracksize);
+	std::vector<double> vFaceTrackMatch(facetracksize);
+	std::vector<int> vFaceTrack(facetracksize);
+	std::vector<double> resultmeancos;
+	std::vector<int> resultDB;
+	//\\ Tinh khoang cach mean-cos giua 2 vector dac trung trung binh.
+	double meancos;
+	//\\ Lap qua trung facetrack de tinh khoang cach.
+
+	//int vFolderPathIndex = mFolderPath.rfind("/Pose/");
+	//if (vFolderPathIndex == -1)
+	//{
+	//	vFolderPathIndex = mFolderPath.rfind("/NotPose/");
+	//}
+	//std::string vSPose = mFolderPath.substr(vFolderPathIndex);
+	//vSPose = util.replaceAll(vSPose, "/", "");
+	//std::string vFacetrackPath = mFolderPath.substr(0, vFolderPathIndex + 1);
+	////vFacetrackPath = mFolderPath.substr(vFolderPathIndex);
+	////vFacetrackPath = mFolderPath.substr(vFolderPathIndex) + vFacetrackPath;
+	ofstream of(pLogPath + "Matching.txt", std::ofstream::app);
+	//ofstream ofDb(vFacetrackPath + "Matching" + vSPose + ".txt", std::ofstream::app);
+	of << "aCosine: ";
+	//ofDb << "aCosine: ";
+
+	//\\ Lap qua tung vector dac trung trung binh.
+	for (size_t f = 0; f < pFaceTrack.size(); f++)
+	{
+		result.clear();
+		resultmeancos.clear();
+		//\\ Lap qua tung face track.
+		for (size_t i = 0; i < facetracksize; i++)
+		{
+			////\\ Neu so luong vector dac trung cua query lon hon facetrac thu i thi bo qua.
+			//if (f >= pFeatureFaceTracks[i].size())
+			//	continue;
+
+			meancos = aCosine1(pFaceTrack[f], pFaceTracks[i][f]);
+			//meancos = aEuclid(pFaceTrack[f], pFaceTracks[i][f]);
+			//\\ Khoi tao thu tu facetrack.aEuclid
+			vFaceTrack[i] = i;
+
+			////\\ Cach chinh:
+			////\\ Giu lai gia tri so khop cua facetrack.
+			//vFaceTrackMatch[i] += meancos;
+			//of << std::to_string(i) + "(" << std::to_string(meancos) << ") ";
+			//\\ End. Cach chinh.
+
+			std::vector<double> resultmeancostemp;
+			std::vector<int> resulttemp;
+			size_t j = 0;
+			bool find = true;
+			//\\ Chen gia tri menacos vua tinh vao danh sach temp.
+			while (j < resultmeancos.size())
+			{
+				if (find && meancos > resultmeancos[j])
+				{
+					resultmeancostemp.push_back(meancos);
+					resulttemp.push_back(i);
+					find = false;
+				}
+				resultmeancostemp.push_back(resultmeancos[j]);
+				resulttemp.push_back(result[j]);
+				j++;
+			}
+			//\\ Khong tim thay cai nao lon hon meancos.
+			if (find)
+			{
+				resultmeancostemp.push_back(meancos);
+				resulttemp.push_back(i);
+			}
+			//\\ Gan danh sach temp cho danh sach ket qua.
+			resultmeancos = resultmeancostemp;
+			resultmeancostemp.clear();
+			result = resulttemp;
+			resulttemp.clear();
+		}// for i (facetrack)
+
+
+
+		//\\ Cach kiem tra: Giu lai thu tu so khop cua facetrack.
+		for (size_t k = 0; k < result.size(); k++)
+		{
+			int vFaceTrackIndex = result[k];
+			//vFaceTrackMatch[vFaceTrackIndex] += k;//\\ Theo thu tu.
+			vFaceTrackMatch[vFaceTrackIndex] += resultmeancos[k];//\\ Theo meancos.
+			of << std::to_string(k) + ":" + std::to_string(vFaceTrackIndex) + "(" + std::to_string(resultmeancos[k]) + ")\t";
+			//ofDb << std::to_string(k) + ":" + std::to_string(vFaceTrackIndex) + "(" + std::to_string(resultmeancos[k]) + ")\t";
+		}
+		//\\ End. Cach kiem tra.
+
+
+
+		resultDB = result;
+		of << std::endl;
+		//ofDb << std::endl;
+	}// for f (feature).
+
+	//\\ Sap xep thu tu facetrack giam dan.
+	for (size_t i = 0; i < facetracksize - 1; i++)
+	{
+		for (size_t j = i + 1; j < facetracksize; j++)
+		{
+			//if (vFaceTrackMatch[i] > vFaceTrackMatch[j])//\\ Theo thu tu.
+			if (vFaceTrackMatch[i] < vFaceTrackMatch[j])//\\ Theo meancos.
+			{
+				double vTemp = vFaceTrackMatch[i];
+				vFaceTrackMatch[i] = vFaceTrackMatch[j];
+				vFaceTrackMatch[j] = vTemp;
+
+				vTemp = vFaceTrack[i];
+				vFaceTrack[i] = vFaceTrack[j];
+				vFaceTrack[j] = vTemp;
+			}
+		}// for j.
+	}// for i.
+	of.close();
+	//ofDb.close();
+
+	return vFaceTrack;
+}
+
 //\\ Thuat toan mean-cos: input (facetrack truy van, DS facetrack); output (DS facetrack duoc sap xep theo facetrack truy van).
 std::vector<std::vector<cv::Mat>> FaceTrackDB::aMeanCos(std::vector<cv::Mat> pQueryFaceTrack, std::vector<int> pPose, std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses)
 {
@@ -3484,6 +3804,15 @@ void FaceTrackDB::aSaveToFile(cv::Mat pFace, std::string pFileName, std::string 
 	std::string vFileName = util.subStringLastBefor(pFileName, ".");
 	util.writeMatBasic(pFace, pSavePath + vFileName + mFeatureType);
 	util.writeMatInt(pFace, pSavePath + vFileName + ".txt");
+}
+//\\ (Use) Luu ra file: vector dac trung
+void FaceTrackDB::aSaveToFile0(cv::Mat pFace, std::string pFileName, std::string pSavePath)
+{
+	Utilites util;
+	//\\ Ghi anh Mat.
+	std::string vFileName = util.subStringLastBefor(pFileName, ".");
+	util.writeMatBasic(pFace, pSavePath + vFileName + mFeatureType);
+	util.writeMatFloat(pFace, pSavePath + vFileName + ".txt");
 }
 
 //\\ Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
