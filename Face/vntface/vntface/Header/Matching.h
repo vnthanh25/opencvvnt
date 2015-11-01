@@ -106,5 +106,8 @@ namespace vnt
 		//\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
 		void aMatchingHeadPoseMAP();
 		void aMatchingColorFeretMAP();
+
+		// Color Feret.
+		void Feret();
 	};
 }

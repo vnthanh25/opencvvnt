@@ -21,6 +21,7 @@ namespace vnt
 		//\\ Ghi Mat ra file.
 		void writeMatUChar(Mat img, string fname);
 		void writeMatInt(Mat img, string fname);
+		void writeMatFloat(Mat img, string fname);
 		void writeMatDouble(Mat img, string fname);
 		void writeMatBasic(Mat img, string fname);
 		Mat Utilites::readMatBasic(string fname);
@@ -34,6 +35,10 @@ namespace vnt
 		cv::Mat convertV2IToMat(std::vector<std::vector<int>> lbpFeature, int width, int height);
 		//\\ Chuyen Mat thanh vector<vector<int>>.
 		std::vector<std::vector<int>> convertMatToV2I(cv::Mat image);
+		//\\ Chuyen vector<vector<float>> thanh Mat.
+		cv::Mat convertV2FToMat(std::vector<std::vector<float>> lbpFeature, int width, int height);
+		//\\ Chuyen Mat thanh vector<vector<float>>.
+		std::vector<std::vector<float>> convertMatToV2F(cv::Mat image);
 		//\\ Chuyen vector<vector<double>> thanh Mat.
 		cv::Mat convertV2DToMat(std::vector<std::vector<double>> lbpFeature, int width, int height);
 		//\\ Chuyen Mat thanh vector<vector<double>>.

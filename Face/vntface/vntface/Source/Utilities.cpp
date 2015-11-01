@@ -87,6 +87,38 @@ void Utilites::writeMatInt(Mat img, string fname)
 	file << "]";
 	file.release();
 }
+void Utilites::writeMatFloat(Mat img, string fname)
+{
+	FileStorage file(fname, FileStorage::WRITE);
+	//file << "mat" << img;
+	file << "mat" << "[:";
+	string sValue = "";
+	for (int x = 0; x < img.cols; x++)
+	{
+		stringstream out;
+		out << x;
+		string value = out.str();
+		sValue += leftPad(value, 3, ' ') + " ";
+	}
+	file << "{" << "x" << sValue + "-1" << "}";
+	for (int y = 0; y < img.rows; y++)
+	{
+		sValue = "";
+		for (int x = 0; x < img.cols; x++)
+		{
+			float iv = img.at<float>(Point(x, y));
+			stringstream out;
+			out << iv;
+			string value = out.str();
+			sValue += leftPad(value, 3, ' ') + " ";
+		}
+		stringstream out;
+		out << y;
+		file << "{" << "y" << sValue + out.str() << "}";
+	}
+	file << "]";
+	file.release();
+}
 void Utilites::writeMatDouble(Mat img, string fname)
 {
 	FileStorage file(fname, FileStorage::WRITE);
@@ -201,6 +233,36 @@ std::vector<std::vector<int>> Utilites::convertMatToV2I(cv::Mat image)
 		for (size_t x = 0; x < cols; x++)
 		{
 			col.push_back(image.at<int>(y, x));
+		}
+		result.push_back(col);
+	}
+	return result;
+}
+//\\ Chuyen vector<vector<double>> thanh Mat.
+cv::Mat Utilites::convertV2FToMat(std::vector<std::vector<float>> lbpFeature, int width, int height)
+{
+	cv::Mat result = cv::Mat::zeros(height, width, CV_32FC1);
+	for (size_t y = 0; y < lbpFeature.size(); y++)
+	{
+		for (size_t x = 0; x < lbpFeature[y].size(); x++)
+		{
+			result.at<float>(y, x) = lbpFeature[y][x];
+		}
+	}
+	return result;
+}
+//\\ Chuyen Mat thanh vector<vector<double>>.
+std::vector<std::vector<float>> Utilites::convertMatToV2F(cv::Mat image)
+{
+	std::vector<std::vector<float>> result;
+	size_t rows = image.rows;
+	size_t cols = image.cols;
+	for (size_t y = 0; y < rows; y++)
+	{
+		std::vector<float> col;
+		for (size_t x = 0; x < cols; x++)
+		{
+			col.push_back(image.at<float>(y, x));
 		}
 		result.push_back(col);
 	}
