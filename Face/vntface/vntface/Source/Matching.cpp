@@ -1344,7 +1344,7 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
 			//if (i % n == vMatchingIndex[k] % n)
 			//if (((i / pDiv * pDiv) == vMatchingIndex[k]) || ((i / pDiv * pDiv + 1) == vMatchingIndex[k]))
-			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thì iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
+			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thÃ¬ iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
 			if ((iStartIndex <= vMatchingIndex[k]) && (vMatchingIndex[k] < iStartIndex + pDiv))
 			{
 				//\\ Tinh AP.
@@ -1492,7 +1492,7 @@ double Matching::aMatchingMAP(std::string pDatabasePath, int pNumPerson, int pDi
 			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
 			//if (i % n == vMatchingIndex[k] % n)
 			//if (((i / pDiv * pDiv) == vMatchingIndex[k]) || ((i / pDiv * pDiv + 1) == vMatchingIndex[k]))
-			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thì iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
+			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thÃ¬ iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
 			if ((iStartIndex <= vMatchingIndex[k]) && (vMatchingIndex[k] < iStartIndex + pDiv))
 			{
 				//\\ Tinh AP.
@@ -1602,6 +1602,7 @@ void Matching::aMatchingColorFeretMAP()
 	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/", "ColorFeret/", vCountMax, 992, 2);
 }
 
+
 void Matching::aMatchingFull(std::string pSourePath, int pDataSetType, int pElementType)
 {
 	Utilites util;
@@ -1612,6 +1613,8 @@ void Matching::aMatchingFull(std::string pSourePath, int pDataSetType, int pElem
 	//std::string vSourePath = vPath + "/VNTDataSet/ColorFeret/";
 	//std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
 
+	int vPersons = 0;
+	int vDiv = 0;
 	//\\ Khoi tao DataSet.
 	FaceDataSet vFaceDataSet;
 	//FaceDataSetBase* vFaceDataSetBase;
@@ -1620,15 +1623,20 @@ void Matching::aMatchingFull(std::string pSourePath, int pDataSetType, int pElem
 	switch (pDataSetType)
 	{
 	case 1:
+		vPersons = 15;
+		vDiv = 2;
 		vFaceDataSet.aDataSetInit(&vHeadPose, pSourePath + "Download/", pSourePath + "DataSet/");
 		break;
 	case 2:
+		vPersons = 992;
+		vDiv = 2;
 		vFaceDataSet.aDataSetInit(&vColorFeret, pSourePath + "Download/", pSourePath + "DataSet/");
 		break;
 	default:
 		break;
 	}
 
+	int vFacetracks = vPersons * vDiv - 1;
 	//\\ Khoi tao feature.
 	std::string vLBPTitle;
 	switch (pElementType)
@@ -1643,25 +1651,25 @@ void Matching::aMatchingFull(std::string pSourePath, int pDataSetType, int pElem
 		break;
 	}
 	FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aFeatureInitFloat(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pElementType);
+	vFaceTrackDB.aFeatureInitFloat(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pElementType);
 
 	//\\ Khoi tao Database
 	std::string vFolderName;
 	// Not.
 	vFolderName = "Not";
-	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Not);
+	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Not);
 	// Linear.
 	vFolderName = "Linear";
-	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Linear);
+	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Linear);
 	// Gaussian.
 	vFolderName = "Gaussian";
-	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Gaussian);
+	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Gaussian);
 	// Threshold.
 	vFolderName = "Threshold";
-	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Threshold);
+	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Threshold);
 	// Filter.
 	vFolderName = "Filter";
-	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Filter);
+	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Filter);
 
 	//\\ So khop
 	std::string vDatabasePath;
@@ -1669,21 +1677,21 @@ void Matching::aMatchingFull(std::string pSourePath, int pDataSetType, int pElem
 	// Not.
 	vDatabasePath = pSourePath + vLBPTitle + "/" + "Not/Database/";
 	vLogPath = pSourePath + vLBPTitle + "/" + "Not/";
-	double vMAPNot = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	double vMAPNot = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
 	// Linear.
 	vDatabasePath = pSourePath + vLBPTitle + "/" + "Linear/Database/";
 	vLogPath = pSourePath + vLBPTitle + "/" + "Linear/";
-	double vMAPLinear = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	double vMAPLinear = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
 	// Gaussian.
 	vDatabasePath = pSourePath + vLBPTitle + "/" + "Gaussian/Database/";
 	vLogPath = pSourePath + vLBPTitle + "/" + "Gaussian/";
-	double vMAPGaussian = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	double vMAPGaussian = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
 	// Threshold.
 	vDatabasePath = pSourePath + vLBPTitle + "/" + "Threshold/Database/";
 	vLogPath = pSourePath + vLBPTitle + "/" + "Threshold/";
-	double vMAPThreshold = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	double vMAPThreshold = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
 	// Filter.
 	vDatabasePath = pSourePath + vLBPTitle + "/" + "Filter/Database/";
 	vLogPath = pSourePath + vLBPTitle + "/" + "Filter/";
-	double vMAPFilter = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
+	double vMAPFilter = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
 }
