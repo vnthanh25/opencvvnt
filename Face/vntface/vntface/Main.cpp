@@ -93,10 +93,7 @@ int main(void)
 	cout << vExePath << endl;
 	cout << vPath << endl;
 
-	//\\ Khoi tao Feature
-	//vMatching.aFeaturesInit();
-
-	//\\ Khoi tao database.
+	//\\ ColorFeret.
 	vMatching.Feret(2);
 
 	cv::waitKey();
