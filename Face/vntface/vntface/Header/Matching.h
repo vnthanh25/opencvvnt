@@ -80,7 +80,7 @@ namespace vnt
 		void aDetectFace(std::string pCascadeName, std::string pSourcePath, std::string pSavePath, std::string pPrefixFaceTrackName, std::string pSuffixFaceTrackName, std::string pStartIndex, std::string pEndIndex, FaceDataSetBase* pFaceDataSetBase);
 		//\\ Khoi tao csdl.
 		void aDatabaseInitHeadPose();
-		void aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourcePath, std::string pSavePath, TypeFunction pTypeFunction);
+		void aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pElementType, TypeFunction pTypeFunction);
 
 		//\\ Khoi tao csdl: tao dataset -> tao facetrack -> tao database.
 		void aDatabaseInitFull(std::string pSourcePath);

@@ -139,11 +139,17 @@ namespace vnt
 		std::vector<std::vector<double>> aSumAfterMul(std::vector<std::vector<double>> pVector1, std::vector<std::vector<int>> pVector2, int pPose);
 		//\\ (Use) (1,2) (double) Tinh tong sau khi nhan cua 2 vector dac trung.
 		std::vector<std::vector<double>> aSumAfterGaussian(std::vector<std::vector<double>> pVector1, std::vector<std::vector<int>> pVector2, int pPose);
+		//\\ Tinh tong cua 2 vector dac trung.
+		std::vector<std::vector<double>> aSumFloat(std::vector<std::vector<double>> pVector1, std::vector<std::vector<float>> pVector2);
+		//\\ (Use) (1,2) (double) Tinh tong sau khi nhan cua 2 vector dac trung.
+		std::vector<std::vector<double>> aSumAfterMulFloat(std::vector<std::vector<double>> pVector1, std::vector<std::vector<float>> pVector2, int pPose);
+		//\\ (Use) (1,2) (double) Tinh tong sau khi nhan cua 2 vector dac trung.
+		std::vector<std::vector<double>> aSumAfterGaussianFloat(std::vector<std::vector<double>> pVector1, std::vector<std::vector<float>> pVector2, int pPose);
 
 		//\\ Chia vector dac trung cho mot so
 		std::vector<std::vector<double>> aDiv(std::vector<std::vector<double>> pVector, int pDiv);
 		//\\ Khoi tao vector dac trung
-		std::vector<std::vector<double>> aInitFeature(double pValue);
+		std::vector<std::vector<double>> aInitFeature(double pValue, int pRows, int pCols);
 
 		//\\ Khoi tao vector dac trung.
 		int aFeatureInit1(std::vector<std::vector<cv::Mat>> pFaceTracks, std::vector<std::vector<int>> pPoses, std::string pFolderPath);
@@ -159,6 +165,8 @@ namespace vnt
 		int aFeatureInit5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, bool pIsSaveToFile = true);
 		//\\ (Use) Khoi tao vector dac trung.
 		int aFeatureInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pSavePath, bool pIsSaveToFile = true);
+		//\\ (Use) Khoi tao vector dac trung.
+		int aFeatureInitFloat(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pSavePath, int pElementType, bool pIsSaveToFile = true);
 
 		//\\ Doc cac vector dac trung tu file va dua vao csdl.
 		int aFeatureRead1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
@@ -203,7 +211,9 @@ namespace vnt
 		//\\ (Use) Khoi tao database.
 		int aDatabaseInitPose5(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction = Not, bool pIsSaveToFile = true);
 		//\\ (Use) Khoi tao database.
-		int aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourceSavePath, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction = Not, bool pIsSaveToFile = true);
+		int aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction = Not, bool pIsSaveToFile = true);
+		//\\ (Use) Khoi tao database.
+		int aDatabaseInitFloat(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pMinPose, int pMaxPose, TypeFunction pTypeFunction = Not, bool pIsSaveToFile = true);
 
 
 		//\\ Doc cac vector dac trung trung binh tu file va dua vao csdl.
@@ -248,7 +258,7 @@ namespace vnt
 		//\\ (Use) Luu ra file: vector dac trung
 		void aSaveToFile(cv::Mat pFace, std::string pFileName, std::string pSavePath);
 		//\\ (Use) Luu ra file: vector dac trung
-		void aSaveToFile0(cv::Mat pFace, std::string pFileName, std::string pSavePath);
+		void aSaveToFileFloat(cv::Mat pFace, std::string pFileName, std::string pSavePath, int pElementType);
 		//\\ Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
 		void aSaveToFile1(std::vector<std::string> pFileNames, std::vector<int> pPoses, std::string pSavePath);
 		//\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
