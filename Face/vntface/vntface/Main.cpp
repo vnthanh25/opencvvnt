@@ -94,6 +94,7 @@ int main(void)
 	cout << vPath << endl;
 
 	//\\ ColorFeret.
+	vMatching.Feret(1);
 	vMatching.Feret(2);
 
 	cv::waitKey();

@@ -1612,51 +1612,62 @@ void Matching::Feret(int pElementType)
 	std::string vPath = util.replaceAll(vExePath, "\\", "/");
 	std::string vSourePath = vPath + "/VNTDataSet/ColorFeret/";
 	std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
-
+	std::string vLBPTitle;
+	switch (pElementType)
+	{
+	case 1:
+		vLBPTitle = "LBP";
+		break;
+	case 2:
+		vLBPTitle = "LBPVLFeat";
+		break;
+	default:
+		break;
+	}
 
 	//\\ Khoi tao feature.
 	FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aFeatureInitFloat(0, 1983, vSourePath + "DataSet/", vSavePath + "FaceTracks/", pElementType);
+	vFaceTrackDB.aFeatureInitFloat(0, 1983, vSourePath + "DataSet/", vSavePath + vLBPTitle + "/" + "FaceTracks/", pElementType);
 
 	//\\ Khoi tao Database
 	std::string vFolderName;
 	// Not.
 	vFolderName = "Not";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Not);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Not);
 	// Linear.
 	vFolderName = "Linear";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Linear);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Linear);
 	// Gaussian.
 	vFolderName = "Gaussian";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Gaussian);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Gaussian);
 	// Threshold.
 	vFolderName = "Threshold";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Threshold);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Threshold);
 	// Filter.
 	vFolderName = "Filter";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Filter);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Filter);
 
 	//\\ So khop
 	std::string vDatabasePath;
 	std::string vLogPath;
 	// Not.
-	vDatabasePath = vSourePath + "Not/Database/";
-	vLogPath = vSavePath + "Not/";
+	vDatabasePath = vSourePath + vLBPTitle + "/" + "Not/Database/";
+	vLogPath = vSavePath + vLBPTitle + "/" + "Not/";
 	double vMAPNot = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Linear.
-	vDatabasePath = vSourePath + "Linear/Database/";
-	vLogPath = vSavePath + "Linear/";
+	vDatabasePath = vSourePath + vLBPTitle + "/" + "Linear/Database/";
+	vLogPath = vSavePath + vLBPTitle + "/" + "Linear/";
 	double vMAPLinear = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Gaussian.
-	vDatabasePath = vSourePath + "Gaussian/Database/";
-	vLogPath = vSavePath + "Gaussian/";
+	vDatabasePath = vSourePath + vLBPTitle + "/" + "Gaussian/Database/";
+	vLogPath = vSavePath + vLBPTitle + "/" + "Gaussian/";
 	double vMAPGaussian = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Threshold.
-	vDatabasePath = vSourePath + "Threshold/Database/";
-	vLogPath = vSavePath + "Threshold/";
+	vDatabasePath = vSourePath + vLBPTitle + "/" + "Threshold/Database/";
+	vLogPath = vSavePath + vLBPTitle + "/" + "Threshold/";
 	double vMAPThreshold = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Filter.
-	vDatabasePath = vSourePath + "Filter/Database/";
-	vLogPath = vSavePath + "Filter/";
+	vDatabasePath = vSourePath + vLBPTitle + "/" + "Filter/Database/";
+	vLogPath = vSavePath + vLBPTitle + "/" + "Filter/";
 	double vMAPFilter = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 }
