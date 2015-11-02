@@ -97,7 +97,7 @@ int main(void)
 	//vMatching.aFeaturesInit();
 
 	//\\ Khoi tao database.
-	vMatching.Feret();
+	vMatching.Feret(2);
 
 	cv::waitKey();
 	cout << vExePath << endl;

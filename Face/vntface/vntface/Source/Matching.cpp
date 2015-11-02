@@ -1603,7 +1603,7 @@ void Matching::aMatchingColorFeretMAP()
 }
 
 
-void Matching::Feret()
+void Matching::Feret(int pElementType)
 {
 	Utilites util;
 	Matching vMatching;
@@ -1616,25 +1616,25 @@ void Matching::Feret()
 
 	//\\ Khoi tao feature.
 	FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aFeatureInitFloat(0, 1983, vSourePath + "DataSet/", vSavePath + "FaceTracks/", 2);
+	vFaceTrackDB.aFeatureInitFloat(0, 1983, vSourePath + "DataSet/", vSavePath + "FaceTracks/", pElementType);
 
 	//\\ Khoi tao Database
 	std::string vFolderName;
 	// Not.
 	vFolderName = "Not";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", 2, Not);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Not);
 	// Linear.
 	vFolderName = "Linear";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", 2, Linear);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Linear);
 	// Gaussian.
 	vFolderName = "Gaussian";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", 2, Gaussian);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Gaussian);
 	// Threshold.
 	vFolderName = "Threshold";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", 2, Threshold);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Threshold);
 	// Filter.
 	vFolderName = "Filter";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", 2, Filter);
+	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + "FaceTracks/", vSavePath + vFolderName + "/", pElementType, Filter);
 
 	//\\ So khop
 	std::string vDatabasePath;
