@@ -108,7 +108,7 @@ namespace vnt
 		void aMatchingHeadPoseMAP();
 		void aMatchingColorFeretMAP();
 
-		// Color Feret: pElementType = 1 (LBP); pElementType = 2 (LBPVLFeat).
-		void Feret(int pElementType);
+		// Color Feret:pDataSetType = 1 (HeadPose); pDataSetType = 2 (ColorFeret). pElementType = 1 (LBP); pElementType = 2 (LBPVLFeat).
+		void aMatchingFull(std::string pSourePath, int pDataSetType, int pElementType);
 	};
 }

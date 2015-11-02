@@ -80,6 +80,7 @@ std::vector<std::vector<float>> vlfeat(int convert)
 	return fVL;
 }
 
+
 // Function main
 int main(void)
 {
@@ -93,13 +94,17 @@ int main(void)
 	cout << vExePath << endl;
 	cout << vPath << endl;
 
+	std::string vSourePath;
+	//\\ HeadPose.
+	vSourePath = vPath + "/VNTDataSet/HeadPose/";
+	vMatching.aMatchingFull(vSourePath, 1, 1);
+	vMatching.aMatchingFull(vSourePath, 1, 2);
 	//\\ ColorFeret.
-	vMatching.Feret(1);
-	vMatching.Feret(2);
+	vSourePath = vPath + "/VNTDataSet/ColorFeret/";
+	vMatching.aMatchingFull(vSourePath, 2, 1);
+	vMatching.aMatchingFull(vSourePath, 2, 2);
 
 	cv::waitKey();
-	cout << vExePath << endl;
-	cout << vPath << endl;
 	cout << "End." << endl;
 	std::string end;
 	cin >> end;

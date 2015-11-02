@@ -1602,16 +1602,34 @@ void Matching::aMatchingColorFeretMAP()
 	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/", "ColorFeret/", vCountMax, 992, 2);
 }
 
-
-void Matching::Feret(int pElementType)
+void Matching::aMatchingFull(std::string pSourePath, int pDataSetType, int pElementType)
 {
 	Utilites util;
 	Matching vMatching;
 	//\\ Duong dan den nguon du lieu.
-	std::string vExePath = util.GetExePath();
-	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	std::string vSourePath = vPath + "/VNTDataSet/ColorFeret/";
-	std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
+	//std::string vExePath = util.GetExePath();
+	//std::string vPath = util.replaceAll(vExePath, "\\", "/");
+	//std::string vSourePath = vPath + "/VNTDataSet/ColorFeret/";
+	//std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
+
+	//\\ Khoi tao DataSet.
+	FaceDataSet vFaceDataSet;
+	//FaceDataSetBase* vFaceDataSetBase;
+	HeadPose vHeadPose;
+	ColorFeret vColorFeret;
+	switch (pDataSetType)
+	{
+	case 1:
+		vFaceDataSet.aDataSetInit(&vHeadPose, pSourePath + "Download/", pSourePath + "DataSet/");
+		break;
+	case 2:
+		vFaceDataSet.aDataSetInit(&vColorFeret, pSourePath + "Download/", pSourePath + "DataSet/");
+		break;
+	default:
+		break;
+	}
+
+	//\\ Khoi tao feature.
 	std::string vLBPTitle;
 	switch (pElementType)
 	{
@@ -1624,50 +1642,48 @@ void Matching::Feret(int pElementType)
 	default:
 		break;
 	}
-
-	//\\ Khoi tao feature.
 	FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aFeatureInitFloat(0, 1983, vSourePath + "DataSet/", vSavePath + vLBPTitle + "/" + "FaceTracks/", pElementType);
+	vFaceTrackDB.aFeatureInitFloat(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pElementType);
 
 	//\\ Khoi tao Database
 	std::string vFolderName;
 	// Not.
 	vFolderName = "Not";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Not);
+	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Not);
 	// Linear.
 	vFolderName = "Linear";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Linear);
+	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Linear);
 	// Gaussian.
 	vFolderName = "Gaussian";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Gaussian);
+	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Gaussian);
 	// Threshold.
 	vFolderName = "Threshold";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Threshold);
+	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Threshold);
 	// Filter.
 	vFolderName = "Filter";
-	vMatching.aDatabaseInit(0, 1983, vSourePath + "DataSet/", vSourePath + vLBPTitle + "/" + "FaceTracks/", vSavePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Filter);
+	vMatching.aDatabaseInit(0, 1983, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Filter);
 
 	//\\ So khop
 	std::string vDatabasePath;
 	std::string vLogPath;
 	// Not.
-	vDatabasePath = vSourePath + vLBPTitle + "/" + "Not/Database/";
-	vLogPath = vSavePath + vLBPTitle + "/" + "Not/";
+	vDatabasePath = pSourePath + vLBPTitle + "/" + "Not/Database/";
+	vLogPath = pSourePath + vLBPTitle + "/" + "Not/";
 	double vMAPNot = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Linear.
-	vDatabasePath = vSourePath + vLBPTitle + "/" + "Linear/Database/";
-	vLogPath = vSavePath + vLBPTitle + "/" + "Linear/";
+	vDatabasePath = pSourePath + vLBPTitle + "/" + "Linear/Database/";
+	vLogPath = pSourePath + vLBPTitle + "/" + "Linear/";
 	double vMAPLinear = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Gaussian.
-	vDatabasePath = vSourePath + vLBPTitle + "/" + "Gaussian/Database/";
-	vLogPath = vSavePath + vLBPTitle + "/" + "Gaussian/";
+	vDatabasePath = pSourePath + vLBPTitle + "/" + "Gaussian/Database/";
+	vLogPath = pSourePath + vLBPTitle + "/" + "Gaussian/";
 	double vMAPGaussian = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Threshold.
-	vDatabasePath = vSourePath + vLBPTitle + "/" + "Threshold/Database/";
-	vLogPath = vSavePath + vLBPTitle + "/" + "Threshold/";
+	vDatabasePath = pSourePath + vLBPTitle + "/" + "Threshold/Database/";
+	vLogPath = pSourePath + vLBPTitle + "/" + "Threshold/";
 	double vMAPThreshold = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 	// Filter.
-	vDatabasePath = vSourePath + vLBPTitle + "/" + "Filter/Database/";
-	vLogPath = vSavePath + vLBPTitle + "/" + "Filter/";
+	vDatabasePath = pSourePath + vLBPTitle + "/" + "Filter/Database/";
+	vLogPath = pSourePath + vLBPTitle + "/" + "Filter/";
 	double vMAPFilter = aMatchingMAP(vDatabasePath, 992, 2, vLogPath);
 }
