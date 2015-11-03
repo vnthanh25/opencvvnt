@@ -713,7 +713,7 @@ int FaceDataSet::aDataSetRead4(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 		std::vector<std::string> vPoseNames;
 		//\\ Doc ten file anh va pose tuong ung.
 		std::ifstream ifImage(vFaceTrackPath + mImageName + mFileType);
-		std::ifstream ifPose(vFaceTrackPath + mTiltPanPoseName + mFileType);
+		std::ifstream ifPose(vFaceTrackPath + mPoseName + mFileType);
 		std::ifstream ifPoseName(vFaceTrackPath + mPoseNameName + mFileType);
 		std::string vFileName;
 		std::string vPose;
@@ -857,6 +857,9 @@ void FaceDataSet::aSaveToFile2(std::vector<std::string> pFileNames, std::vector<
 //\\ (Use) Luu danh sach ten file anh va pose tuong ung cua tung facetrack ra file. Kich thuoc 2 danh sach phai bang nhau.
 void FaceDataSet::aSaveToFile3(std::vector<std::string> pFileNames, std::vector<std::string> pPoses, std::vector<std::string> pPoseNames, bool pSortPose, std::string pSavePath)
 {
+
+	int vSumPose = 0;
+
 	if (pSortPose)
 	{
 		Utilites util;
@@ -870,6 +873,9 @@ void FaceDataSet::aSaveToFile3(std::vector<std::string> pFileNames, std::vector<
 			int vPose = std::atoi(pPoses[i].c_str());
 			vPose = vPose / 1000 + vPose % 1000;
 			vTiltPans.push_back(vPose);
+
+			vSumPose += vPose;
+
 		}
 		//\\ Sap xep thu tu pose giam dan.
 		for (size_t i = 0; i < vTiltPans.size() - 1; i++)
@@ -901,8 +907,11 @@ void FaceDataSet::aSaveToFile3(std::vector<std::string> pFileNames, std::vector<
 
 
 	std::ofstream ofImage(pSavePath + mImageName + mFileType);
-	std::ofstream ofPose(pSavePath + mTiltPanPoseName + mFileType);
+	std::ofstream ofPose(pSavePath + mPoseName + mFileType);
 	std::ofstream ofPoseName(pSavePath + mPoseNameName + mFileType);
+
+	std::ofstream ofSumPose(pSavePath + mSumPoseName + mFileType);
+
 	std::string vFileName;
 	int vIndex;
 	size_t pFileNamesSize = pFileNames.size();
@@ -925,7 +934,11 @@ void FaceDataSet::aSaveToFile3(std::vector<std::string> pFileNames, std::vector<
 	ofPose << pPoses[pFileNamesSize - 1];
 	ofPoseName << pPoseNames[pFileNamesSize - 1];
 
+	//\\ Ghi tong pose.
+	ofSumPose << std::to_string(vSumPose);
+
 	ofImage.close();
 	ofPose.close();
 	ofPoseName.close();
+	ofSumPose.close();
 }
