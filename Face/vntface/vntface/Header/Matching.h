@@ -11,6 +11,15 @@ namespace vnt
 	class Matching
 	{
 	public:
+		std::string mDataSetFolder = "DataSet";//\\ Chua gia tri Mat cua anh.
+		std::string mFaceTrackName = "FaceTrack";//\\ Ex: "FaceTrack01", "FaceTrack02", ...
+		std::string mFaceTracksFolder = "FaceTracks";
+		std::string mFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
+		std::string mDBFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
+		std::string mDatabaseFolder = "Database";//\\ Chua vector dac trung trung binh.
+		std::string mLBPTitle = "LBP";
+		std::string mLBPVLFeatTitle = "LBPVLFeat";
+
 		int mNumPerson = 0;
 		int mDiv = 0;
 		//\\ Detect HeadPose with serie 1.
@@ -108,7 +117,14 @@ namespace vnt
 		void aMatchingHeadPoseMAP();
 		void aMatchingColorFeretMAP();
 
+
+		void aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pSourePath, std::string pSavePath, int pDiv);
+		void aFeatureInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourePath, std::string pSavePath, int pLBPType);
+		void aDatabaseInitFunctionType(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pLBPType);
+		void aMatchingFunctionType(std::string pDatabasePath, int pNumPerson, int pDiv, std::string pLogPath);
+		void aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePath, int pPersons, int pDiv, int pLBPType = 0);
+		void aMatchingColorFeretFull(std::string pSourePath, std::string pSavePath, int pPersons, int pDiv, int pLBPType = 0);
 		// Color Feret:pDataSetType = 1 (HeadPose); pDataSetType = 2 (ColorFeret). pElementType = 1 (LBP); pElementType = 2 (LBPVLFeat).
-		void aMatchingFull(std::string pSourePath, int pDataSetType, int pElementType);
+		void aMatchingFull();
 	};
 }
