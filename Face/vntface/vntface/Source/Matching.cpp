@@ -711,8 +711,8 @@ void Matching::aDatabaseInitHeadPose()
 void Matching::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pElementType, TypeFunction pTypeFunction)
 {
 	Utilites util;
-	// Tao thu muc.
-	util.makeDir(util.replaceAll(pSavePath, "/", "\\"));
+	//// Tao thu muc.
+	//util.makeDir(util.replaceAll(pSavePath, "/", "\\"));
 	//\\ Khoi tao Database:
 	FaceTrackDB vFaceTrackDB;
 	int iMinPose = 90;
@@ -808,7 +808,7 @@ void Matching::aDatabaseInitFull(std::string pSourcePath)
 	////\\ Khoi tao Feature (vector dac trung cua tung anh).
 	//vFaceTrackDB.aFeatureInit3(vFaceDataSet.aGetFaceTraks(), vFaceDataSet.aGetFileNames(), vFaceDataSet.aGetPoses(), vFaceDataSet.aGetPoseNames(), vSavePath);
 	////\\ End Cach 1.
-	
+
 	//////\\ Cach 2:
 	//////\\ Doc Feature.
 	////FaceTrackDB vFaceTrackDB;
@@ -1344,7 +1344,7 @@ double Matching::aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseF
 			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
 			//if (i % n == vMatchingIndex[k] % n)
 			//if (((i / pDiv * pDiv) == vMatchingIndex[k]) || ((i / pDiv * pDiv + 1) == vMatchingIndex[k]))
-			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thì iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
+			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thi iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
 			if ((iStartIndex <= vMatchingIndex[k]) && (vMatchingIndex[k] < iStartIndex + pDiv))
 			{
 				//\\ Tinh AP.
@@ -1492,7 +1492,7 @@ double Matching::aMatchingMAP(std::string pDatabasePath, int pNumPerson, int pDi
 			//\\ Gia tri index dung trong tham so truyen vao la tu i*m den i*m + m.
 			//if (i % n == vMatchingIndex[k] % n)
 			//if (((i / pDiv * pDiv) == vMatchingIndex[k]) || ((i / pDiv * pDiv + 1) == vMatchingIndex[k]))
-			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thì iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
+			int iStartIndex = i / pDiv * pDiv; // Neu i = 2 hoac = 3 thi iStartIndex = 2 => vMatchingIndex[k] >= 2 va vMatchingIndex[k] < 2 + 2;
 			if ((iStartIndex <= vMatchingIndex[k]) && (vMatchingIndex[k] < iStartIndex + pDiv))
 			{
 				//\\ Tinh AP.
@@ -1602,96 +1602,135 @@ void Matching::aMatchingColorFeretMAP()
 	double vMAPPoseNorm1 = aMatchingMAP2("ColorFeret/Pose/", "ColorFeret/", vCountMax, 992, 2);
 }
 
+//\\ Khoi tao Data Set.
+void Matching::aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pSourePath, std::string pSavePath, int pDiv)
+{
+	FaceDataSet vFaceDataSet;
+	vFaceDataSet.aDataSetInitDiv2(pFaceDataSetBase, pSourePath, pSavePath, pDiv);
+}
+//\\ Khoi tao feature.
+void Matching::aFeatureInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourePath, std::string pSavePath, int pLBPType)
+{
+	FaceTrackDB vFaceTrackDB;
+	vFaceTrackDB.aFeatureInit(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, pSavePath, pLBPType);
+}
+//\\ Khoi tao Database
+void Matching::aDatabaseInitFunctionType(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pLBPType)
+{
+	std::string vFolderName;
+	// Not.
+	vFolderName = "Not";
+	aDatabaseInit(pNumFaceTrackStart, pNumFaceTrackEnd, pDataSetPath, pFeaturePath, pSavePath + vFolderName + "/", pLBPType, Not);
+	// Linear.
+	vFolderName = "Linear";
+	aDatabaseInit(pNumFaceTrackStart, pNumFaceTrackEnd, pDataSetPath, pFeaturePath, pSavePath + vFolderName + "/", pLBPType, Linear);
+	// Gaussian.
+	vFolderName = "Gaussian";
+	aDatabaseInit(pNumFaceTrackStart, pNumFaceTrackEnd, pDataSetPath, pFeaturePath, pSavePath + vFolderName + "/", pLBPType, Gaussian);
+	// Threshold.
+	vFolderName = "Threshold";
+	aDatabaseInit(pNumFaceTrackStart, pNumFaceTrackEnd, pDataSetPath, pFeaturePath, pSavePath + vFolderName + "/", pLBPType, Threshold);
+	// Filter.
+	vFolderName = "Filter";
+	aDatabaseInit(pNumFaceTrackStart, pNumFaceTrackEnd, pDataSetPath, pFeaturePath, pSavePath + vFolderName + "/", pLBPType, Filter);
+}
+//\\ So khop
+void Matching::aMatchingFunctionType(std::string pDatabasePath, int pNumPerson, int pDiv, std::string pLogPath)
+{
+	std::string vFolderName;
+	// Not.
+	vFolderName = "Not";
+	double vMAPNot = aMatchingMAP(pDatabasePath, pNumPerson, pDiv, pLogPath + vFolderName + "/");
+	// Linear.
+	vFolderName = "Linear";
+	double vMAPLinear = aMatchingMAP(pDatabasePath, pNumPerson, pDiv, pLogPath + vFolderName + "/");
+	// Gaussian.
+	vFolderName = "Gaussian";
+	double vMAPGaussian = aMatchingMAP(pDatabasePath, pNumPerson, pDiv, pLogPath + vFolderName + "/");
+	// Threshold.
+	vFolderName = "Threshold";
+	double vMAPThreshold = aMatchingMAP(pDatabasePath, pNumPerson, pDiv, pLogPath + vFolderName + "/");
+	// Filter.
+	vFolderName = "Filter";
+	double vMAPFilter = aMatchingMAP(pDatabasePath, pNumPerson, pDiv, pLogPath + vFolderName + "/");
+}
 
-void Matching::aMatchingFull(std::string pSourePath, int pDataSetType, int pElementType)
+void Matching::aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePath, int pPersons, int pDiv, int pLBPType)
+{
+	//\\ Khoi tao Data Set.
+	HeadPose vHeadPose;
+	std::string vDataSetPath = pSavePath + mDataSetFolder + "/";
+	aDataSetInit(&vHeadPose, pSourePath, vDataSetPath, pDiv);
+	//\\ Tinh so facetrack.
+	if (pDiv < 1)
+		pDiv = 1;
+	int vFacetracks = pPersons * pDiv - 1;
+	//\\ Khoi tao feature.
+	std::string vLBPPath = pSavePath + mLBPTitle + "/";
+	std::string vLBPVLFeatPath = pSavePath + mLBPVLFeatTitle + "/";
+	switch (pLBPType)
+	{
+	case 1:
+		aFeatureInit(0, vFacetracks, vDataSetPath, vLBPPath + mFaceTracksFolder + "/", pLBPType);
+		break;
+	case 2:
+		aFeatureInit(0, vFacetracks, vDataSetPath, vLBPVLFeatPath + mFaceTracksFolder + "/", pLBPType);
+		break;
+	default:
+		aFeatureInit(0, vFacetracks, vDataSetPath, vLBPPath + mFaceTracksFolder + "/", 1);
+		aFeatureInit(0, vFacetracks, vDataSetPath, vLBPVLFeatPath + mFaceTracksFolder + "/", 2);
+		break;
+	}
+	//\\ Khoi tao database.
+	std::string vDatabaseLBPPath = vLBPPath + mDatabaseFolder + "/";
+	std::string vDatabaseLBPVLFeatPath = vLBPVLFeatPath + mDatabaseFolder + "/";
+	switch (pLBPType)
+	{
+	case 1:
+		aDatabaseInitFunctionType(0, vFacetracks, vDataSetPath, vLBPPath, vDatabaseLBPPath, pLBPType);
+		break;
+	case 2:
+		aDatabaseInitFunctionType(0, vFacetracks, vDataSetPath, vLBPVLFeatPath, vDatabaseLBPVLFeatPath, pLBPType);
+		break;
+	default:
+		aDatabaseInitFunctionType(0, vFacetracks, vDataSetPath, vLBPPath, vDatabaseLBPPath, 1);
+		aDatabaseInitFunctionType(0, vFacetracks, vDataSetPath, vLBPVLFeatPath, vDatabaseLBPVLFeatPath, 2);
+		break;
+	}
+	//\\ So khop
+	std::string vLogLBPPath = vLBPPath + mDatabaseFolder + "/";
+	std::string vLogLBPVLFeatPath = vLBPVLFeatPath + mDatabaseFolder + "/";
+	switch (pLBPType)
+	{
+	case 1:
+		aMatchingFunctionType(vDatabaseLBPPath, pPersons, pDiv, vLogLBPPath);
+		break;
+	case 2:
+		aMatchingFunctionType(vDatabaseLBPPath, pPersons, pDiv, vLogLBPVLFeatPath);
+		break;
+	default:
+		aMatchingFunctionType(vDatabaseLBPPath, pPersons, pDiv, vLogLBPPath);
+		aMatchingFunctionType(vDatabaseLBPPath, pPersons, pDiv, vLogLBPVLFeatPath);
+		break;
+	}
+}
+void Matching::aMatchingColorFeretFull(std::string pSourePath, std::string pSavePath, int pPersons, int pDiv, int pLBPType)
+{
+
+}
+
+void Matching::aMatchingFull()
 {
 	Utilites util;
 	Matching vMatching;
 	//\\ Duong dan den nguon du lieu.
-	//std::string vExePath = util.GetExePath();
-	//std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	//std::string vSourePath = vPath + "/VNTDataSet/ColorFeret/";
-	//std::string vSavePath = vPath + "/VNTDataSet/ColorFeret/";
+	std::string vExePath = util.GetExePath();
+	std::string vPath = util.replaceAll(vExePath, "\\", "/");
 
 	int vPersons = 0;
 	int vDiv = 0;
-	//\\ Khoi tao DataSet.
-	FaceDataSet vFaceDataSet;
-	//FaceDataSetBase* vFaceDataSetBase;
-	HeadPose vHeadPose;
-	ColorFeret vColorFeret;
-	switch (pDataSetType)
-	{
-	case 1:
-		vPersons = 15;
-		vDiv = 2;
-		vFaceDataSet.aDataSetInit(&vHeadPose, pSourePath + "Download/", pSourePath + "DataSet/");
-		break;
-	case 2:
-		vPersons = 992;
-		vDiv = 2;
-		vFaceDataSet.aDataSetInit(&vColorFeret, pSourePath + "Download/", pSourePath + "DataSet/");
-		break;
-	default:
-		break;
-	}
+	std::string vSourePath = vPath + "/VNTDataSet/HeadPose/Download/";
+	std::string vSavePath = vPath + "/VNTDataSet/HeadPose/Download/";
+	aMatchingHeadPoseFull(vSourePath, vSavePath, 30, 1);
 
-	int vFacetracks = vPersons * vDiv - 1;
-	//\\ Khoi tao feature.
-	std::string vLBPTitle;
-	switch (pElementType)
-	{
-	case 1:
-		vLBPTitle = "LBP";
-		break;
-	case 2:
-		vLBPTitle = "LBPVLFeat";
-		break;
-	default:
-		break;
-	}
-	FaceTrackDB vFaceTrackDB;
-	vFaceTrackDB.aFeatureInitFloat(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pElementType);
-
-	//\\ Khoi tao Database
-	std::string vFolderName;
-	// Not.
-	vFolderName = "Not";
-	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Not);
-	// Linear.
-	vFolderName = "Linear";
-	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Linear);
-	// Gaussian.
-	vFolderName = "Gaussian";
-	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Gaussian);
-	// Threshold.
-	vFolderName = "Threshold";
-	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Threshold);
-	// Filter.
-	vFolderName = "Filter";
-	vMatching.aDatabaseInit(0, vFacetracks, pSourePath + "DataSet/", pSourePath + vLBPTitle + "/" + "FaceTracks/", pSourePath + vLBPTitle + "/" + vFolderName + "/", pElementType, Filter);
-
-	//\\ So khop
-	std::string vDatabasePath;
-	std::string vLogPath;
-	// Not.
-	vDatabasePath = pSourePath + vLBPTitle + "/" + "Not/Database/";
-	vLogPath = pSourePath + vLBPTitle + "/" + "Not/";
-	double vMAPNot = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
-	// Linear.
-	vDatabasePath = pSourePath + vLBPTitle + "/" + "Linear/Database/";
-	vLogPath = pSourePath + vLBPTitle + "/" + "Linear/";
-	double vMAPLinear = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
-	// Gaussian.
-	vDatabasePath = pSourePath + vLBPTitle + "/" + "Gaussian/Database/";
-	vLogPath = pSourePath + vLBPTitle + "/" + "Gaussian/";
-	double vMAPGaussian = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
-	// Threshold.
-	vDatabasePath = pSourePath + vLBPTitle + "/" + "Threshold/Database/";
-	vLogPath = pSourePath + vLBPTitle + "/" + "Threshold/";
-	double vMAPThreshold = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
-	// Filter.
-	vDatabasePath = pSourePath + vLBPTitle + "/" + "Filter/Database/";
-	vLogPath = pSourePath + vLBPTitle + "/" + "Filter/";
-	double vMAPFilter = aMatchingMAP(vDatabasePath, vPersons, vDiv, vLogPath);
 }
