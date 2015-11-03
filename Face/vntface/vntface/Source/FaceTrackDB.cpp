@@ -1,4 +1,4 @@
-﻿/*
+/*
 VNThanh
 - Face Track.
 */
@@ -1576,7 +1576,7 @@ int FaceTrackDB::aFeatureRead4(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 		std::vector<std::string> vPoseNames;
 		//\\ Doc ten file anh va pose tuong ung.
 		std::ifstream ifImage(vFaceTrackPath + mImageName + mFileType);
-		std::ifstream ifPose(vFaceTrackPath + mTiltPanPoseName + mFileType);
+		std::ifstream ifPose(vFaceTrackPath + mPoseName + mFileType);
 		std::ifstream ifPoseName(vFaceTrackPath + mPoseNameName + mFileType);
 		std::string vFileName;
 		std::string vPose;
@@ -2073,7 +2073,7 @@ int FaceTrackDB::aDatabaseInitPoseNormalize2(std::vector<std::vector<std::vector
 			}
 			std::string vSaveFTPath = mFolderPath + mDBFeatureFolder + "/" + faceTrackNames[i] + "/";
 			std::ofstream ofImage(vSaveFTPath + mImageName + mFileType);
-			std::ofstream ofPose(vSaveFTPath + mTiltPanPoseName + mFileType);
+			std::ofstream ofPose(vSaveFTPath + mPoseName + mFileType);
 			size_t featuressize = dbfeatures.size();
 			for (size_t j = 0; j < featuressize; j++)
 			{
@@ -2152,7 +2152,7 @@ int FaceTrackDB::aDatabaseInitNotPose2(std::vector<std::vector<std::vector<std::
 			}
 			std::string vSaveFTPath = mFolderPath + mDBFeatureFolder + "/" + faceTrackNames[i] + "/";
 			std::ofstream ofImage(vSaveFTPath + mImageName + mFileType);
-			std::ofstream ofPose(vSaveFTPath + mTiltPanPoseName + mFileType);
+			std::ofstream ofPose(vSaveFTPath + mPoseName + mFileType);
 			size_t featuressize = dbfeatures.size();
 			for (size_t j = 0; j < featuressize; j++)
 			{
@@ -2547,9 +2547,9 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 	FeatureLBP featureLBP;
 	//std::string vDataSetPath = pSourcePath + mDataSetFolder + "/"; 
 	//std::string vFacetrackPath = pSourcePath + mFaceTracksFolder + "/";
-	std::string vDatabasePath = pSavePath + mDBFeatureFolder + "/";
+	//std::string vDatabasePath = pSavePath + mDBFeatureFolder + "/";
 	//\\ Tao thu muc database.
-	std::string vFolderPath = util.replaceAll(vDatabasePath, "/", "\\");
+	std::string vFolderPath = util.replaceAll(pSavePath, "/", "\\");
 	util.makeDir(vFolderPath);
 	////\\ Khoi tao vector dac trung trung binh cho tat ca facetrack.
 	//std::vector<std::vector<double>> vAVGFeatureAll = aInitFeature(0.0);
@@ -2644,12 +2644,12 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 			cv::Mat face = util.convertV2DToMat(vAVGFeature, (int)vAVGFeature[0].size(), (int)vAVGFeature.size());
 			std::string vDBname = mDBFeatureName + "0";
 			//\\ Ghi vector trung binh.
-			util.writeMatBasic(face, vDatabasePath + vFaceTrackName + "/" + vDBname + mDBFeatureType);
+			util.writeMatBasic(face, pSavePath + vFaceTrackName + "/" + vDBname + mDBFeatureType);
 			//\\ Ghi ten vector trung binh.
 			//ofImage << vDBname;
 			//ofPose << vSumPose;
 			//\\ Ghi file text.
-			util.writeMatDouble(face, vDatabasePath + vFaceTrackName + "/" + vDBname + ".txt");
+			util.writeMatDouble(face, pSavePath + vFaceTrackName + "/" + vDBname + ".txt");
 		}
 	}
 
@@ -4234,7 +4234,7 @@ void FaceTrackDB::aSaveToFile3(std::vector<std::string> pFileNames, std::vector<
 
 
 	std::ofstream ofImage(pSavePath + mImageName + mFileType);
-	std::ofstream ofPose(pSavePath + mTiltPanPoseName + mFileType);
+	std::ofstream ofPose(pSavePath + mPoseName + mFileType);
 	std::ofstream ofPoseName(pSavePath + mPoseNameName + mFileType);
 	std::string vFileName;
 	int vIndex;
