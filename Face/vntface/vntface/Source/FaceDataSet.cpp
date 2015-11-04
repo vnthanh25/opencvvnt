@@ -891,7 +891,9 @@ void FaceDataSet::aSaveToFile3(std::vector<std::string> pFileNames, std::vector<
 			for (size_t j = i + 1; j < pPoses.size(); j++)
 			{
 				//if (vTiltPans[i] < vTiltPans[j])//\\ Theo pose.
-				if (pPoses[i] < pPoses[j])//\\ Theo pose.
+				int vPoseI = std::atoi(pPoses[i].c_str());
+				int vPoseJ = std::atoi(pPoses[j].c_str());
+				if (vPoseI < vPoseJ)//\\ Theo pose.
 				{
 					//int vTemp = vTiltPans[i];
 					//vTiltPans[i] = vTiltPans[j];
