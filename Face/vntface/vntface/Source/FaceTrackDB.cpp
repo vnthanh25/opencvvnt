@@ -498,7 +498,11 @@ double FaceTrackDB::aCosine1(std::vector<std::vector<double>> pVector1, std::vec
 	//\\ Tinh tong tich Bi x Bi.
 	double d22 = aSumMul1(pVector2, pVector2);
 
-	result = d12 / (sqrt(d11) * sqrt(d22));
+	result = (sqrt(d11) * sqrt(d22));
+	if (result == 0)
+		result = 0;
+	else
+		result = d12 / result;
 	return result;
 }
 //\\ (Use) (1,2) (int) Tinh khoang cach cosine cua 2 vector. Co so chieu bang nhau.
@@ -2557,17 +2561,11 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 	//\\ Doc tung facetrack.
 	for (size_t i = pNumFaceTrackStart; i <= pNumFaceTrackEnd; i++)
 	{
-		cout << std::to_string(i) << endl;
-
 		std::string vFaceTrackName = mFaceTrackName + std::to_string(i);
 		//std::vector<std::string> vFileNames;
 		std::vector<cv::Mat> vImageMats;
 
 		util.makeDir(vFolderPath + vFaceTrackName);
-
-
-		cout << std::to_string(i) + vFaceTrackName << endl;
-
 		//std::vector<int> vPoses;
 		//std::vector<std::string> vPoseNames;
 
@@ -2591,8 +2589,6 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 			std::getline(ifPose, vPose);
 			iPose = std::atoi(vPose.c_str());
 			iTotalPose += iPose;
-
-			cout << std::to_string(iPose) << endl;
 
 			//std::getline(ifPoseName, vPoseName);
 			vImageMat = util.readMatBasic(pFeaturePath + vFaceTrackName + "/" + vFileName + mFeatureType);
@@ -2622,7 +2618,6 @@ int FaceTrackDB::aDatabaseInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std
 				vAVGFeature = aSumAfterMul(vAVGFeature, vFeature, iPose);
 				break;
 			case vnt::Filter:
-				cout << "Filter" + std::to_string(iPose) << endl;
 				if (pMinPose <= iPose && iPose <= pMaxPose)
 					vAVGFeature = aSum(vAVGFeature, vFeature);
 				break;
@@ -2667,9 +2662,9 @@ int FaceTrackDB::aDatabaseInitFloat(int pNumFaceTrackStart, int pNumFaceTrackEnd
 	FeatureLBP featureLBP;
 	//std::string vDataSetPath = pSourcePath + mDataSetFolder + "/"; 
 	//std::string vFacetrackPath = pSourcePath + mFaceTracksFolder + "/";
-	std::string vDatabasePath = pSavePath + mDBFeatureFolder + "/";
+	//std::string vDatabasePath = pSavePath + mDBFeatureFolder + "/";
 	//\\ Tao thu muc database.
-	std::string vFolderPath = util.replaceAll(vDatabasePath, "/", "\\");
+	std::string vFolderPath = util.replaceAll(pSavePath, "/", "\\");
 	util.makeDir(vFolderPath);
 	////\\ Khoi tao vector dac trung trung binh cho tat ca facetrack.
 	//std::vector<std::vector<double>> vAVGFeatureAll = aInitFeature(0.0);
@@ -2778,12 +2773,12 @@ int FaceTrackDB::aDatabaseInitFloat(int pNumFaceTrackStart, int pNumFaceTrackEnd
 			cv::Mat face = util.convertV2DToMat(vAVGFeature, (int)vAVGFeature[0].size(), (int)vAVGFeature.size());
 			std::string vDBname = mDBFeatureName + "0";
 			//\\ Ghi vector trung binh.
-			util.writeMatBasic(face, vDatabasePath + vFaceTrackName + "/" + vDBname + mDBFeatureType);
+			util.writeMatBasic(face, pSavePath + vFaceTrackName + "/" + vDBname + mDBFeatureType);
 			//\\ Ghi ten vector trung binh.
 			//ofImage << vDBname;
 			//ofPose << vSumPose;
 			//\\ Ghi file text.
-			util.writeMatDouble(face, vDatabasePath + vFaceTrackName + "/" + vDBname + ".txt");
+			util.writeMatDouble(face, pSavePath + vFaceTrackName + "/" + vDBname + ".txt");
 		}
 	}
 
