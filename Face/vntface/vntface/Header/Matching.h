@@ -17,6 +17,7 @@ namespace vnt
 		std::string mFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
 		std::string mDBFeatureName = "Feature";//\\ Ex: "Feature01", "Feature02", ...
 		std::string mDatabaseFolder = "Database";//\\ Chua vector dac trung trung binh.
+		std::string mMatchingFolder = "Matching";//\\ Chua vector dac trung trung binh.
 		std::string mLBPTitle = "LBP";
 		std::string mLBPVLFeatTitle = "LBPVLFeat";
 
@@ -112,18 +113,22 @@ namespace vnt
 		double aMatchingHeadPoseMAP1(std::string pDatabasePath);
 
 		double aMatchingMAP2(std::string pDatabasePath, std::string pDatabaseFeaturePath, int pCountMax, int pNumPerson, int pDiv);
-		double aMatchingMAP(std::string pDatabasePath, int pNumPerson, int pDiv, std::string pLogPath);
+		double aMatchingMAP(std::string pDatabasePath, int pNumFaceTrackStart, int pNumFaceTrackEnd, int pMul, int pDiv, std::string pLogPath);
 		//\\ Tron serie1 va serie2 cua HeadPose de lam csdl va tinh MAP.
 		void aMatchingHeadPoseMAP();
 		void aMatchingColorFeretMAP();
 
 
-		void aDataSetInit(FaceDataSetBase* pFaceDataSetBase, std::string pSourePath, std::string pSavePath, int pDiv);
+		std::string aGetFaceTrackPath(std::string pSavePath, int pLBPType);
+		std::string aDatabasePath(std::string pSavePath, int pLBPType, int pFunctionType);
+		std::string aMatchingPath(std::string pSavePath, int pLBPType, int pFunctionType);
+		void aDataSetInit(FaceDataSetBase* pFaceDataSetBase, int pPersonStart, int pPersonEnd, std::string pSourePath, std::string pSavePath, int pMul, int pDiv);
 		void aFeatureInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pSourePath, std::string pSavePath, int pLBPType);
 		void aDatabaseInitFunctionType(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pLBPType);
-		void aMatchingFunctionType(std::string pDatabasePath, int pNumPerson, int pDiv, std::string pLogPath);
-		void aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePath, int pPersons, int pDiv, int pLBPType = 0);
-		void aMatchingColorFeretFull(std::string pSourePath, std::string pSavePath, int pPersons, int pDiv, int pLBPType = 0);
+		void aMatchingFunctionType(std::string pDatabasePath, int pNumFaceTrackStart, int pNumFaceTrackEnd, int pMul, int pDiv, std::string pLogPath, int pLBPType);
+		
+		void aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType = 0);
+		void aMatchingColorFeretFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType = 0);
 		// Color Feret:pDataSetType = 1 (HeadPose); pDataSetType = 2 (ColorFeret). pElementType = 1 (LBP); pElementType = 2 (LBPVLFeat).
 		void aMatchingFull();
 	};
