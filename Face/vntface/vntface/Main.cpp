@@ -84,26 +84,33 @@ std::vector<std::vector<float>> vlfeat(int convert)
 // Function main
 int main(void)
 {
-	vnt::Utilites util;
-	vnt::Matching vMatching;
-	//\\ Duong dan den nguon du lieu.
-	std::string vExePath = util.GetExePath() + "\\";
-	std::string vPath = util.replaceAll(vExePath, "\\", "/");
-	VL_PRINT("Starting ...");
-	cout << endl;
-	cout << vExePath << endl;
-	cout << vPath << endl;
+	try
+	{
+		vnt::Utilites util;
+		vnt::Matching vMatching;
+		//\\ Duong dan den nguon du lieu.
+		std::string vExePath = util.GetExePath() + "\\";
+		std::string vPath = util.replaceAll(vExePath, "\\", "/");
+		VL_PRINT("Starting ...");
+		cout << endl;
+		cout << vExePath << endl;
+		cout << vPath << endl;
 
-	std::string vSourePath;
-	//\\ HeadPose.
-	vSourePath = vPath + "/VNTDataSet/HeadPose/";
-	vMatching.aMatchingFull(vSourePath, 1, 1);
-	vMatching.aMatchingFull(vSourePath, 1, 2);
-	//\\ ColorFeret.
-	vSourePath = vPath + "/VNTDataSet/ColorFeret/";
-	vMatching.aMatchingFull(vSourePath, 2, 1);
-	vMatching.aMatchingFull(vSourePath, 2, 2);
+		vMatching.aMatchingFull();
 
+		//std::string vSourePath;
+		////\\ HeadPose.
+		//vSourePath = vPath + "VNTDataSet/HeadPose/";
+		//vMatching.aMatchingFull(vSourePath, 1, 1);
+		//vMatching.aMatchingFull(vSourePath, 1, 2);
+		////\\ ColorFeret.
+		//vSourePath = vPath + "VNTDataSet/ColorFeret/";
+		//vMatching.aMatchingFull(vSourePath, 2, 1);
+		//vMatching.aMatchingFull(vSourePath, 2, 2);
+	}
+	catch (Exception ex)
+	{
+	}
 	cv::waitKey();
 	cout << "End." << endl;
 	std::string end;
