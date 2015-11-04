@@ -462,8 +462,8 @@ std::vector<std::string> HeadPose::aGetsAllPose2(const std::string pId)
 	//\\ Co 2 serie.
 	for (size_t i = 0; i < serie_size; i++)
 	{
-		//\\ File anh "...-90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
-		pose = "010100";
+		//\\ File anh "...-90+0.jpg" => pose = ((100 - 90) + (100 - 0)) / 2 = 55.
+		pose = "55";
 		result.push_back(pose);
 		for (size_t j = 1; j < tilt_size - 1; j++) //\\ Bo gia tri dau (-90) va gia tri cuoi (+90).
 		{
@@ -471,14 +471,34 @@ std::vector<std::string> HeadPose::aGetsAllPose2(const std::string pId)
 			{
 				int itilt = std::atoi(tilt[j].c_str());//\\ Vertical.
 				int ipan = std::atoi(pan[k].c_str());//\\ Horizontal.
-				pose = util.leftPad(std::to_string((mMaxPose - abs(itilt))), 3, '0') + util.leftPad(std::to_string((mMaxPose - abs(ipan))), 3, '0');
+				int ipose = (mMaxPose - abs(itilt)) + (mMaxPose - abs(ipan));
+				ipose /= 2; // 2 chieu.
+				pose = std::to_string(ipose);
 
 				result.push_back(pose);
 			}// pan
 		}// tilt
-		//\\ File anh "...+90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
-		pose = "010100";
+		//\\ File anh "...+90+0.jpg" => pose = ((100 - 90) + (100 - 0)) / 2 = 55.
+		pose = "55";
 		result.push_back(pose);
+
+		////\\ File anh "...-90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
+		//pose = "010100";
+		//result.push_back(pose);
+		//for (size_t j = 1; j < tilt_size - 1; j++) //\\ Bo gia tri dau (-90) va gia tri cuoi (+90).
+		//{
+		//	for (size_t k = 0; k < pan_size; k++)
+		//	{
+		//		int itilt = std::atoi(tilt[j].c_str());//\\ Vertical.
+		//		int ipan = std::atoi(pan[k].c_str());//\\ Horizontal.
+		//		pose = util.leftPad(std::to_string((mMaxPose - abs(itilt))), 3, '0') + util.leftPad(std::to_string((mMaxPose - abs(ipan))), 3, '0');
+
+		//		result.push_back(pose);
+		//	}// pan
+		//}// tilt
+		////\\ File anh "...+90+0.jpg" => pose = (100 - 90) + (100 - 0) = 110.
+		//pose = "010100";
+		//result.push_back(pose);
 	}// serie
 	return result;
 }
