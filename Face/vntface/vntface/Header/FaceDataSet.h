@@ -40,7 +40,7 @@ namespace vnt
 		std::string mImageType = ".img";
 		std::string mImageName = "Image";
 		std::string mPoseName = "Pose";
-		std::string mTiltPanPoseName = "TiltPanPoses";
+		std::string mSumPoseName = "SumPose";
 		std::string mPoseNameName = "PoseNames";
 		std::string mFileType = ".txt";
 	public:
@@ -92,7 +92,7 @@ namespace vnt
 		//\\ Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong? pIdIndexStart: vi tri index trong mang AllIds. pIdSizeEnd: So id cuoi cung + 1.
 		int aDataSetInitDiv1(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pIdIndexStart, const int pIdSizeEnd, const int pNum, const int pStart, const bool pCheckFile);
 		//\\ (Use) Chia moi FaceTrack trong DataSet thanh n FaceTrack. Co ghi csdl ra file. Kiem tra file anh co ton tai khong?
-		int aDataSetInitDiv2(FaceDataSetBase* pFaceDataSetBase, const std::string pDataSourcePath, const std::string pSavePath, const int pNum, const int pStart = 0, const bool pCheckFile = false);
+		int aDataSetInitDiv2(FaceDataSetBase* pFaceDataSetBase, int pPersonStart, int pPersonEnd, const std::string pDataSourcePath, const std::string pSavePath, const int pMul, const int pDiv, const int pStart = 0, const bool pCheckFile = false);
 
 		//\\ Doc cac anh tu file.
 		int aDataSetRead1(std::string pNumFaceTrackStart, std::string pNumFaceTrackEnd, std::string pNumFeatureStart, std::string pNumFeatureEnd, std::string pFolderPath);
