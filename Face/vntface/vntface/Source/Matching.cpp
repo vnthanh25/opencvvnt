@@ -1723,17 +1723,17 @@ void Matching::aFeatureInit(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::s
 	{
 	case 1:
 		vSavePath = aGetFaceTrackPath(pSavePath, pLBPType);
-		vFaceTrackDB.aFeatureInit(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, pLBPType);
+		vFaceTrackDB.aFeatureInitFloat(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, pLBPType);
 		break;
 	case 2:
 		vSavePath = aGetFaceTrackPath(pSavePath, pLBPType);
-		vFaceTrackDB.aFeatureInit(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, pLBPType);
+		vFaceTrackDB.aFeatureInitFloat(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, pLBPType);
 		break;
 	default:
 		vSavePath = aGetFaceTrackPath(pSavePath, 1);
-		vFaceTrackDB.aFeatureInit(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, 1);
+		vFaceTrackDB.aFeatureInitFloat(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, 1);
 		vSavePath = aGetFaceTrackPath(pSavePath, 2);
-		vFaceTrackDB.aFeatureInit(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, 2);
+		vFaceTrackDB.aFeatureInitFloat(pNumFaceTrackStart, pNumFaceTrackEnd, pSourePath, vSavePath, 2);
 		break;
 	}
 }
@@ -1789,7 +1789,7 @@ void Matching::aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePa
 	//\\ Khoi tao Data Set.
 	HeadPose vHeadPose;
 	std::string vDataSetPath = pSavePath + mDataSetFolder + "/";
-	aDataSetInit(&vHeadPose, pPersonStart, pPersonEnd, pSourePath, vDataSetPath, pMul, pDiv);
+	//aDataSetInit(&vHeadPose, pPersonStart, pPersonEnd, pSourePath, vDataSetPath, pMul, pDiv);
 	//\\ Tinh so facetrack.
 	if (pMul < 1)
 		pMul = 1;
@@ -1797,7 +1797,7 @@ void Matching::aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePa
 		pDiv = 1;
 	int vFacetrackStart = pPersonStart * pMul * pDiv;
 	int vFacetrackEnd = (pPersonEnd + 1) * pMul * pDiv - 1;
-	////\\ Khoi tao feature.
+	//\\ Khoi tao feature.
 	aFeatureInit(vFacetrackStart, vFacetrackEnd, vDataSetPath, pSavePath, pLBPType);
 	//\\ Khoi tao database.
 	std::string vFaceTrackPath;
@@ -1846,7 +1846,7 @@ void Matching::aMatchingColorFeretFull(std::string pSourePath, std::string pSave
 		pDiv = 1;
 	int vFacetrackStart = pPersonStart * pMul * pDiv;
 	int vFacetrackEnd = (pPersonEnd + 1) * pMul * pDiv - 1;
-	////\\ Khoi tao feature.
+	//\\ Khoi tao feature.
 	aFeatureInit(vFacetrackStart, vFacetrackEnd, vDataSetPath, pSavePath, pLBPType);
 	//\\ Khoi tao database.
 	std::string vFaceTrackPath;
@@ -1910,7 +1910,7 @@ void Matching::aMatchingFull()
 
 	//\\ Color Feret.
 	vPersonStart = 0;
-	vPersonEnd = 992;
+	vPersonEnd = 991;
 	vMul = 1;
 	vDiv = 2;
 	vLBPType = 0;
