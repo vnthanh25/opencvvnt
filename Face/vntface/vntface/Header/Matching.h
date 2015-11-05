@@ -127,6 +127,7 @@ namespace vnt
 		void aDatabaseInitFunctionType(int pNumFaceTrackStart, int pNumFaceTrackEnd, std::string pDataSetPath, std::string pFeaturePath, std::string pSavePath, int pLBPType);
 		void aMatchingFunctionType(std::string pDatabasePath, int pNumFaceTrackStart, int pNumFaceTrackEnd, int pMul, int pDiv, std::string pLogPath, int pLBPType);
 		
+		void aMatching(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType = 0);
 		void aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType = 0);
 		void aMatchingColorFeretFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType = 0);
 		// Color Feret:pDataSetType = 1 (HeadPose); pDataSetType = 2 (ColorFeret). pElementType = 1 (LBP); pElementType = 2 (LBPVLFeat).

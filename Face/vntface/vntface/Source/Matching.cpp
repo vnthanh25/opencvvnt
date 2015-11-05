@@ -1784,12 +1784,10 @@ void Matching::aMatchingFunctionType(std::string pDatabasePath, int pNumFaceTrac
 	double vMAPFilter = aMatchingMAP(vDatabasePath, pNumFaceTrackStart, pNumFaceTrackEnd, pMul, pDiv, vLogPath);
 }
 
-void Matching::aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType)
+void Matching::aMatching(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType)
 {
 	//\\ Khoi tao Data Set.
-	HeadPose vHeadPose;
 	std::string vDataSetPath = pSavePath + mDataSetFolder + "/";
-	//aDataSetInit(&vHeadPose, pPersonStart, pPersonEnd, pSourePath, vDataSetPath, pMul, pDiv);
 	//\\ Tinh so facetrack.
 	if (pMul < 1)
 		pMul = 1;
@@ -1833,54 +1831,26 @@ void Matching::aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePa
 		break;
 	}
 }
+
+void Matching::aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType)
+{
+	//\\ Khoi tao Data Set.
+	HeadPose vHeadPose;
+	std::string vDataSetPath = pSavePath + mDataSetFolder + "/";
+	//aDataSetInit(&vHeadPose, pPersonStart, pPersonEnd, pSourePath, vDataSetPath, pMul, pDiv);
+
+	//\\ Khoi tao feature, database and matching.
+	aMatching(pSourePath, pSavePath, pPersonStart, pPersonEnd, pMul, pDiv, pLBPType);
+}
 void Matching::aMatchingColorFeretFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType)
 {
 	//\\ Khoi tao Data Set.
 	ColorFeret vColorFeret;
 	std::string vDataSetPath = pSavePath + mDataSetFolder + "/";
 	//aDataSetInit(&vColorFeret, pPersonStart, pPersonEnd, pSourePath, vDataSetPath, pMul, pDiv);
-	//\\ Tinh so facetrack.
-	if (pMul < 1)
-		pMul = 1;
-	if (pDiv < 1)
-		pDiv = 1;
-	int vFacetrackStart = pPersonStart * pMul * pDiv;
-	int vFacetrackEnd = (pPersonEnd + 1) * pMul * pDiv - 1;
-	//\\ Khoi tao feature.
-	aFeatureInit(vFacetrackStart, vFacetrackEnd, vDataSetPath, pSavePath, pLBPType);
-	//\\ Khoi tao database.
-	std::string vFaceTrackPath;
-	switch (pLBPType)
-	{
-	case 1:
-		vFaceTrackPath = aGetFaceTrackPath(pSavePath, pLBPType);
-		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, pLBPType);
-		break;
-	case 2:
-		vFaceTrackPath = aGetFaceTrackPath(pSavePath, pLBPType);
-		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, pLBPType);
-		break;
-	default:
-		vFaceTrackPath = aGetFaceTrackPath(pSavePath, 1);
-		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, 1);
-		vFaceTrackPath = aGetFaceTrackPath(pSavePath, 2);
-		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, 2);
-		break;
-	}
-	//\\ So khop
-	switch (pLBPType)
-	{
-	case 1:
-		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, pLBPType);
-		break;
-	case 2:
-		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, pLBPType);
-		break;
-	default:
-		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, 1);
-		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, 2);
-		break;
-	}
+
+	//\\ Khoi tao feature, database and matching.
+	aMatching(pSourePath, pSavePath, pPersonStart, pPersonEnd, pMul, pDiv, pLBPType);
 }
 
 void Matching::aMatchingFull()
