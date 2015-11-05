@@ -1835,7 +1835,52 @@ void Matching::aMatchingHeadPoseFull(std::string pSourePath, std::string pSavePa
 }
 void Matching::aMatchingColorFeretFull(std::string pSourePath, std::string pSavePath, int pPersonStart, int pPersonEnd, int pMul, int pDiv, int pLBPType)
 {
-
+	//\\ Khoi tao Data Set.
+	ColorFeret vColorFeret;
+	std::string vDataSetPath = pSavePath + mDataSetFolder + "/";
+	//aDataSetInit(&vColorFeret, pPersonStart, pPersonEnd, pSourePath, vDataSetPath, pMul, pDiv);
+	//\\ Tinh so facetrack.
+	if (pMul < 1)
+		pMul = 1;
+	if (pDiv < 1)
+		pDiv = 1;
+	int vFacetrackStart = pPersonStart * pMul * pDiv;
+	int vFacetrackEnd = (pPersonEnd + 1) * pMul * pDiv - 1;
+	////\\ Khoi tao feature.
+	aFeatureInit(vFacetrackStart, vFacetrackEnd, vDataSetPath, pSavePath, pLBPType);
+	//\\ Khoi tao database.
+	std::string vFaceTrackPath;
+	switch (pLBPType)
+	{
+	case 1:
+		vFaceTrackPath = aGetFaceTrackPath(pSavePath, pLBPType);
+		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, pLBPType);
+		break;
+	case 2:
+		vFaceTrackPath = aGetFaceTrackPath(pSavePath, pLBPType);
+		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, pLBPType);
+		break;
+	default:
+		vFaceTrackPath = aGetFaceTrackPath(pSavePath, 1);
+		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, 1);
+		vFaceTrackPath = aGetFaceTrackPath(pSavePath, 2);
+		aDatabaseInitFunctionType(vFacetrackStart, vFacetrackEnd, vDataSetPath, vFaceTrackPath, pSavePath, 2);
+		break;
+	}
+	//\\ So khop
+	switch (pLBPType)
+	{
+	case 1:
+		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, pLBPType);
+		break;
+	case 2:
+		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, pLBPType);
+		break;
+	default:
+		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, 1);
+		aMatchingFunctionType(pSavePath, vFacetrackStart, vFacetrackEnd, pMul, pDiv, pSavePath, 2);
+		break;
+	}
 }
 
 void Matching::aMatchingFull()
@@ -1851,14 +1896,25 @@ void Matching::aMatchingFull()
 	int vMul = 0;
 	int vDiv = 0;
 	int vLBPType = 0;
+	std::string vSourePath;
+	std::string vSavePath;
 	//\\ Head Pose.
 	vPersonStart = 0;
-	vPersonEnd = 1;
+	vPersonEnd = 14;
 	vMul = 2;
 	vDiv = 1;
 	vLBPType = 0;
-	std::string vSourePath = vPath + "/VNTDataSet/HeadPose/Download/";
-	std::string vSavePath = vPath + "/VNTDataSet/HeadPose/";
+	vSourePath = vPath + "/VNTDataSet/HeadPose/Download/";
+	vSavePath = vPath + "/VNTDataSet/HeadPose/";
 	aMatchingHeadPoseFull(vSourePath, vSavePath, vPersonStart, vPersonEnd, vMul, vDiv, vLBPType);
 
+	//\\ Color Feret.
+	vPersonStart = 0;
+	vPersonEnd = 992;
+	vMul = 1;
+	vDiv = 2;
+	vLBPType = 0;
+	vSourePath = vPath + "/VNTDataSet/ColorFeret/Download/";
+	vSavePath = vPath + "/VNTDataSet/ColorFeret/";
+	aMatchingColorFeretFull(vSourePath, vSavePath, vPersonStart, vPersonEnd, vMul, vDiv, vLBPType);
 }
