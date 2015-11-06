@@ -83,3 +83,22 @@ của các Facetrack để xếp hạng:
 + NotDiv + NotPose + NotNormalize: (33:31 - 33:35).
 + NotDiv + NotPose + Normalize: (33:35 - 33:40).
 + NotDiv + NotPose + Normalize: (33:40 - 33:44).
+
+
+-------------------------------------------------------------------------------------------------------------
+
+
+Xin chào thầy Thành, thầy Thăng,
+
+- Cảm ơn lời nhận xét của thầy Thành.
+
+- Thanh có một số ý kiến như thế này:
++ Về định dạng: Thanh sẽ sữa lại.
++ Về nội dung: Với thực tế những gì Thanh đã làm trong thời gian qua, Thanh không biết phải đưa vào nội dung báo cáo như thế nào. Và bài toán của Thanh là 1 phần nhỏ của bài toán lớn như bài toán tìm kiếm nhân vật trong kho video lớn nên Thanh mới trích nội dung của bài báo cáo Vũ Thanh Hưng làm công trình nghiên cứu liên quan. Với lại Thanh quan tâm tới thực nghiệm nhiều hơn và cũng là lần đầu tiếp xúc với lĩnh vực này nên nội dung không có nhiều ý.
++ Về bố cục Thanh sẽ cố gắng cập nhật.
+
+- Hiện tại Thanh không biết cập nhật nội dung như thế nào nhưng Thanh sẽ cố gắng sữa lại bài báo cáo cho phù hợp hơn. Rất mong thầy Thành và thầy Thăng thông cảm.
+
+Cảm ơn thầy Thành và thầy Thăng nhiều.
+
+Thân mến,
